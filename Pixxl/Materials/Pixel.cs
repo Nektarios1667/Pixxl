@@ -2,12 +2,8 @@
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using System;
-using System.ComponentModel;
-using MonoGame.Extended.Input.InputListeners;
-using System.Runtime.InteropServices;
 using Pixxl;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Pixxl.Materials
 {
@@ -88,7 +84,7 @@ namespace Pixxl.Materials
             }
 
             // Gas spreading
-            if (State == 3 && !moved && Canvas.Rand.Next(0, 4) == 0) { GasSpread(); }
+            if (State == 3 && !moved && Canvas.Rand.Next(0, 10) == 0) { GasSpread(); }
 
             // Heat transfer
             HeatTransfer();
@@ -133,6 +129,7 @@ namespace Pixxl.Materials
             if (loc == dest) { return false; } // Not moving
 
             // If in bounds then check the available pixel
+            if (!IndexCheck(dest, 'l')) { return false; }
             Pixel target = Canvas.Pixels[(int)destCoord.Y, (int)destCoord.X];
             Xna.Vector2 delta = dest - loc;
 
@@ -159,16 +156,12 @@ namespace Pixxl.Materials
         }
         public virtual void GasSpread()
         {
-            try
+            int side = Canvas.Rand.Next(0, 10) < 5 ? -Const.PixelSize : Const.PixelSize;
+            Xna.Vector2 next = new(Location.X + side, Location.Y);
+            if (CollideCheck(Location, next, 'l'))
             {
-                int side = Canvas.Rand.Next(0, 10) < 5 ? -Const.PixelSize : Const.PixelSize;
-                Xna.Vector2 next = new(Location.X + side, Location.Y);
-                if (CollideCheck(Location, next, 'l'))
-                {
-                    Location = Swap(Location, next, 'l');
-                }
+                Location = Swap(Location, next, 'l');
             }
-            catch { } // Out of bounds
         }
         public virtual void HeatTransfer()
         {
@@ -180,8 +173,8 @@ namespace Pixxl.Materials
             foreach (Xna.Vector2 dir in adjacents)
             {
                 // Add neighbor pixel
-                try { Neighbors.Add(Find(Location + adjacents[i], 'l')); }
-                catch { } // Out of bounds
+                Pixel? neighbor = Find(Location + adjacents[i], 'l');
+                if (neighbor != null) { Neighbors.Add(neighbor); }
                 i++;
             }
 
@@ -198,18 +191,27 @@ namespace Pixxl.Materials
                 }
             }
         }
-        public Pixel Find(Xna.Vector2 vec, char mode)
+        public Pixel? Find(Xna.Vector2 vec, char mode)
         {
-            Xna.Vector2 converted = ConvertToCoord(vec, mode);
-            return Canvas.Pixels[(int)converted.Y, (int)converted.X];
+            if (IndexCheck(vec, 'l'))
+            {
+                Xna.Vector2 converted = ConvertToCoord(vec, mode);
+                return Canvas.Pixels[(int)converted.Y, (int)converted.X];
+            } else
+            {
+                return null;
+            }
         }
         public Xna.Vector2 Swap(Xna.Vector2 first, Xna.Vector2 second, char mode)
         {
             // Info
             Xna.Vector2 firstCoord = ConvertToCoord(first, mode);
             Xna.Vector2 secondCoord = ConvertToCoord(second, mode);
-            Pixel firstPixel = Find(firstCoord, 'c');
-            Pixel secondPixel = Find(secondCoord, 'c');
+            Pixel? firstPixel = Find(firstCoord, 'c');
+            Pixel? secondPixel = Find(secondCoord, 'c');
+
+            // If null values return current position (don't move)
+            if (firstPixel == null || secondPixel == null) { return first; }
 
             // Swap objects
             Canvas.Pixels[(int)firstCoord.Y, (int)firstCoord.X] = secondPixel; // Move second to first
@@ -219,6 +221,13 @@ namespace Pixxl.Materials
             return second;
         }
         // Static methods
+        public static bool IndexCheck(Xna.Vector2 loc, char mode)
+        {
+            Xna.Vector2 coord = ConvertToCoord(loc, mode);
+            if (coord.X < 0 || coord.X >= Const.Grid[0]) { return false; }
+            if (coord.Y < 0 || coord.Y >= Const.Grid[1]) { return false; }
+            return true;
+        }
         public static Xna.Vector2 ConvertToCoord(Xna.Vector2 loc, char mode)
         {
             // Setup

@@ -42,7 +42,7 @@ namespace Pixxl
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            canvas = new(_spriteBatch);
+            canvas = new(_graphics.GraphicsDevice, _spriteBatch);
             font = Content.Load<SpriteFont>("Arial");
 
             // TODO: use this.Content to load your game content here
@@ -67,12 +67,14 @@ namespace Pixxl
                 if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
                 {
                     canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Water(location, canvas);
+                    canvas.Pixels[(int)snapped.Y, (int)snapped.X].Update();
                 }
             } else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
                 if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
                 {
                     canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Ice(location, canvas);
+                    canvas.Pixels[(int)snapped.Y, (int)snapped.X].Update();
                 }
             }
             else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
@@ -80,6 +82,7 @@ namespace Pixxl
                 if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
                 {
                     canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Lava(location, canvas);
+                    canvas.Pixels[(int)snapped.Y, (int)snapped.X].Update();
                 }
             }
 
@@ -98,7 +101,6 @@ namespace Pixxl
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
             // Canvas

@@ -9,6 +9,8 @@ using Pixxl.Materials;
 using Xna = Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Threading;
 
 namespace Pixxl
 {
@@ -17,16 +19,18 @@ namespace Pixxl
         public Pixel[,] Pixels { get; set; }
         public int[] Size { get; set; }
         public SpriteBatch Batch { get; set; }
+        public GraphicsDevice Device { get; set; }
         public Xna.Vector2 SizeVector = new(Const.PixelSize, Const.PixelSize);
         public float Delta { get; private set; }
         public Random Rand = new();
         public int ColorMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal
 
-        public Canvas(SpriteBatch batch)
+        public Canvas(GraphicsDevice device, SpriteBatch batch)
         {
             Size = Const.Grid;
             Pixels = new Pixel[Const.Grid[0], Const.Grid[1]];
             Batch = batch;
+            Device = device;
 
             // Fill pixels
             Pixels = Cleared(this);
@@ -48,6 +52,11 @@ namespace Pixxl
         public void Draw() {
             if (Batch != null)
             {
+                // Render setup
+                RenderTarget2D render = new(Device, 1200, 900);
+                Device.SetRenderTarget(render);
+
+                // Drawing
                 for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
                 {
                     for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
@@ -55,6 +64,13 @@ namespace Pixxl
                         Pixels[y, x].Draw();
                     }
                 }
+
+                // Paste render
+                Batch.End();
+                Batch.Begin();
+                Device.SetRenderTarget(null);
+                Batch.Draw(render, Xna.Vector2.Zero, Color.White);
+
             } else
             {
                 Console.WriteLine("Skipping drawing with uninitialized batch...");

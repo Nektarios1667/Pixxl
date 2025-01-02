@@ -11,6 +11,8 @@ namespace Pixxl.Materials
         public Water(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+
+            Temperature = 65f;
             Conductivity = .65f;
             Density = 1f;
             State = 3;
