@@ -11,12 +11,14 @@ namespace Pixxl.Materials
         public Steam(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Temperature = 250f;
+            Conductivity = .02f;
             Density = .0004f;
             State = 3;
             Strength = 1000;
             Melting = new Transformation(9200, typeof(Plasma));
             Solidifying = new Transformation(212, typeof(Water));
-            Color = ColorSchemes.Helium();
+            Color = ColorSchemes.Steam();
         }
     }
 }

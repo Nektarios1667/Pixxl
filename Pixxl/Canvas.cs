@@ -20,6 +20,7 @@ namespace Pixxl
         public Xna.Vector2 SizeVector = new(Const.PixelSize, Const.PixelSize);
         public float Delta { get; private set; }
         public Random Rand = new();
+        public int ColorMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal
 
         public Canvas(SpriteBatch batch)
         {

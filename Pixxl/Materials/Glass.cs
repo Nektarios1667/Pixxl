@@ -11,6 +11,7 @@ namespace Pixxl.Materials
         public Glass(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Conductivity = .9f;
             Density = .918f;
             State = 0;
             Strength = 80;

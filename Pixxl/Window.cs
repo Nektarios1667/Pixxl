@@ -18,6 +18,7 @@ namespace Pixxl
         public SpriteFont font { get; private set; }
 
         public Xna.Vector2 snapped { get; private set; }
+        private Keys[] previous { get; set; } = [];
 
         public Window()
         {
@@ -61,26 +62,33 @@ namespace Pixxl
                 Exit();
 
             // Drawing
-            if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] && snapped.Y >= 0 && snapped.Y <= Const.Grid[1])
+            if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
                 if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Plasma(location, canvas);
+                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Water(location, canvas);
                 }
-            } else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] && snapped.Y >= 0 && snapped.Y <= Const.Grid[1])
+            } else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
                 if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Steam(location, canvas);
+                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Ice(location, canvas);
                 }
             }
-            else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] && snapped.Y >= 0 && snapped.Y <= Const.Grid[1])
+            else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
                 if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
                 {
                     canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Lava(location, canvas);
                 }
             }
+
+            // Keyboard
+            if (keys.Contains(Keys.OemTilde) && !previous.Contains(Keys.OemTilde))
+            {
+                canvas.ColorMode = (canvas.ColorMode + 1) % 3;
+            }
+            previous = keys.ToArray();
 
             // Canvas update
             canvas.Update((float)gameTime.ElapsedGameTime.Milliseconds / 1000f);

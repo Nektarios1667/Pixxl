@@ -6,6 +6,8 @@ using System.ComponentModel;
 using MonoGame.Extended.Input.InputListeners;
 using System.Runtime.InteropServices;
 using Pixxl;
+using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Pixxl.Materials
 {
@@ -13,6 +15,7 @@ namespace Pixxl.Materials
     {
         // Constants
         public float Density { get; set; }
+        public float Conductivity { get; set; }
         public int State { get; set; }
         public int Strength { get; set; }
         public Transformation Melting { get; set; }
@@ -28,7 +31,9 @@ namespace Pixxl.Materials
         public Xna.Vector2 Snapped => Snap(Location);
         public Xna.Vector2 Coords => Coord(Location);
         public RectangleF Rect => new(Snapped.X, Snapped.Y, Const.PixelSize, Const.PixelSize);
-        
+
+        // Constants
+        private readonly Xna.Vector2[] adjacents = [new(0, Const.PixelSize), new(Const.PixelSize, 0), new(0, -Const.PixelSize), new(-Const.PixelSize, 0)];
 
         // Other
         public Canvas Canvas { get; set; }
@@ -37,6 +42,7 @@ namespace Pixxl.Materials
         public Pixel(Xna.Vector2 location, Canvas canvas)
         {
             // Constants
+            Conductivity = 1f;
             Density = 1f;
             State = 2; // 0 = Solid, 1 = Rigid Powder, 2 = Powder, 3 = Fluid
             Strength = 100;
@@ -80,29 +86,40 @@ namespace Pixxl.Materials
             }
 
             // Gas spreading
-            if (State == 3 && !moved && Canvas.Rand.Next(0, 4) == 0)
-            {
-                try
-                {
-                    int side = Canvas.Rand.Next(0, 2) == 0 ? -Const.PixelSize : Const.PixelSize;
-                    Xna.Vector2 next = new(Location.X + side, Location.Y);
-                    if (Find(next, 'l').GetType().Name == "Air")
-                    {
-                        Location = Swap(Location, next, 'l');
-                    }
-                } catch {} // Out of bounds
-            }
+            if (State == 3 && !moved && Canvas.Rand.Next(0, 4) == 0) { GasSpread(); }
+
+            // Heat transfer
+            HeatTransfer();
+
+            // Check changes for melting, evaporating, plasmifying, deplasmifying condensing, hardening
+            StateCheck();
         }
         public virtual void Draw()
         {
-            Canvas.Batch.FillRectangle(Rect, Color);
+            // Calculate red and green values based on the temperature
+            Color color = Color;
+            // Default is textures
+            if (Canvas.ColorMode == 1)
+            {
+                float temp = Math.Clamp(Temperature, 0, 500);
+                float r = (temp / 500) * 255; float g = 255 - r; float b = 0;
+                color = new((int)r, (int)g, (int)b);
+            }
+            else if (Canvas.ColorMode == 2)
+            {
+                float temp = Math.Clamp(Temperature, 0, 500);
+                int saturation = (int) ((temp / 500) * 255);
+                color = new(saturation, saturation, saturation);
+            }
+
+            Canvas.Batch.FillRectangle(Rect, color);
         }
         // Methods
         public Xna.Vector2 Predict(Xna.Vector2 vec, float velocity)
         {
             return new(vec.X, vec.Y + (velocity * Canvas.Delta));
         }
-        public bool CollideCheck(Xna.Vector2 loc, Xna.Vector2 dest, char mode)
+        public virtual bool CollideCheck(Xna.Vector2 loc, Xna.Vector2 dest, char mode)
         {
             // Setup
             Xna.Vector2 destCoord = ConvertToCoord(dest, mode);
@@ -123,7 +140,60 @@ namespace Pixxl.Materials
             if (target.Density <= Density && delta.Y < 0) { return false; } // Moving up and hitting denser
 
             return true;
+        }
+        public virtual void StateCheck()
+        {
+            if (Temperature >= Melting.Temperature) { Transform(Melting); }
+            else if (Temperature <= Solidifying.Temperature) { Transform(Solidifying); }
+        }
+        public virtual void Transform(Transformation transformation)
+        {
+            object[] args = { Location, Canvas };
+            Pixel converted = (Pixel)Activator.CreateInstance(Melting.Material, args);
+            converted.Temperature = Temperature; converted.Velocity = Velocity;
 
+            Canvas.Pixels[(int)Coords.Y][(int)Coords.X] = converted;
+        }
+        public virtual void GasSpread()
+        {
+            try
+            {
+                int side = Canvas.Rand.Next(0, 4) == 0 ? -Const.PixelSize : Const.PixelSize;
+                Xna.Vector2 next = new(Location.X + side, Location.Y);
+                if (CollideCheck(Location, next, 'l'))
+                {
+                    Location = Swap(Location, next, 'l');
+                }
+            }
+            catch { } // Out of bounds
+        }
+        public virtual void HeatTransfer()
+        {
+            // Setup
+            List<Pixel> neighbors = [];
+            int i = 0;
+
+            // Getting pixel objects
+            foreach (Xna.Vector2 dir in adjacents)
+            {
+                // Add neighbor pixel
+                try { neighbors.Add(Find(Location + adjacents[i], 'l')); }
+                catch { } // Out of bounds
+                i++;
+            }
+
+            // Heat transfers
+            foreach (Pixel neighbor in neighbors)
+            {
+                // Lose hear
+                if (Temperature > neighbor.Temperature)
+                {
+                    // Heat transfer simplified equation
+                    float transfer = (Temperature - neighbor.Temperature) / ( 1f / Conductivity + 1f / neighbor.Conductivity) * Canvas.Delta;
+                    Temperature -= transfer;
+                    neighbor.Temperature += transfer;
+                }
+            }
         }
         public Pixel Find(Xna.Vector2 vec, char mode)
         {

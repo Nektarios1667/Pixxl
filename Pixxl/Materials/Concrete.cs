@@ -11,6 +11,7 @@ namespace Pixxl.Materials
         public Concrete(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Conductivity = 1.6f;
             Density = 2.8f;
             State = 0;
             Strength = 400;

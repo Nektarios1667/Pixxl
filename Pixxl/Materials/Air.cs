@@ -11,6 +11,7 @@ namespace Pixxl.Materials
         public Air(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Conductivity = .025f;
             Density = .0012f;
             State = 3;
             Strength = 999999;

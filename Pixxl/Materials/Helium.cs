@@ -11,6 +11,7 @@ namespace Pixxl.Materials
         public Helium(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Conductivity = .142f;
             Density = .00018f;
             State = 3;
             Strength = 999999;

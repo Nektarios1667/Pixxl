@@ -11,10 +11,11 @@ namespace Pixxl.Materials
         public Water(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Conductivity = .65f;
             Density = 1f;
             State = 3;
             Strength = 999999;
-            Melting = new Transformation(212, typeof(Glass));
+            Melting = new Transformation(212, typeof(Steam));
             Solidifying = new Transformation(32, typeof(Ice));
             Color = ColorSchemes.Water();
         }
