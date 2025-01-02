@@ -34,7 +34,7 @@ namespace Pixxl
         // Updating
         public void Update(float delta)
         {
-            Delta = .0167f;
+            Delta = delta;
             foreach (List<Pixel> row in Pixels.ToArray())
             {
                 foreach (Pixel pix in row.ToArray())
@@ -47,7 +47,6 @@ namespace Pixxl
         public void Draw() {
             if (Batch != null)
             {
-                Batch.Begin();
                 foreach (List<Pixel> row in Pixels)
                 {
                     foreach (Pixel pix in row)
@@ -55,7 +54,6 @@ namespace Pixxl
                         pix.Draw();
                     }
                 }
-                Batch.End();
             } else
             {
                 Console.WriteLine("Skipping drawing with uninitialized batch...");
@@ -83,24 +81,26 @@ namespace Pixxl
 {
     public static class ColorSchemes
     {
-        static Random rand = new();
-        // Sand
-        public static Color Sand()
+        static readonly Random rand = new();
+        public static Color SelectColor(Color[] colors)
         {
-            Color[] scheme = { new(186, 194, 33), new(230, 219, 25), new(202, 208, 51), new(218, 207, 28), new(204, 211, 41), new(221, 214, 37) };
-            return scheme[rand.Next(0, scheme.Length)];
+            return colors[rand.Next(0, colors.Length)];
         }
-        // Concrete
-        public static Color Concrete()
+        public static Color GetVariation(Color color, int range)
         {
-            Color[] scheme = { new(169, 169, 169), new(192, 192, 192), new(128, 128, 128), new(105, 105, 105), new(211, 211, 211) };
-            return scheme[rand.Next(0, scheme.Length)];
+            // Break down
+            int r = color.R; int g = color.G; int b = color.B;
+            // Randomize
+            int shift = rand.Next(-range, range + 1);
+            r += shift; g += shift; b += shift;
+            // Return
+            return new Color(r, g, b);
         }
-        // Helium
-        public static Color Helium()
-        {
-            Color[] scheme = { new(173, 216, 230), new(176, 224, 230), new(170, 240, 250), new(190, 225, 245), new(180, 210, 230) };
-            return scheme[rand.Next(0, scheme.Length)];
-        }
+
+        public static Color Sand() => GetVariation(new(186, 194, 33), 18);
+        public static Color Concrete() => GetVariation(new(169, 169, 169), 9);
+        public static Color Helium() => GetVariation(new(121, 194, 217), 12);
+        public static Color Debug() => SelectColor([new(209, 42, 198), new(237, 47, 225), new(166, 18, 151), new(0, 0, 0)]);
+        public static Color Water() => GetVariation(new(0, 77, 207), 9);
     }
 }

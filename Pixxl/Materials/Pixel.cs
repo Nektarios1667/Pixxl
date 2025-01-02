@@ -35,11 +35,11 @@ namespace Pixxl.Materials
         {
             // Constants
             Density = 1f;
-            State = 2; // 0 = Solid, 1 = Sharp Powder, 2 = Powder, 3 = Fluid
+            State = 2; // 0 = Solid, 1 = Rigid Powder, 2 = Powder, 3 = Fluid
             Strength = 100;
             Melting = 200;
             Gravity = true;
-            Color = Color.Pink;
+            Color = ColorSchemes.Debug();
 
             // Properties
             Location = location;
@@ -60,6 +60,7 @@ namespace Pixxl.Materials
             if (Gravity) { Velocity = Const.Gravity; }
 
             // For the possible moves including diagonals
+            bool moved = false;
             for (int c = 0; c < offsets.Length; c++)
             {
                 // Movement
@@ -69,17 +70,22 @@ namespace Pixxl.Materials
                 {
                     // Move array pixels
                     Location = Swap(Location, next, 'l');
+                    moved = true;
                     break;
                 }
             }
 
             // Gas spreading
-            if (State == 3 && Canvas.Rand.Next(0, 6) == 0)
+            if (State == 3 && !moved && Canvas.Rand.Next(0, 4) == 0)
             {
-                try {
+                try
+                {
                     int side = Canvas.Rand.Next(0, 2) == 0 ? -Const.PixelSize : Const.PixelSize;
                     Xna.Vector2 next = new(Location.X + side, Location.Y);
-                    Location = Swap(Location, next, 'l');
+                    if (Find(next, 'l').GetType().Name == "Air")
+                    {
+                        Location = Swap(Location, next, 'l');
+                    }
                 } catch {} // Out of bounds
             }
         }

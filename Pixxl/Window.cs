@@ -15,6 +15,7 @@ namespace Pixxl
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         public Canvas canvas { get; private set; }
+        public SpriteFont font { get; private set; }
 
         public Xna.Vector2 snapped { get; private set; }
 
@@ -27,6 +28,7 @@ namespace Pixxl
             };
             IsFixedTimeStep = false;
             IsMouseVisible = true;
+            Content.RootDirectory = "Content";
         }
 
         protected override void Initialize()
@@ -40,6 +42,7 @@ namespace Pixxl
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             canvas = new(_spriteBatch);
+            font = Content.Load<SpriteFont>("Arial");
 
             // TODO: use this.Content to load your game content here
         }
@@ -75,7 +78,7 @@ namespace Pixxl
             {
                 if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Concrete(location, canvas);
+                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Water(location, canvas);
                 }
             }
 
@@ -88,10 +91,18 @@ namespace Pixxl
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin();
 
             // Canvas
             canvas.Draw();
 
+            // Text
+            if (canvas.Delta != 0)
+            {
+                _spriteBatch.DrawString(font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
+            }
+
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }

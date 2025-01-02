@@ -5,17 +5,17 @@ using Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
-    public class Air : Pixel
+    public class Water : Pixel
     {
         // Constructor
-        public Air(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
+        public Water(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Density = .0012f;
+            Density = 1f;
             State = 3;
             Strength = 999999;
-            Melting = 9500;
-            Color = Color.CornflowerBlue;
+            Melting = 212;
+            Color = ColorSchemes.Water();
         }
     }
 }
