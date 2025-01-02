@@ -14,7 +14,7 @@ namespace Pixxl
 {
     public class Canvas
     {
-        public List<List<Pixel>> Pixels { get; set; }
+        public Pixel[,] Pixels { get; set; }
         public int[] Size { get; set; }
         public SpriteBatch Batch { get; set; }
         public Xna.Vector2 SizeVector = new(Const.PixelSize, Const.PixelSize);
@@ -25,7 +25,7 @@ namespace Pixxl
         public Canvas(SpriteBatch batch)
         {
             Size = Const.Grid;
-            Pixels = new();
+            Pixels = new Pixel[Const.Grid[0], Const.Grid[1]];
             Batch = batch;
 
             // Fill pixels
@@ -36,11 +36,11 @@ namespace Pixxl
         public void Update(float delta)
         {
             Delta = delta;
-            foreach (List<Pixel> row in Pixels.ToArray())
+            for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
             {
-                foreach (Pixel pix in row.ToArray())
+                for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
                 {
-                    pix.Update();
+                    Pixels[y, x].Update();
                 }
             }
         }
@@ -48,11 +48,11 @@ namespace Pixxl
         public void Draw() {
             if (Batch != null)
             {
-                foreach (List<Pixel> row in Pixels)
+                for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
                 {
-                    foreach (Pixel pix in row)
+                    for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
                     {
-                        pix.Draw();
+                        Pixels[y, x].Draw();
                     }
                 }
             } else
@@ -61,16 +61,15 @@ namespace Pixxl
             }
         }
         // Static
-        public static List<List<Pixel>> Cleared(Canvas canvas)
+        public static Pixel[,] Cleared(Canvas canvas)
         {
-            List<List<Pixel>> pixels = new();
+            Pixel[,] pixels = new Pixel[Const.Grid[1], Const.Grid[0]];
 
             for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
             {
-                pixels.Add(new());
                 for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
                 {
-                    pixels[y].Add(new Air(new Xna.Vector2(x * Const.PixelSize, y * Const.PixelSize), canvas));
+                    pixels[y, x] = new Air(new Xna.Vector2(x * Const.PixelSize, y * Const.PixelSize), canvas);
                 }
             }
             return pixels;
@@ -95,7 +94,7 @@ namespace Pixxl
             int shift = rand.Next(-range, range + 1);
             r += shift; g += shift; b += shift;
             // Return
-            return new Color(r, g, b);
+            return new Color(Math.Clamp(r, 0, 255), Math.Clamp(g, 0, 255), Math.Clamp(b, 0, 255));
         }
 
         public static Color Sand() => GetVariation(new(186, 194, 33), 18);
@@ -108,5 +107,6 @@ namespace Pixxl
         public static Color Lava() => GetVariation(new(201, 67, 26), 20);
         public static Color Plasma() => GetVariation(new(187, 57, 227), 8);
         public static Color Steam() => GetVariation(new(191, 191, 191), 6);
+        public static Color Fire() => GetVariation(new(189, 46, 21), 12);
     }
 }

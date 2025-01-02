@@ -11,7 +11,7 @@ namespace Pixxl.Materials
         public Lava(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Temperature = 4000f;
+            Temperature = 5000f;
             Conductivity = 1.5f;
             Density = 2.4f;
             State = 3;

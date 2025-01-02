@@ -64,22 +64,22 @@ namespace Pixxl
             // Drawing
             if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
-                if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
+                if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Water(location, canvas);
+                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Water(location, canvas);
                 }
             } else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
-                if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
+                if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Ice(location, canvas);
+                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Ice(location, canvas);
                 }
             }
             else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
-                if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
+                if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Lava(location, canvas);
+                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Lava(location, canvas);
                 }
             }
 
