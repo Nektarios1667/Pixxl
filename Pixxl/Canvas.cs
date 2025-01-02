@@ -99,7 +99,7 @@ namespace Pixxl
 
         public static Color Sand() => GetVariation(new(186, 194, 33), 18);
         public static Color Concrete() => GetVariation(new(169, 169, 169), 9);
-        public static Color Helium() => GetVariation(new(121, 194, 217), 12);
+        public static Color Helium() => GetVariation(new(168, 213, 227), 12);
         public static Color Debug() => SelectColor([new(209, 42, 198), new(237, 47, 225), new(166, 18, 151), new(0, 0, 0)]);
         public static Color Water() => GetVariation(new(0, 77, 207), 9);
     }
