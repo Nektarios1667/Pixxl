@@ -65,20 +65,20 @@ namespace Pixxl
             {
                 if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Sand(location, canvas);
+                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Plasma(location, canvas);
                 }
             } else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] && snapped.Y >= 0 && snapped.Y <= Const.Grid[1])
             {
                 if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Helium(location, canvas);
+                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Steam(location, canvas);
                 }
             }
             else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] && snapped.Y >= 0 && snapped.Y <= Const.Grid[1])
             {
                 if (canvas.Pixels[(int)snapped.Y][(int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Water(location, canvas);
+                    canvas.Pixels[(int)snapped.Y][(int)snapped.X] = new Lava(location, canvas);
                 }
             }
 

@@ -14,7 +14,8 @@ namespace Pixxl.Materials
             Density = 1f;
             State = 3;
             Strength = 999999;
-            Melting = 212;
+            Melting = new Transformation(212, typeof(Glass));
+            Solidifying = new Transformation(32, typeof(Ice));
             Color = ColorSchemes.Water();
         }
     }

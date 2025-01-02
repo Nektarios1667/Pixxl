@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.ComponentModel;
 using MonoGame.Extended.Input.InputListeners;
+using System.Runtime.InteropServices;
+using Pixxl;
 
 namespace Pixxl.Materials
 {
@@ -13,7 +15,8 @@ namespace Pixxl.Materials
         public float Density { get; set; }
         public int State { get; set; }
         public int Strength { get; set; }
-        public int Melting { get; set; }
+        public Transformation Melting { get; set; }
+        public Transformation Solidifying { get; set; }
         public bool Gravity { get; set; }
         public Color Color { get; set; }
         public int Size = Const.PixelSize;
@@ -37,7 +40,8 @@ namespace Pixxl.Materials
             Density = 1f;
             State = 2; // 0 = Solid, 1 = Rigid Powder, 2 = Powder, 3 = Fluid
             Strength = 100;
-            Melting = 200;
+            Melting = new Transformation(999999, typeof(Pixel));
+            Solidifying = new Transformation(-999999, typeof(Pixel));
             Gravity = true;
             Color = ColorSchemes.Debug();
 
@@ -162,6 +166,21 @@ namespace Pixxl.Materials
         public static Xna.Vector2 Snap(Xna.Vector2 vec)
         {
             return Coord(vec) * Const.PixelSize;
+        }        
+    }
+}
+
+namespace Pixxl
+{
+    public struct Transformation
+    {
+        public int Temperature { get; set; }
+        public Type Material { get; set; }
+
+        public Transformation(int temperature, Type material)
+        {
+            Temperature = temperature;
+            Material = material;
         }
     }
 }

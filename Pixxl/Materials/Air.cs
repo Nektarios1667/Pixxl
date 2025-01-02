@@ -14,7 +14,8 @@ namespace Pixxl.Materials
             Density = .0012f;
             State = 3;
             Strength = 999999;
-            Melting = 9500;
+            Melting = new Transformation(9500, typeof(Plasma));
+            Solidifying = new Transformation(-999999, typeof(Air));
             Color = Color.CornflowerBlue;
         }
     }

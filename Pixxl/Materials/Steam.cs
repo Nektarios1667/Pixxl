@@ -5,17 +5,17 @@ using Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
-    public class Helium : Pixel
+    public class Steam : Pixel
     {
         // Constructor
-        public Helium(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
+        public Steam(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Density = .00018f;
+            Density = .0004f;
             State = 3;
-            Strength = 999999;
+            Strength = 1000;
             Melting = new Transformation(9200, typeof(Plasma));
-            Solidifying = new Transformation(-999999, typeof(Helium));
+            Solidifying = new Transformation(212, typeof(Water));
             Color = ColorSchemes.Helium();
         }
     }

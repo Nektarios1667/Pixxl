@@ -102,5 +102,10 @@ namespace Pixxl
         public static Color Helium() => GetVariation(new(168, 213, 227), 12);
         public static Color Debug() => SelectColor([new(209, 42, 198), new(237, 47, 225), new(166, 18, 151), new(0, 0, 0)]);
         public static Color Water() => GetVariation(new(0, 77, 207), 9);
+        public static Color Glass() => GetVariation(new(190, 222, 232), 9);
+        public static Color Ice() => GetVariation(new(130, 199, 245), 18);
+        public static Color Lava() => GetVariation(new(201, 67, 26), 20);
+        public static Color Plasma() => GetVariation(new(187, 57, 227), 8);
+        public static Color Steam() => GetVariation(new(191, 191, 191), 6);
     }
 }
