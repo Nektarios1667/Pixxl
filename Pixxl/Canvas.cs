@@ -53,8 +53,8 @@ namespace Pixxl
             if (Batch != null)
             {
                 // Render setup
-                RenderTarget2D render = new(Device, 1200, 900);
-                Device.SetRenderTarget(render);
+                //RenderTarget2D render = new(Device, 1200, 900);
+                //Device.SetRenderTarget(render);
 
                 // Drawing
                 for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
@@ -66,10 +66,10 @@ namespace Pixxl
                 }
 
                 // Paste render
-                Batch.End();
-                Batch.Begin();
-                Device.SetRenderTarget(null);
-                Batch.Draw(render, Xna.Vector2.Zero, Color.White);
+                //Batch.End();
+                //Batch.Begin();
+                //Device.SetRenderTarget(null);
+                //Batch.Draw(render, Xna.Vector2.Zero, Color.White);
 
             } else
             {
