@@ -130,7 +130,7 @@ namespace Pixxl.Materials
 
             // If in bounds then check the available pixel
             if (!IndexCheck(dest, 'l')) { return false; }
-            Pixel target = Canvas.Pixels[(int)destCoord.Y, (int)destCoord.X];
+            Pixel target = Canvas.Pixels[Flat(destCoord.Y, destCoord.X)];
             Xna.Vector2 delta = dest - loc;
 
             // Later checks
@@ -152,7 +152,7 @@ namespace Pixxl.Materials
             Pixel converted = (Pixel)Activator.CreateInstance(transformation.Material, args);
             converted.Temperature = Temperature; converted.Velocity = Velocity;
 
-            Canvas.Pixels[(int)Coords.Y, (int)Coords.X] = converted;
+            Canvas.Pixels[Flat(Coords.Y, Coords.X)] = converted;
         }
         public virtual void GasSpread()
         {
@@ -173,7 +173,8 @@ namespace Pixxl.Materials
                 if (neighbor != null && Temperature > neighbor.Temperature)
                 {
                     // Heat transfer simplified equation
-                    float transfer = ((Temperature - neighbor.Temperature) / (1f / Conductivity + 1f / neighbor.Conductivity)) * Canvas.Delta;
+                    float dTemp = Temperature - neighbor.Temperature;
+                    float transfer = Math.Clamp((dTemp / (1f / Conductivity + 1f / neighbor.Conductivity)) * Canvas.Delta, float.Epsilon, dTemp / 2);
                     Temperature -= transfer;
                     neighbor.Temperature += transfer;
                 }
@@ -184,7 +185,7 @@ namespace Pixxl.Materials
             if (IndexCheck(vec, 'l'))
             {
                 Xna.Vector2 converted = ConvertToCoord(vec, mode);
-                return Canvas.Pixels[(int)converted.Y, (int)converted.X];
+                return Canvas.Pixels[Flat(converted.Y, converted.X)];
             } else
             {
                 return null;
@@ -202,8 +203,8 @@ namespace Pixxl.Materials
             if (firstPixel == null || secondPixel == null) { return first; }
 
             // Swap objects
-            Canvas.Pixels[(int)firstCoord.Y, (int)firstCoord.X] = secondPixel; // Move second to first
-            Canvas.Pixels[(int)secondCoord.Y, (int)secondCoord.X] = firstPixel; // Move first to second
+            Canvas.Pixels[Flat(firstCoord.Y, firstCoord.X)] = secondPixel; // Move second to first
+            Canvas.Pixels[Flat(secondCoord.Y, secondCoord.X)] = firstPixel; // Move first to second
 
             secondPixel.Location = first;
             return second;
@@ -236,7 +237,9 @@ namespace Pixxl.Materials
         public static Xna.Vector2 Snap(Xna.Vector2 vec)
         {
             return Coord(vec) * Const.PixelSize;
-        }        
+        }
+        public static int Flat(int y, int x) { return Const.Grid[0] * y + x; }
+        public static int Flat(float y, float x) { return Const.Grid[0] * (int)y + (int)x;}
     }
 }
 

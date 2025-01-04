@@ -64,25 +64,25 @@ namespace Pixxl
             // Drawing
             if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
-                if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
+                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Water(location, canvas);
-                    canvas.Pixels[(int)snapped.Y, (int)snapped.X].Update();
+                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Water(location, canvas);
+                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
                 }
             } else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
-                if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
+                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Explosive(location, canvas);
-                    canvas.Pixels[(int)snapped.Y, (int)snapped.X].Update();
+                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Fire(location, canvas);
+                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
                 }
             }
             else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
-                if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
+                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Concrete(location, canvas);
-                    canvas.Pixels[(int)snapped.Y, (int)snapped.X].Update();
+                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Copper(location, canvas);
+                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
                 }
             }
 

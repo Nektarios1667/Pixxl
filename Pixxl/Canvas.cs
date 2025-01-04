@@ -16,7 +16,7 @@ namespace Pixxl
 {
     public class Canvas
     {
-        public Pixel[,] Pixels { get; set; }
+        public Pixel[] Pixels { get; set; }
         public int[] Size { get; set; }
         public SpriteBatch Batch { get; set; }
         public GraphicsDevice Device { get; set; }
@@ -29,7 +29,7 @@ namespace Pixxl
         public Canvas(GraphicsDevice device, SpriteBatch batch)
         {
             Size = Const.Grid;
-            Pixels = new Pixel[Const.Grid[0], Const.Grid[1]];
+            Pixels = new Pixel[Const.Grid[0] * Const.Grid[1]];
             Batch = batch;
             Device = device;
 
@@ -43,54 +43,28 @@ namespace Pixxl
             // Delta
             Delta = delta;
             // Updates
-            for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
-            {
-                for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
-                {
-                    Pixels[y, x].Update();
-                }
-            }
+            Pixel[] pixelsCopy = (Pixel[])Pixels.Clone();
+            for (int i = 0; i < Pixels.Length; i++) { pixelsCopy[i].Update(); }
             Cycle = (Cycle + 1) % 10; // Cycle
         }
         // Drawing
         public void Draw() {
             if (Batch != null)
             {
-                // Render setup
-                //RenderTarget2D render = new(Device, 1200, 900);
-                //Device.SetRenderTarget(render);
-
                 // Drawing
-                for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
-                {
-                    for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
-                    {
-                        Pixels[y, x].Draw();
-                    }
-                }
-
-                // Paste render
-                //Batch.End();
-                //Batch.Begin();
-                //Device.SetRenderTarget(null);
-                //Batch.Draw(render, Xna.Vector2.Zero, Color.White);
-
+                for (int i = 0; i < Pixels.Length; i++) { Pixels[i].Draw(); }
             } else
             {
                 Console.WriteLine("Skipping drawing with uninitialized batch...");
             }
         }
         // Static
-        public static Pixel[,] Cleared(Canvas canvas)
+        public static Pixel[] Cleared(Canvas canvas)
         {
-            Pixel[,] pixels = new Pixel[Const.Grid[1], Const.Grid[0]];
-
-            for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
+            Pixel[] pixels = new Pixel[Const.Grid[0] * Const.Grid[1]];
+            for (int i = 0; i < Const.Grid[0] * Const.Grid[1]; i++)
             {
-                for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
-                {
-                    pixels[y, x] = new Air(new Xna.Vector2(x * Const.PixelSize, y * Const.PixelSize), canvas);
-                }
+                pixels[i] = new Air(new Xna.Vector2((i % Const.Grid[0]) * Const.PixelSize, i / Const.Grid[0] * Const.PixelSize), canvas);
             }
             return pixels;
         }
@@ -127,6 +101,7 @@ namespace Pixxl
         public static Color Lava() => GetVariation(new(201, 67, 26), 20);
         public static Color Plasma() => GetVariation(new(187, 57, 227), 8);
         public static Color Steam() => GetVariation(new(191, 191, 191), 6);
-        public static Color Fire() => GetVariation(new(189, 46, 21), 25);
+        public static Color Fire() => GetVariation(new(189, 46, 21), 30);
+        public static Color Copper() => GetVariation(new(173, 86, 31), 9);
     }
 }

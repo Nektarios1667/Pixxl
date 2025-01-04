@@ -13,9 +13,9 @@ namespace Pixxl.Materials
         public Fire(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Lifespan = .3f;
-            Temperature = 800f;
-            Conductivity = 1f;
+            Lifespan = .5f;
+            Temperature = 2200f;
+            Conductivity = .5f;
             Density = .0004f;
             Gravity = true;
             State = 3;
@@ -26,6 +26,7 @@ namespace Pixxl.Materials
         }
         public override void Update()
         {
+            // Base
             base.Update();
 
             // Life
@@ -34,7 +35,7 @@ namespace Pixxl.Materials
             {
                 Pixel created = new Air(Location, Canvas);
                 created.Velocity = Velocity;
-                Canvas.Pixels[(int)Coords.Y, (int)Coords.X] = created;
+                Canvas.Pixels[Flat(Coords.Y, Coords.X)] = created;
                 return;
             }
 
@@ -42,15 +43,13 @@ namespace Pixxl.Materials
             if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.Fire(); }
 
             // Spreading
-            bool spread = false;
             foreach (Pixel neighbor in Neighbors)
             {
                 if (Canvas.Rand.Next(0, 20) == -1 && Tags.Flammable.Contains(neighbor.GetType()))
                 {
                     Pixel created = new Fire(neighbor.Location, Canvas);
                     created.Velocity = neighbor.Velocity;
-                    Canvas.Pixels[(int)created.Coords.Y, (int)created.Coords.X] = created;
-                    spread = true;
+                    Canvas.Pixels[Flat(created.Coords.Y, created.Coords.X)] = created;
                 }
             }
         }
