@@ -73,7 +73,7 @@ namespace Pixxl
             {
                 if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Ice(location, canvas);
+                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Explosive(location, canvas);
                     canvas.Pixels[(int)snapped.Y, (int)snapped.X].Update();
                 }
             }
@@ -81,7 +81,7 @@ namespace Pixxl
             {
                 if (canvas.Pixels[(int)snapped.Y, (int)snapped.X].GetType().Name == "Air")
                 {
-                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Lava(location, canvas);
+                    canvas.Pixels[(int)snapped.Y, (int)snapped.X] = new Concrete(location, canvas);
                     canvas.Pixels[(int)snapped.Y, (int)snapped.X].Update();
                 }
             }

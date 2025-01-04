@@ -24,6 +24,7 @@ namespace Pixxl
         public float Delta { get; private set; }
         public Random Rand = new();
         public int ColorMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal
+        public int Cycle = 0; // 10 tick cycle used for limiting calculations
 
         public Canvas(GraphicsDevice device, SpriteBatch batch)
         {
@@ -39,7 +40,9 @@ namespace Pixxl
         // Updating
         public void Update(float delta)
         {
+            // Delta
             Delta = delta;
+            // Updates
             for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
             {
                 for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
@@ -47,6 +50,7 @@ namespace Pixxl
                     Pixels[y, x].Update();
                 }
             }
+            Cycle = (Cycle + 1) % 10; // Cycle
         }
         // Drawing
         public void Draw() {
@@ -123,6 +127,6 @@ namespace Pixxl
         public static Color Lava() => GetVariation(new(201, 67, 26), 20);
         public static Color Plasma() => GetVariation(new(187, 57, 227), 8);
         public static Color Steam() => GetVariation(new(191, 191, 191), 6);
-        public static Color Fire() => GetVariation(new(189, 46, 21), 12);
+        public static Color Fire() => GetVariation(new(189, 46, 21), 25);
     }
 }

@@ -1,0 +1,74 @@
+﻿using System;
+using Xna = Microsoft.Xna.Framework;
+using MonoGame.Extended;
+using Microsoft.Xna.Framework;
+using System.Reflection.Metadata;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace Pixxl.Materials
+{
+    public class Explosive : Pixel
+    {
+        // Constructor
+        public int Explosion { get; set; }
+        public int Range { get; set; }
+        public Explosive(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
+        {
+            // Constants
+            Explosion = 600;
+            Range = 3;
+            Conductivity = 1f;
+            Density = 1.2f;
+            State = 2;
+            Strength = 50;
+            Melting = new Transformation(999999, typeof(Explosive));
+            Solidifying = new Transformation(-999999, typeof(Explosive));
+            Color = Color.DarkRed;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (Coords.Y == Const.Grid[1] - 1 || Canvas.Pixels[(int)Coords.Y + 1, (int)Coords.X].GetType().Name != "Air") { Explode(); }
+        }
+
+        public void Explode()
+        {
+            // Iterate pixels
+            for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
+            {
+                for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
+                {
+                    // Pixel data
+                    Pixel current = Canvas.Pixels[y, x];
+                    int dX = (int)(Coords.X - current.Coords.X);
+                    int dY = (int)(Coords.Y - current.Coords.Y);
+                    int dist = Math.Abs(dX) + Math.Abs(dY);
+
+                    // Damage
+                    if (dist <= Range)  
+                    {
+                        //    damage = -dxr^-1 + d where d = Damage, x = Distance, r = Range
+                        float damage = (float)(Explosion * dist * (1 / Range) + Explosion);
+                        if (damage >= current.Strength)
+                        {
+                            Pixel repl = new Air(current.Location, Canvas);
+                            repl.Temperature = current.Temperature + damage / 2; repl.Velocity = current.Velocity;
+                            Canvas.Pixels[(int)current.Coords.Y, (int)current.Coords.X] = repl;
+                        } else if (current.GetType().Name == "Air")
+                        {
+                            Pixel repl = new Fire(current.Location, Canvas);
+                            repl.Temperature = current.Temperature + damage / 2; repl.Velocity = current.Velocity;
+                            Canvas.Pixels[(int)current.Coords.Y, (int)current.Coords.X] = repl;
+                        }
+                    }
+                }
+            }
+
+            // Remove self
+            Pixel self = new Air(Location, Canvas);
+            self.Temperature = Temperature; self.Velocity = Velocity;
+            Canvas.Pixels[(int)Coords.Y, (int)Coords.X] = self;
+        }
+    }
+}

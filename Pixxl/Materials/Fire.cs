@@ -13,12 +13,12 @@ namespace Pixxl.Materials
         public Fire(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Lifespan = 1f;
+            Lifespan = .3f;
             Temperature = 800f;
             Conductivity = 1f;
             Density = .0004f;
             Gravity = true;
-            State = 4;
+            State = 3;
             Strength = 1000;
             Melting = new Transformation(9200, typeof(Plasma));
             Solidifying = new Transformation(600, typeof(Air));
@@ -29,6 +29,7 @@ namespace Pixxl.Materials
             base.Update();
 
             // Life
+            Lifespan -= Canvas.Delta;
             if (Lifespan <= 0)
             {
                 Pixel created = new Air(Location, Canvas);
@@ -44,7 +45,7 @@ namespace Pixxl.Materials
             bool spread = false;
             foreach (Pixel neighbor in Neighbors)
             {
-                if (Canvas.Rand.Next(0, 10) == 0 && Tags.Flammable.Contains(neighbor.GetType()))
+                if (Canvas.Rand.Next(0, 20) == -1 && Tags.Flammable.Contains(neighbor.GetType()))
                 {
                     Pixel created = new Fire(neighbor.Location, Canvas);
                     created.Velocity = neighbor.Velocity;
@@ -52,7 +53,6 @@ namespace Pixxl.Materials
                     spread = true;
                 }
             }
-            if (!spread) { Lifespan -= Canvas.Delta; } // If not on flammable fuel source then burn away
         }
     }
 }

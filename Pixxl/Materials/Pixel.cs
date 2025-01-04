@@ -165,27 +165,15 @@ namespace Pixxl.Materials
         }
         public virtual void HeatTransfer()
         {
-            // Setup
-            Neighbors.Clear();
-            int i = 0;
-
-            // Getting pixel objects
-            foreach (Xna.Vector2 dir in adjacents)
-            {
-                // Add neighbor pixel
-                Pixel? neighbor = Find(Location + adjacents[i], 'l');
-                if (neighbor != null) { Neighbors.Add(neighbor); }
-                i++;
-            }
-
             // Heat transfers
-            foreach (Pixel neighbor in Neighbors)
+            for (int n = 0; n < adjacents.Length; n++)
             {
-                // Lose hear
-                if (Temperature > neighbor.Temperature)
+                Pixel? neighbor = Find(Location + adjacents[n], 'l');
+                // Lose heat
+                if (neighbor != null && Temperature > neighbor.Temperature)
                 {
                     // Heat transfer simplified equation
-                    float transfer = (Temperature - neighbor.Temperature) / ( 1f / Conductivity + 1f / neighbor.Conductivity) * Canvas.Delta;
+                    float transfer = ((Temperature - neighbor.Temperature) / (1f / Conductivity + 1f / neighbor.Conductivity)) * Canvas.Delta;
                     Temperature -= transfer;
                     neighbor.Temperature += transfer;
                 }

@@ -13,5 +13,6 @@ namespace Pixxl
         public static readonly int PixelSize = 5;
         public static readonly float Gravity = 9.81f * PixelSize;
         public static readonly int[] Grid = [Window[0] / PixelSize, Window[1] / PixelSize];
+        public static readonly float M = .18f;
     }
 }
