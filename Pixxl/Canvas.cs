@@ -103,5 +103,6 @@ namespace Pixxl
         public static Color Steam() => GetVariation(new(191, 191, 191), 6);
         public static Color Fire() => GetVariation(new(189, 46, 21), 30);
         public static Color Copper() => GetVariation(new(173, 86, 31), 9);
+        public static Color Insulation() => GetVariation(new(245, 245, 245), 18);
     }
 }

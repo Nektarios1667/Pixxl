@@ -11,7 +11,7 @@ namespace Pixxl.Materials
         public Copper(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Conductivity = 398f;
+            Conductivity = 512f;
             Density = 9f;
             State = 0;
             Strength = 200;
