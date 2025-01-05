@@ -3,6 +3,7 @@ using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using System;
 using Pixxl;
+using Consts = Pixxl.Constants;
 using System.Collections.Generic;
 
 namespace Pixxl.Materials
@@ -18,7 +19,7 @@ namespace Pixxl.Materials
         public Transformation Solidifying { get; set; }
         public bool Gravity { get; set; }
         public Color Color { get; set; }
-        public int Size = Const.PixelSize;
+        public int Size = Consts.Screen.PixelSize;
 
         // Properties
         public float Temperature { get; set; }
@@ -26,10 +27,10 @@ namespace Pixxl.Materials
         public Xna.Vector2 Location { get; set; }
         public Xna.Vector2 Snapped => Snap(Location);
         public Xna.Vector2 Coords => Coord(Location);
-        public RectangleF Rect => new(Snapped.X, Snapped.Y, Const.PixelSize, Const.PixelSize);
+        public RectangleF Rect => new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
 
         // Constants
-        private readonly Xna.Vector2[] adjacents = [new(0, Const.PixelSize), new(Const.PixelSize, 0), new(0, -Const.PixelSize), new(-Const.PixelSize, 0)];
+        private readonly Xna.Vector2[] adjacents = [new(0, Consts.Screen.PixelSize), new(Consts.Screen.PixelSize, 0), new(0, -Consts.Screen.PixelSize), new(-Consts.Screen.PixelSize, 0)];
 
         // Other
         public Canvas Canvas { get; set; }
@@ -52,7 +53,7 @@ namespace Pixxl.Materials
             Neighbors = [];
             Location = location;
             Canvas = canvas;
-            Temperature = Const.RoomTemp;
+            Temperature = Consts.Game.RoomTemp;
             Velocity = 0f;
         }
 
@@ -62,10 +63,10 @@ namespace Pixxl.Materials
             // Left, middle, right
             int[] offsets = [];
             if (State == 1) { offsets = [0]; }
-            if (State == 2) { offsets = [0, -Const.PixelSize, Const.PixelSize]; }
+            if (State == 2) { offsets = [0, -Consts.Screen.PixelSize, Consts.Screen.PixelSize]; }
             if (State == 3) { offsets = [0]; }
             
-            if (Gravity) { Velocity = Const.Gravity; }
+            if (Gravity) { Velocity = Consts.Game.Gravity; }
 
             // For the possible moves including diagonals
             bool moved = false;
@@ -84,7 +85,7 @@ namespace Pixxl.Materials
             }
 
             // Gas spreading
-            if (State == 3 && !moved && Canvas.Rand.Next(0, 10) == 0) { GasSpread(); }
+            if (State == 3 && !moved && Canvas.Rand.Next(0, 10) <= 1) { GasSpread(); }
 
             // Heat transfer
             HeatTransfer();
@@ -99,14 +100,14 @@ namespace Pixxl.Materials
             // Default is textures
             if (Canvas.ColorMode == 1)
             {
-                float temp = Math.Clamp(Temperature, 0, Const.ThermalMax);
-                float r = (temp / Const.ThermalMax) * 255; float g = 255 - r; float b = 0;
+                float temp = Math.Clamp(Temperature, 0, Consts.Visual.ThermalMax);
+                float r = (temp / Consts.Visual.ThermalMax) * 255; float g = 255 - r; float b = 0;
                 color = new((int)r, (int)g, (int)b);
             }
             else if (Canvas.ColorMode == 2)
             {
-                float temp = Math.Clamp(Temperature, 0, Const.ThermalMax);
-                int saturation = (int) ((temp / Const.ThermalMax) * 255);
+                float temp = Math.Clamp(Temperature, 0, Consts.Visual.ThermalMax);
+                int saturation = (int) ((temp / Consts.Visual.ThermalMax) * 255);
                 color = new(saturation, saturation, saturation);
             }
 
@@ -123,8 +124,8 @@ namespace Pixxl.Materials
             Xna.Vector2 destCoord = ConvertToCoord(dest, mode);
 
             // Basic checks before getting pixel, if it exists
-            if (destCoord.X < 0 || destCoord.X > Const.Grid[0] - 1) { return false; } // Out of bounds width
-            if (destCoord.Y < 0 || destCoord.Y > Const.Grid[1] - 1) { return false; } // Out of bounds height
+            if (destCoord.X < 0 || destCoord.X > Consts.Screen.Grid[0] - 1) { return false; } // Out of bounds width
+            if (destCoord.Y < 0 || destCoord.Y > Consts.Screen.Grid[1] - 1) { return false; } // Out of bounds height
             if (!Gravity) { return false; } // Not affected
             if (loc == dest) { return false; } // Not moving
 
@@ -156,7 +157,7 @@ namespace Pixxl.Materials
         }
         public virtual void GasSpread()
         {
-            int side = Canvas.Rand.Next(0, 10) < 5 ? -Const.PixelSize : Const.PixelSize;
+            int side = Canvas.Rand.Next(0, 10) < 5 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
             Xna.Vector2 next = new(Location.X + side, Location.Y);
             Pixel? target = Find(next, 'l');
             if (target != null && target.GetType().Name == "Air" && CollideCheck(Location, next, 'l'))
@@ -214,8 +215,8 @@ namespace Pixxl.Materials
         public static bool IndexCheck(Xna.Vector2 loc, char mode)
         {
             Xna.Vector2 coord = ConvertToCoord(loc, mode);
-            if (coord.X < 0 || coord.X >= Const.Grid[0]) { return false; }
-            if (coord.Y < 0 || coord.Y >= Const.Grid[1]) { return false; }
+            if (coord.X < 0 || coord.X >= Consts.Screen.Grid[0]) { return false; }
+            if (coord.Y < 0 || coord.Y >= Consts.Screen.Grid[1]) { return false; }
             return true;
         }
         public static Xna.Vector2 ConvertToCoord(Xna.Vector2 loc, char mode)
@@ -225,7 +226,7 @@ namespace Pixxl.Materials
 
             // Converting to coords based on mode
             if (mode == 'l') { converted = Coord(loc); } // Location
-            else if (mode == 's') { converted = loc * Const.PixelSize; } // Snapped location
+            else if (mode == 's') { converted = loc * Consts.Screen.PixelSize; } // Snapped location
             else if (mode == 'c') { converted = loc; } // Coordinate
             else { throw new ArgumentException("Mode should be 'l', 's', or 'c'"); }
 
@@ -233,14 +234,14 @@ namespace Pixxl.Materials
         }
         public static Xna.Vector2 Coord(Xna.Vector2 vec)
         {
-            return Xna.Vector2.Floor(vec / Const.PixelSize);
+            return Xna.Vector2.Floor(vec / Consts.Screen.PixelSize);
         }
         public static Xna.Vector2 Snap(Xna.Vector2 vec)
         {
-            return Coord(vec) * Const.PixelSize;
+            return Coord(vec) * Consts.Screen.PixelSize;
         }
-        public static int Flat(int y, int x) { return Const.Grid[0] * y + x; }
-        public static int Flat(float y, float x) { return Const.Grid[0] * (int)y + (int)x;}
+        public static int Flat(int y, int x) { return Consts.Screen.Grid[0] * y + x; }
+        public static int Flat(float y, float x) { return Consts.Screen.Grid[0] * (int)y + (int)x;}
     }
 }
 

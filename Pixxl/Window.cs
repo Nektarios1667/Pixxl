@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Xna = Microsoft.Xna.Framework;
 using Pixxl.Materials;
+using Pixxl.Tools;
+using Consts = Pixxl.Constants;
+using System.Data;
 
 namespace Pixxl
 {
@@ -23,8 +26,8 @@ namespace Pixxl
         {
             _graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = 1200,
-                PreferredBackBufferHeight = 900
+                PreferredBackBufferWidth = Constants.Screen.Window[0],
+                PreferredBackBufferHeight = Constants.Screen.Window[1]
             };
             IsFixedTimeStep = false;
             IsMouseVisible = true;
@@ -55,14 +58,14 @@ namespace Pixxl
             Keys[] keys = keyState.GetPressedKeys();
             MouseState mouse = Mouse.GetState();
             Xna.Vector2 location = new(mouse.Position.X, mouse.Position.Y);
-            snapped = new ((int)Math.Floor((float)location.X / Const.PixelSize), (int)Math.Floor((float)location.Y / Const.PixelSize));
+            snapped = new ((int)Math.Floor((float)location.X / Consts.Screen.PixelSize), (int)Math.Floor((float)location.Y / Consts.Screen.PixelSize));
 
             // Exit
             if (keys.Contains(Keys.Escape))
                 Exit();
 
             // Drawing
-            if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
+            if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
             {
                 if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
                 {
@@ -70,7 +73,7 @@ namespace Pixxl
                     canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
                 }
             }
-            else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
+            else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
             {
                 canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Air(location, canvas);
                 //canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();

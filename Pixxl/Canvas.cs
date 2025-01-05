@@ -7,7 +7,9 @@ using Microsoft.Xna.Framework;
 using Pixxl.Gui;
 using Microsoft.Xna.Framework.Input;
 using MatReg = Pixxl.Registry.Materials;
+using ToolReg = Pixxl.Registry.Tools;
 using Pixxl.Tools;
+using Consts = Pixxl.Constants;
 
 namespace Pixxl
 {
@@ -19,7 +21,7 @@ namespace Pixxl
         public int[] Size { get; set; }
         public SpriteBatch Batch { get; set; }
         public GraphicsDevice Device { get; set; }
-        public Xna.Vector2 SizeVector = new(Const.PixelSize, Const.PixelSize);
+        public Xna.Vector2 SizeVector = new(Consts.Screen.PixelSize, Consts.Screen.PixelSize);
         public float Delta { get; private set; }
         public Random Rand = new();
         public int ColorMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal
@@ -29,20 +31,30 @@ namespace Pixxl
         public Canvas(Window window, GraphicsDevice device, SpriteBatch batch)
         {
             Window = window;
-            Size = Const.Grid;
-            Pixels = new Pixel[Const.Grid[0] * Const.Grid[1]];
+            Size = Consts.Screen.Grid;
+            Pixels = new Pixel[Consts.Screen.Grid[0] * Consts.Screen.Grid[1]];
             Batch = batch;
             Device = device;
             void select(string selection) => Window.Selection = selection;
 
             // Create buttons
             Buttons = [];
+
+            // Tools
+            for (int i = 0; i < Registry.Tools.Names.Length; i++)
+            {
+                float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[i], Window.Font, Color.Black, ToolReg.Colors[i], Functions.Lighten(ToolReg.Colors[i], .2f), ToolReg.Functions[i], args: [this], borderColor:Color.DarkGray);
+                Buttons.Add(created);
+            }
+
+            // Selection
             for (int i = 0; i < Registry.Materials.Names.Length; i++)
             {
                 // 100x30
-                float x = Const.ButtonDim.X * (i % (Const.Window[0] / Const.ButtonDim.X));
-                float y = Const.Window[1] - (Const.PixelSize * Const.MenuSize) + Const.ButtonDim.Y * (float)Math.Floor((double)(i / (Const.Window[0] / Const.ButtonDim.X)));
-                Button created = new(Batch, new(x, y), Const.ButtonDim, MatReg.Names[i], Window.Font, Color.Black, MatReg.Colors[i], Functions.Lighten(MatReg.Colors[i], .2f), select, args: MatReg.Names[i]);
+                float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
+                float y = Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(i / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1);
+                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, MatReg.Names[i], Window.Font, Color.Black, MatReg.Colors[i], Functions.Lighten(MatReg.Colors[i], .2f), select, args: [MatReg.Names[i]]);
                 Buttons.Add(created);
             }
 
@@ -82,10 +94,11 @@ namespace Pixxl
         // Static
         public static Pixel[] Cleared(Canvas canvas)
         {
-            Pixel[] pixels = new Pixel[Const.Grid[0] * Const.Grid[1]];
-            for (int i = 0; i < Const.Grid[0] * Const.Grid[1]; i++)
+            int[] grid = Consts.Screen.Grid;
+            Pixel[] pixels = new Pixel[grid[0] * grid[1]];
+            for (int i = 0; i < Consts.Screen.Grid[0] * grid[1]; i++)
             {
-                pixels[i] = new Air(new Xna.Vector2((i % Const.Grid[0]) * Const.PixelSize, i / Const.Grid[0] * Const.PixelSize), canvas);
+                pixels[i] = new Air(new Xna.Vector2((i % grid[0]) * Consts.Screen.PixelSize, i / Consts.Screen.Grid[0] * Consts.Screen.PixelSize), canvas);
             }
             return pixels;
         }

@@ -2,8 +2,7 @@
 using Xna = Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
-using System.Reflection.Metadata;
-using static System.Net.Mime.MediaTypeNames;
+using Consts = Pixxl.Constants;
 
 namespace Pixxl.Materials
 {
@@ -29,15 +28,15 @@ namespace Pixxl.Materials
         public override void Update()
         {
             base.Update();
-            if (Coords.Y == Const.Grid[1] - 1 || Canvas.Pixels[Flat(Coords.Y + 1, Coords.X)].GetType().Name != "Air") { Explode(); }
+            if (Coords.Y == Consts.Screen.Grid[1] - 1 || Canvas.Pixels[Flat(Coords.Y + 1, Coords.X)].GetType().Name != "Air") { Explode(); }
         }
 
         public void Explode()
         {
             // Iterate pixels
-            for (int y = 0; y < Const.Grid[1]; y++)  // Loop through rows
+            for (int y = 0; y < Consts.Screen.Grid[1]; y++)  // Loop through rows
             {
-                for (int x = 0; x < Const.Grid[0]; x++)  // Loop through columns
+                for (int x = 0; x < Consts.Screen.Grid[0]; x++)  // Loop through columns
                 {
                     // Pixel data
                     Pixel current = Canvas.Pixels[Flat(y, x)];

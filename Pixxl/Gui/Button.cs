@@ -27,12 +27,12 @@ namespace Pixxl.Gui
         public Xna.Color Highlight { get; private set; }
         public SpriteFont Font { get; private set; }
         public Color Foreground { get; private set; }
-        public Action<string>? Function { get; private set; }
+        public Delegate? Function { get; private set; }
         public int Border { get; private set; }
         public Color BorderColor { get; private set; }
-        public string Args { get; private set; }
+        public object?[]? Args { get; private set; }
         public int State { get; private set; }
-        public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, string text, SpriteFont font, Color foreground, Xna.Color color, Xna.Color highlight, Action<string>? function, string? args, int border = 3, Color borderColor = default)
+        public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, string text, SpriteFont font, Color foreground, Xna.Color color, Xna.Color highlight, Delegate? function, object?[]? args, int border = 3, Color borderColor = default)
         {
             Batch = batch;
             Location = location;
@@ -58,7 +58,7 @@ namespace Pixxl.Gui
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     State = 2;
-                    if (Function != null) { Function(Args); }
+                    Function?.DynamicInvoke(Args);
                 }
                 else { State = 1; }
             }
