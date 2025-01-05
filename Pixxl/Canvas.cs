@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Pixxl.Materials;
 using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using Pixxl.Gui;
 using Microsoft.Xna.Framework.Input;
 using MatReg = Pixxl.Registry.Materials;
+using Pixxl.Tools;
 
 namespace Pixxl
 {
@@ -42,7 +42,7 @@ namespace Pixxl
                 // 100x30
                 float x = Const.ButtonDim.X * (i % (Const.Window[0] / Const.ButtonDim.X));
                 float y = Const.Window[1] - (Const.PixelSize * Const.MenuSize) + Const.ButtonDim.Y * (float)Math.Floor((double)(i / (Const.Window[0] / Const.ButtonDim.X)));
-                Button created = new(Batch, new(x, y), Const.ButtonDim, MatReg.Names[i], Window.Font, Color.Black, MatReg.Colors[i], MatReg.Colors[i], select, args: MatReg.Names[i]);
+                Button created = new(Batch, new(x, y), Const.ButtonDim, MatReg.Names[i], Window.Font, Color.Black, MatReg.Colors[i], Functions.Lighten(MatReg.Colors[i], .2f), select, args: MatReg.Names[i]);
                 Buttons.Add(created);
             }
 
@@ -125,5 +125,20 @@ namespace Pixxl
         public static Color Fire() => GetVariation(MatReg.Colors[MatReg.Id("Fire")], 30);
         public static Color Copper() => GetVariation(MatReg.Colors[MatReg.Id("Copper")], 9);
         public static Color Insulation() => GetVariation(MatReg.Colors[MatReg.Id("Insulation")], 18);
+    }
+}
+
+namespace Pixxl.Tools
+{
+    public static class Functions
+    {
+        public static Color Lighten(Color color, float percentage)
+        {
+            int r = color.R; int g = color.G; int b = color.B;
+            r += (int)((255 - r) * percentage);
+            g += (int)((255 - g) * percentage);
+            b += (int)((255 - b) * percentage);
+            return new(r, g, b);
+        }
     }
 }

@@ -68,7 +68,7 @@ namespace Pixxl.Gui
             // Background
             Batch.FillRectangle(Rect, State == 0 ? Color : Highlight);
             // Outline
-            Batch.DrawRectangle(Rect, BorderColor, Border);
+            Batch.DrawRectangle(Rect, State == 0 ? BorderColor : State == 1 ? new(35, 35, 35) : new(65, 65, 65), Border);
             // Text
             if (Font != null)
             {

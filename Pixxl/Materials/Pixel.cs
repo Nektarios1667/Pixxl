@@ -99,14 +99,14 @@ namespace Pixxl.Materials
             // Default is textures
             if (Canvas.ColorMode == 1)
             {
-                float temp = Math.Clamp(Temperature, 0, 500);
-                float r = (temp / 500) * 255; float g = 255 - r; float b = 0;
+                float temp = Math.Clamp(Temperature, 0, Const.ThermalMax);
+                float r = (temp / Const.ThermalMax) * 255; float g = 255 - r; float b = 0;
                 color = new((int)r, (int)g, (int)b);
             }
             else if (Canvas.ColorMode == 2)
             {
-                float temp = Math.Clamp(Temperature, 0, 500);
-                int saturation = (int) ((temp / 500) * 255);
+                float temp = Math.Clamp(Temperature, 0, Const.ThermalMax);
+                int saturation = (int) ((temp / Const.ThermalMax) * 255);
                 color = new(saturation, saturation, saturation);
             }
 

@@ -13,6 +13,6 @@ namespace Pixxl
         public static readonly int MenuSize = (int)(ButtonDim.Y * 3f) / PixelSize;
         public static readonly int[] Grid = [Window[0] / PixelSize, (Window[1] / PixelSize) - MenuSize];
 
-
+        public static readonly int ThermalMax = 500;
     }
 }
