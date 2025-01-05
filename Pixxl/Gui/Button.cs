@@ -7,113 +7,86 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using Xna = Microsoft.Xna.Framework;
 using Pixxl.Materials;
+using MonoGame.Extended;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-namespace Pixxl
+namespace Pixxl.Gui
 {
-    public class Window : Game
+    public class Button
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        public Canvas canvas { get; private set; }
-        public SpriteFont font { get; private set; }
-
-        public Xna.Vector2 snapped { get; private set; }
-        private Keys[] previous { get; set; } = [];
-
-        public Window()
+        public SpriteBatch Batch { get; private set; }
+        public Xna.Vector2 Location { get; private set; }
+        public Xna.Vector2 Dimensions { get; private set; }
+        public string Text { get; private set; }
+        public Rectangle Rect
         {
-            _graphics = new GraphicsDeviceManager(this)
+            get { return new((int)Location.X, (int)Location.Y, (int)Dimensions.X, (int)Dimensions.Y); }
+        }
+        public Xna.Color Color { get; private set; }
+        public Xna.Color Highlight { get; private set; }
+        public SpriteFont Font { get; private set; }
+        public Color Foreground { get; private set; }
+        public Action<string>? Function { get; private set; }
+        public int Border { get; private set; }
+        public Color BorderColor { get; private set; }
+        public string Args { get; private set; }
+        public int State { get; private set; }
+        public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, string text, SpriteFont font, Color foreground, Xna.Color color, Xna.Color highlight, Action<string>? function, string? args, int border = 3, Color borderColor = default)
+        {
+            Batch = batch;
+            Location = location;
+            Dimensions = dimensions;
+            Text = text;
+            Font = font;
+            Foreground = foreground;
+            Color = color;
+            Highlight = highlight;
+            Function = function;
+            Border = border;
+            BorderColor = (borderColor == default ? Color.Black : borderColor);
+            Args = args;
+            State = 0;
+        }
+        public void Update(MouseState mouseState)
+        {
+            State = 0;
+            // Hovering
+            if (PointRectCollide(Location, Dimensions, mouseState.Position))
             {
-                PreferredBackBufferWidth = 1200,
-                PreferredBackBufferHeight = 900
-            };
-            IsFixedTimeStep = false;
-            IsMouseVisible = true;
-            Content.RootDirectory = "Content";
-        }
-
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
-        }
-
-        protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            canvas = new(_graphics.GraphicsDevice, _spriteBatch);
-            font = Content.Load<SpriteFont>("Arial");
-
-            // TODO: use this.Content to load your game content here
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            // States
-            KeyboardState keyState = Keyboard.GetState();
-            Keys[] keys = keyState.GetPressedKeys();
-            MouseState mouse = Mouse.GetState();
-            Xna.Vector2 location = new(mouse.Position.X, mouse.Position.Y);
-            snapped = new ((int)Math.Floor((float)location.X / Const.PixelSize), (int)Math.Floor((float)location.Y / Const.PixelSize));
-
-            // Exit
-            if (keys.Contains(Keys.Escape))
-                Exit();
-
-            // Drawing
-            if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
-            {
-                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
+                // Clicking
+                if (mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Water(location, canvas);
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
+                    State = 2;
+                    if (Function != null) { Function(Args); }
                 }
-            } else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
-            {
-                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
-                {
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Lava(location, canvas);
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
-                }
+                else { State = 1; }
             }
-            else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
-            {
-                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
-                {
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Copper(location, canvas);
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
-                }
-            }
-
-            // Keyboard
-            if (keys.Contains(Keys.OemTilde) && !previous.Contains(Keys.OemTilde))
-            {
-                canvas.ColorMode = (canvas.ColorMode + 1) % 3;
-            }
-            previous = keys.ToArray();
-
-            // Canvas update
-            canvas.Update((float)gameTime.ElapsedGameTime.Milliseconds / 1000f);
-
-            base.Update(gameTime);
         }
-
-        protected override void Draw(GameTime gameTime)
+        public void Draw()
         {
-            _spriteBatch.Begin();
-
-            // Canvas
-            canvas.Draw();
-
+            // Background
+            Batch.FillRectangle(Rect, State == 0 ? Color : Highlight);
+            // Outline
+            Batch.DrawRectangle(Rect, BorderColor, Border);
             // Text
-            if (canvas.Delta != 0)
+            if (Font != null)
             {
-                _spriteBatch.DrawString(font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
+                Batch.DrawString(Font, Text, new(Location.X + Border + 3, Location.Y + Border + 3), Foreground);
+            } else
+            {
+                Console.WriteLine($"Skipping drawing text '{Text}' because of uninitialized font.");
             }
+        }
 
-            _spriteBatch.End();
-            base.Draw(gameTime);
+        // Static methods
+        public bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Vector2 point)
+        {
+            return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
+        }
+        public bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Point point)
+        {
+            return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
         }
     }
 }

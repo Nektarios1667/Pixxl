@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Pixxl.Materials;
 using Xna = Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Threading;
+using Pixxl.Gui;
+using Microsoft.Xna.Framework.Input;
+using MatReg = Pixxl.Registry.Materials;
 
 namespace Pixxl
 {
     public class Canvas
     {
         public Pixel[] Pixels { get; set; }
+        public Window Window { get; set; }
+        public List<Pixxl.Gui.Button> Buttons { get; set; }
         public int[] Size { get; set; }
         public SpriteBatch Batch { get; set; }
         public GraphicsDevice Device { get; set; }
@@ -26,33 +25,55 @@ namespace Pixxl
         public int ColorMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal
         public int Cycle = 0; // 10 tick cycle used for limiting calculations
 
-        public Canvas(GraphicsDevice device, SpriteBatch batch)
+
+        public Canvas(Window window, GraphicsDevice device, SpriteBatch batch)
         {
+            Window = window;
             Size = Const.Grid;
             Pixels = new Pixel[Const.Grid[0] * Const.Grid[1]];
             Batch = batch;
             Device = device;
+            void select(string selection) => Window.Selection = selection;
+
+            // Create buttons
+            Buttons = [];
+            for (int i = 0; i < Registry.Materials.Names.Length; i++)
+            {
+                // 100x30
+                float x = Const.ButtonDim.X * (i % (Const.Window[0] / Const.ButtonDim.X));
+                float y = Const.Window[1] - (Const.PixelSize * Const.MenuSize) + Const.ButtonDim.Y * (float)Math.Floor((double)(i / (Const.Window[0] / Const.ButtonDim.X)));
+                Button created = new(Batch, new(x, y), Const.ButtonDim, MatReg.Names[i], Window.Font, Color.Black, MatReg.Colors[i], MatReg.Colors[i], select, args: MatReg.Names[i]);
+                Buttons.Add(created);
+            }
 
             // Fill pixels
             Pixels = Cleared(this);
         }
 
         // Updating
-        public void Update(float delta)
+        public void Update(float delta, MouseState mouseState)
         {
             // Delta
             Delta = delta;
-            // Updates
+            // Pixels
             Pixel[] pixelsCopy = (Pixel[])Pixels.Clone();
             for (int i = 0; i < Pixels.Length; i++) { pixelsCopy[i].Update(); }
-            Cycle = (Cycle + 1) % 10; // Cycle
+
+            // Buttons
+            for (int i = 0; i < Buttons.Count; i++) { Buttons[i].Update(mouseState); }
+
+            // Cycle
+            Cycle = (Cycle + 1) % 10;
         }
         // Drawing
         public void Draw() {
             if (Batch != null)
             {
-                // Drawing
+                // Pixels
                 for (int i = 0; i < Pixels.Length; i++) { Pixels[i].Draw(); }
+
+                // Buttons
+                for (int i = 0; i < Buttons.Count; i++) { Buttons[i].Draw(); }
             } else
             {
                 Console.WriteLine("Skipping drawing with uninitialized batch...");
@@ -91,18 +112,18 @@ namespace Pixxl
             return new Color(Math.Clamp(r, 0, 255), Math.Clamp(g, 0, 255), Math.Clamp(b, 0, 255));
         }
 
-        public static Color Sand() => GetVariation(new(186, 194, 33), 18);
-        public static Color Concrete() => GetVariation(new(169, 169, 169), 9);
-        public static Color Helium() => GetVariation(new(168, 213, 227), 12);
+        public static Color Sand() => GetVariation(MatReg.Colors[MatReg.Id("Sand")], 18);
+        public static Color Concrete() => GetVariation(MatReg.Colors[MatReg.Id("Concrete")], 9);
+        public static Color Helium() => GetVariation(MatReg.Colors[MatReg.Id("Helium")], 12);
         public static Color Debug() => SelectColor([new(209, 42, 198), new(237, 47, 225), new(166, 18, 151), new(0, 0, 0)]);
-        public static Color Water() => GetVariation(new(0, 77, 207), 9);
-        public static Color Glass() => GetVariation(new(190, 222, 232), 9);
-        public static Color Ice() => GetVariation(new(130, 199, 245), 18);
-        public static Color Lava() => GetVariation(new(201, 67, 26), 20);
-        public static Color Plasma() => GetVariation(new(187, 57, 227), 8);
-        public static Color Steam() => GetVariation(new(191, 191, 191), 6);
-        public static Color Fire() => GetVariation(new(189, 46, 21), 30);
-        public static Color Copper() => GetVariation(new(173, 86, 31), 9);
-        public static Color Insulation() => GetVariation(new(245, 245, 245), 18);
+        public static Color Water() => GetVariation(MatReg.Colors[MatReg.Id("Water")], 9);
+        public static Color Glass() => GetVariation(MatReg.Colors[MatReg.Id("Glass")], 9);
+        public static Color Ice() => GetVariation(MatReg.Colors[MatReg.Id("Ice")], 18);
+        public static Color Lava() => GetVariation(MatReg.Colors[MatReg.Id("Lava")], 20);
+        public static Color Plasma() => GetVariation(MatReg.Colors[MatReg.Id("Plasma")], 8);
+        public static Color Steam() => GetVariation(MatReg.Colors[MatReg.Id("Steam")], 6);
+        public static Color Fire() => GetVariation(MatReg.Colors[MatReg.Id("Fire")], 30);
+        public static Color Copper() => GetVariation(MatReg.Colors[MatReg.Id("Copper")], 9);
+        public static Color Insulation() => GetVariation(MatReg.Colors[MatReg.Id("Insulation")], 18);
     }
 }

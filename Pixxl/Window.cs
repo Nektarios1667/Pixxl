@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
 using Xna = Microsoft.Xna.Framework;
 using Pixxl.Materials;
 
@@ -15,12 +13,13 @@ namespace Pixxl
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         public Canvas canvas { get; private set; }
-        public SpriteFont font { get; private set; }
-
         public Xna.Vector2 snapped { get; private set; }
         private Keys[] previous { get; set; } = [];
+        public SpriteFont Font { get; set; }
+        public string Selection { get; set; }
+        public 
 
-        public Window()
+        Window()
         {
             _graphics = new GraphicsDeviceManager(this)
             {
@@ -30,6 +29,7 @@ namespace Pixxl
             IsFixedTimeStep = false;
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
+            Selection = "Concrete";
         }
 
         protected override void Initialize()
@@ -42,10 +42,10 @@ namespace Pixxl
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            canvas = new(_graphics.GraphicsDevice, _spriteBatch);
-            font = Content.Load<SpriteFont>("Arial");
-
-            // TODO: use this.Content to load your game content here
+            Font = Content.Load<SpriteFont>("Arial");
+            
+            // Load canvas at the end
+            canvas = new(this, _graphics.GraphicsDevice, _spriteBatch);
         }
 
         protected override void Update(GameTime gameTime)
@@ -66,24 +66,14 @@ namespace Pixxl
             {
                 if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
                 {
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Water(location, canvas);
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
-                }
-            } else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
-            {
-                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
-                {
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Lava(location, canvas);
+                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = (Pixel)Activator.CreateInstance(Type.GetType($"Pixxl.Materials.{Selection}"), location, canvas);
                     canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
                 }
             }
             else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Const.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Const.Grid[1] - 1)
             {
-                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
-                {
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Copper(location, canvas);
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
-                }
+                canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Air(location, canvas);
+                //canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
             }
 
             // Keyboard
@@ -94,7 +84,7 @@ namespace Pixxl
             previous = keys.ToArray();
 
             // Canvas update
-            canvas.Update((float)gameTime.ElapsedGameTime.Milliseconds / 1000f);
+            canvas.Update((float)gameTime.ElapsedGameTime.Milliseconds / 1000f, mouse);
 
             base.Update(gameTime);
         }
@@ -109,7 +99,7 @@ namespace Pixxl
             // Text
             if (canvas.Delta != 0)
             {
-                _spriteBatch.DrawString(font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
+                _spriteBatch.DrawString(Font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
             }
 
             _spriteBatch.End();

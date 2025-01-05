@@ -1,9 +1,4 @@
-﻿using System.Xml.Linq;
-using Xna = Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Pixxl;
-using Pixxl.Materials;
+﻿using Pixxl.Materials;
 using System;
 using System.Collections.Generic;
 

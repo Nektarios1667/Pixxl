@@ -1,8 +1,4 @@
-﻿using System.Xml.Linq;
-using Xna = Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Pixxl;
+﻿using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl
 {
@@ -12,7 +8,11 @@ namespace Pixxl
         public static readonly int[] Window = [1200, 900];
         public static readonly int PixelSize = 5;
         public static readonly float Gravity = 9.81f * PixelSize;
-        public static readonly int[] Grid = [Window[0] / PixelSize, Window[1] / PixelSize];
-        public static readonly float M = .18f;
+
+        public static readonly Xna.Vector2 ButtonDim = new(100, 30);
+        public static readonly int MenuSize = (int)(ButtonDim.Y * 3f) / PixelSize;
+        public static readonly int[] Grid = [Window[0] / PixelSize, (Window[1] / PixelSize) - MenuSize];
+
+
     }
 }
