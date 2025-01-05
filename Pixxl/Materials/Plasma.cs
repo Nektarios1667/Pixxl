@@ -11,7 +11,7 @@ namespace Pixxl.Materials
         public Plasma(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Temperature = 1100f;
+            Temperature = 11000f;
             Conductivity = .3f;
             Density = .00018f;
             State = 3;

@@ -158,7 +158,8 @@ namespace Pixxl.Materials
         {
             int side = Canvas.Rand.Next(0, 10) < 5 ? -Const.PixelSize : Const.PixelSize;
             Xna.Vector2 next = new(Location.X + side, Location.Y);
-            if (CollideCheck(Location, next, 'l'))
+            Pixel? target = Find(next, 'l');
+            if (target != null && target.GetType().Name == "Air" && CollideCheck(Location, next, 'l'))
             {
                 Location = Swap(Location, next, 'l');
             }
