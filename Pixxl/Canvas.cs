@@ -41,15 +41,15 @@ namespace Pixxl
             Buttons = [];
 
             // Tools
-            for (int i = 0; i < Registry.Tools.Names.Length; i++)
+            for (int i = 0; i < ToolReg.Names.Length; i++)
             {
                 float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
-                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[i], Window.Font, Color.Black, ToolReg.Colors[i], Functions.Lighten(ToolReg.Colors[i], .2f), ToolReg.Functions[i], args: [this], borderColor:Color.DarkGray);
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[i], Window.Font, Color.Black, ToolReg.Colors[i], Functions.Lighten(ToolReg.Colors[i], .2f), ToolReg.Functions[i], args: [this], borderColor:new(45, 45, 45));
                 Buttons.Add(created);
             }
 
             // Selection
-            for (int i = 0; i < Registry.Materials.Names.Length; i++)
+            for (int i = 0; i < MatReg.Names.Length; i++)
             {
                 // 100x30
                 float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
@@ -102,6 +102,20 @@ namespace Pixxl
             }
             return pixels;
         }
+        public static Pixel? New(Canvas canvas, string type, Xna.Vector2 loc, float? temp = null, float vel = 0)
+        {
+            Type? typeObj = Type.GetType($"Pixxl.Materials.{type}");
+            if (typeObj != null)
+            {
+                Pixel? created = (Pixel)Activator.CreateInstance(typeObj, loc, canvas);
+                if (created == null) { return null; }
+
+                if (temp != null) { created.Temperature = (float)temp; }
+                created.Velocity = vel;
+                return created;
+            }
+            return null;
+        }
     }
 }
 
@@ -138,6 +152,9 @@ namespace Pixxl
         public static Color Fire() => GetVariation(MatReg.Colors[MatReg.Id("Fire")], 30);
         public static Color Copper() => GetVariation(MatReg.Colors[MatReg.Id("Copper")], 9);
         public static Color Insulation() => GetVariation(MatReg.Colors[MatReg.Id("Insulation")], 18);
+        public static Color Faucet() => GetVariation(MatReg.Colors[MatReg.Id("Faucet")], 3); // WIP
+        public static Color Coolant() => GetVariation(MatReg.Colors[MatReg.Id("Coolant")], 8);
+        public static Color BlueFire() => GetVariation(MatReg.Colors[MatReg.Id("BlueFire")], 13);
     }
 }
 

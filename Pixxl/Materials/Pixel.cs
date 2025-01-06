@@ -25,6 +25,7 @@ namespace Pixxl.Materials
         public float Temperature { get; set; }
         public float Velocity { get; set; }
         public Xna.Vector2 Location { get; set; }
+        public int Index => Flat(Coord(Location));
         public Xna.Vector2 Snapped => Snap(Location);
         public Xna.Vector2 Coords => Coord(Location);
         public RectangleF Rect => new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
@@ -35,6 +36,8 @@ namespace Pixxl.Materials
         // Other
         public Canvas Canvas { get; set; }
         public List<Pixel> Neighbors { get; set; }
+        public int Id { get; }
+        public string Type { get; }
 
         // Constructor
         public Pixel(Xna.Vector2 location, Canvas canvas)
@@ -55,6 +58,8 @@ namespace Pixxl.Materials
             Canvas = canvas;
             Temperature = Consts.Game.RoomTemp;
             Velocity = 0f;
+            Type = GetType().Name;
+            Id = Registry.Materials.Id(Type);
         }
 
         // Update and draw
@@ -116,7 +121,7 @@ namespace Pixxl.Materials
         // Methods
         public Xna.Vector2 Predict(Xna.Vector2 vec, float velocity)
         {
-            return new(vec.X, vec.Y + (velocity * Canvas.Delta));
+            return new(vec.X, vec.Y + Math.Min(velocity * Canvas.Delta * Consts.Game.Speed, Consts.Screen.PixelSize));
         }
         public virtual bool CollideCheck(Xna.Vector2 loc, Xna.Vector2 dest, char mode)
         {
@@ -160,7 +165,7 @@ namespace Pixxl.Materials
             int side = Canvas.Rand.Next(0, 10) < 5 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
             Xna.Vector2 next = new(Location.X + side, Location.Y);
             Pixel? target = Find(next, 'l');
-            if (target != null && target.GetType().Name == "Air" && CollideCheck(Location, next, 'l'))
+            if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next, 'l'))
             {
                 Location = Swap(Location, next, 'l');
             }
@@ -176,7 +181,7 @@ namespace Pixxl.Materials
                 {
                     // Heat transfer simplified equation
                     float dTemp = Temperature - neighbor.Temperature;
-                    float transfer = Math.Clamp((dTemp / (1f / Conductivity + 1f / neighbor.Conductivity)) * Canvas.Delta, float.Epsilon, dTemp / 2);
+                    float transfer = Math.Clamp((dTemp / (1f / Conductivity + 1f / neighbor.Conductivity)) * Canvas.Delta * Consts.Game.Speed, float.Epsilon, dTemp / 2);
                     Temperature -= transfer;
                     neighbor.Temperature += transfer;
                 }
@@ -241,6 +246,7 @@ namespace Pixxl.Materials
             return Coord(vec) * Consts.Screen.PixelSize;
         }
         public static int Flat(int y, int x) { return Consts.Screen.Grid[0] * y + x; }
+        public static int Flat(Xna.Vector2 loc) { return (int)(Consts.Screen.Grid[0] * loc.Y + loc.X); }
         public static int Flat(float y, float x) { return Consts.Screen.Grid[0] * (int)y + (int)x;}
     }
 }

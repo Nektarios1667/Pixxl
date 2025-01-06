@@ -69,14 +69,12 @@ namespace Pixxl
             {
                 if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
                 {
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = (Pixel)Activator.CreateInstance(Type.GetType($"Pixxl.Materials.{Selection}"), location, canvas);
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
+                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = Canvas.New(canvas, Selection, location);
                 }
             }
             else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
             {
                 canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Air(location, canvas);
-                //canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].Update();
             }
 
             // Keyboard

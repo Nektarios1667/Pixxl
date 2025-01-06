@@ -17,7 +17,7 @@ namespace Pixxl.Materials
             State = 3;
             Strength = 1000;
             Melting = new Transformation(999999, typeof(Lava));
-            Solidifying = new Transformation(2200, typeof(Concrete));
+            Solidifying = new Transformation(1800, typeof(Concrete));
             Color = ColorSchemes.Lava();
         }
     }

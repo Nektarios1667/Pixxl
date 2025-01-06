@@ -12,12 +12,12 @@ namespace Pixxl.Materials
         {
             // Constants
             Temperature = 250f;
-            Conductivity = .001f;
+            Conductivity = .05f;
             Density = .0004f;
             State = 3;
-            Strength = 1000;
+            Strength = 100;
             Melting = new Transformation(9200, typeof(Plasma));
-            Solidifying = new Transformation(212, typeof(Water));
+            Solidifying = new Transformation(180, typeof(Water));
             Color = ColorSchemes.Steam();
         }
     }
