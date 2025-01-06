@@ -151,9 +151,10 @@ namespace Pixxl
         public static Color Fire() => GetVariation(MatReg.Colors[MatReg.Id("Fire")], 30);
         public static Color Copper() => GetVariation(MatReg.Colors[MatReg.Id("Copper")], 9);
         public static Color Insulation() => GetVariation(MatReg.Colors[MatReg.Id("Insulation")], 18);
-        public static Color Faucet() => GetVariation(MatReg.Colors[MatReg.Id("Faucet")], 3); // WIP
+        public static Color Faucet() => GetVariation(MatReg.Colors[MatReg.Id("Faucet")], 3);
         public static Color Coolant() => GetVariation(MatReg.Colors[MatReg.Id("Coolant")], 8);
         public static Color BlueFire() => GetVariation(MatReg.Colors[MatReg.Id("BlueFire")], 13);
+        public static Color Void() => GetVariation(MatReg.Colors[MatReg.Id("Void")], 5);
     }
 }
 

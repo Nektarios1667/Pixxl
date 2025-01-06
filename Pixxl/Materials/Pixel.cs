@@ -65,6 +65,9 @@ namespace Pixxl.Materials
         // Update and draw
         public virtual void Update()
         {
+            // Reset
+            Neighbors.Clear();
+
             // Left, middle, right
             int[] offsets = [];
             if (State == 1) { offsets = [0]; }
@@ -176,6 +179,7 @@ namespace Pixxl.Materials
             for (int n = 0; n < adjacents.Length; n++)
             {
                 Pixel? neighbor = Find(Location + adjacents[n], 'l');
+                if (neighbor != null) { Neighbors.Add(neighbor); }
                 // Lose heat
                 if (neighbor != null && Temperature > neighbor.Temperature)
                 {
