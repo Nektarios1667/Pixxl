@@ -27,9 +27,10 @@ namespace Pixxl.Materials
 
             // Water
             Xna.Vector2 spawn = new(Location.X, Location.Y + Constants.Screen.PixelSize);
-            if (Canvas.Pixels[Flat(spawn)].Type == "Air")
+            int idx = Flat(Coord(spawn));
+            if (Canvas.Pixels[idx].Type == "Air")
             {
-                Canvas.Pixels[Flat(spawn)] = new Water(spawn, Canvas);
+                Canvas.Pixels[idx] = new Water(spawn, Canvas);
             }
         }
     }

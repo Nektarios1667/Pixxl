@@ -241,6 +241,10 @@ namespace Pixxl.Materials
         {
             return Xna.Vector2.Floor(vec / Consts.Screen.PixelSize);
         }
+        public static Xna.Vector2 Coord(float x, float y)
+        {
+            return Xna.Vector2.Floor(new Xna.Vector2(x, y) / Consts.Screen.PixelSize);
+        }
         public static Xna.Vector2 Snap(Xna.Vector2 vec)
         {
             return Coord(vec) * Consts.Screen.PixelSize;
