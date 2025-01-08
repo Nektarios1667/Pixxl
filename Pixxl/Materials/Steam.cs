@@ -12,7 +12,7 @@ namespace Pixxl.Materials
         {
             // Constants
             Temperature = 250f;
-            Conductivity = .05f;
+            Conductivity = .1f;
             Density = .0004f;
             State = 3;
             Strength = 100;

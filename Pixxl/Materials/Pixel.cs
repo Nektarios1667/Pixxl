@@ -38,6 +38,7 @@ namespace Pixxl.Materials
         public List<Pixel> Neighbors { get; set; }
         public int Id { get; }
         public string Type { get; }
+        public bool Ignore { get; set; }
 
         // Constructor
         public Pixel(Xna.Vector2 location, Canvas canvas)
@@ -65,6 +66,9 @@ namespace Pixxl.Materials
         // Update and draw
         public virtual void Update()
         {
+            // Deletion
+            if (Ignore) {  return; }
+
             // Reset
             Neighbors.Clear();
 
@@ -185,7 +189,7 @@ namespace Pixxl.Materials
                 {
                     // Heat transfer simplified equation
                     float dTemp = Temperature - neighbor.Temperature;
-                    float transfer = Math.Clamp((dTemp / (1f / Conductivity + 1f / neighbor.Conductivity)) * Canvas.Delta * Consts.Game.Speed, float.Epsilon, dTemp / 2);
+                    float transfer = Math.Clamp((dTemp / (1f / Conductivity + 1f / neighbor.Conductivity)) * Canvas.Delta * Consts.Game.Speed * Consts.Game.HeatTransfer, float.Epsilon, dTemp / 2);
                     Temperature -= transfer;
                     neighbor.Temperature += transfer;
                 }

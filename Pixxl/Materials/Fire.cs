@@ -26,9 +26,6 @@ namespace Pixxl.Materials
         }
         public override void Update()
         {
-            // Base
-            base.Update();
-
             // Life
             Lifespan -= Canvas.Delta;
             if (Lifespan <= 0)
@@ -52,6 +49,9 @@ namespace Pixxl.Materials
                     Canvas.Pixels[Flat(created.Coords.Y, created.Coords.X)] = created;
                 }
             }
+
+            // Base
+            base.Update();
         }
     }
 }

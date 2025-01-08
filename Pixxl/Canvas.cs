@@ -67,8 +67,10 @@ namespace Pixxl
         {
             // Delta
             Delta = delta;
+
             // Pixels
-            for (int i = 0; i < Pixels.Length; i++) { Pixels[i].Update(); }
+            Pixel[] copy = (Pixel[])(Pixels.Clone());
+            for (int i = 0; i < copy.Length; i++) { copy[i].Update(); }
 
             // Buttons
             for (int i = 0; i < Buttons.Count; i++) { Buttons[i].Update(mouseState); }
