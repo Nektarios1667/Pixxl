@@ -15,7 +15,7 @@ namespace Pixxl.Materials
             Density = .9f;
             State = 3;
             Strength = 600;
-            Melting = new Transformation(9500, typeof(Plasma));
+            Melting = new Transformation(700, typeof(CoolantVapor));
             Solidifying = new Transformation(-9500, typeof(Coolant));
             Color = ColorSchemes.Coolant();
         }

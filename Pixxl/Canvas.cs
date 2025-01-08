@@ -157,6 +157,7 @@ namespace Pixxl
         public static Color Coolant() => GetVariation(MatReg.Colors[MatReg.Id("Coolant")], 8);
         public static Color BlueFire() => GetVariation(MatReg.Colors[MatReg.Id("BlueFire")], 13);
         public static Color Void() => GetVariation(MatReg.Colors[MatReg.Id("Void")], 5);
+        public static Color CoolantVapor() => GetVariation(MatReg.Colors[MatReg.Id("CoolantVapor")], 14);
     }
 }
 
