@@ -80,7 +80,7 @@ namespace Pixxl
             // Keyboard
             if (keys.Contains(Keys.OemTilde) && !previous.Contains(Keys.OemTilde))
             {
-                canvas.ColorMode = (canvas.ColorMode + 1) % 3;
+                canvas.ColorMode = (canvas.ColorMode + 1) % 4;
             }
             previous = keys.ToArray();
 

@@ -32,6 +32,8 @@ namespace Pixxl.Gui
         public Color BorderColor { get; private set; }
         public object?[]? Args { get; private set; }
         public int State { get; private set; }
+        public bool Last { get; private set; }
+        public bool Visible { get; set; }
         public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, string text, SpriteFont font, Color foreground, Xna.Color color, Xna.Color highlight, Delegate? function, object?[]? args, int border = 3, Color borderColor = default)
         {
             Batch = batch;
@@ -47,24 +49,31 @@ namespace Pixxl.Gui
             BorderColor = (borderColor == default ? Color.Black : borderColor);
             Args = args;
             State = 0;
+            Last = false;
+            Visible = true;
         }
         public void Update(MouseState mouseState)
         {
-            State = 0;
             // Hovering
+            bool pressed = false;
             if (PointRectCollide(Location, Dimensions, mouseState.Position))
             {
                 // Clicking
-                if (mouseState.LeftButton == ButtonState.Pressed)
+                pressed = mouseState.LeftButton == ButtonState.Pressed;
+                if (pressed && !Last)
                 {
                     State = 2;
                     Function?.DynamicInvoke(Args);
                 }
                 else { State = 1; }
-            }
+            } else { State = 0; }
+            Last = pressed;
         }
         public void Draw()
         {
+            // Not drawing
+            if (!Visible) { return; }
+
             // Background
             Batch.FillRectangle(Rect, State == 0 ? Color : Highlight);
             // Outline
@@ -80,11 +89,11 @@ namespace Pixxl.Gui
         }
 
         // Static methods
-        public bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Vector2 point)
+        public static bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Vector2 point)
         {
             return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
         }
-        public bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Point point)
+        public static bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Point point)
         {
             return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
         }

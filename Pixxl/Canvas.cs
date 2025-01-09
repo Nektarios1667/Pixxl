@@ -24,8 +24,7 @@ namespace Pixxl
         public Xna.Vector2 SizeVector = new(Consts.Screen.PixelSize, Consts.Screen.PixelSize);
         public float Delta { get; private set; }
         public Random Rand = new();
-        public int ColorMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal
-        public int Cycle = 0; // 10 tick cycle used for limiting calculations
+        public int ColorMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal, 3 = Monotexture
 
 
         public Canvas(Window window, GraphicsDevice device, SpriteBatch batch)
@@ -61,7 +60,6 @@ namespace Pixxl
             // Fill pixels
             Pixels = Cleared(this);
         }
-
         // Updating
         public void Update(float delta, MouseState mouseState)
         {
@@ -74,9 +72,6 @@ namespace Pixxl
 
             // Buttons
             for (int i = 0; i < Buttons.Count; i++) { Buttons[i].Update(mouseState); }
-
-            // Cycle
-            Cycle = (Cycle + 1) % 10;
         }
         // Drawing
         public void Draw() {
@@ -116,6 +111,10 @@ namespace Pixxl
                 return created;
             }
             return null;
+        }
+        public static void Mode(Canvas canvas)
+        {
+            canvas.ColorMode = (canvas.ColorMode + 1) % 4;
         }
     }
 }

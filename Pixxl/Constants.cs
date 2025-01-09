@@ -5,7 +5,7 @@ namespace Pixxl.Constants
     public static class Screen
     {
         public static readonly int[] Window = [1600, 900];
-        public const int PixelSize = 10;
+        public const int PixelSize = Game.PixelSize;
         public static readonly int[] Grid = [Window[0] / PixelSize, (Window[1] / PixelSize) - Gui.MenuSize];
 
     }
@@ -16,6 +16,7 @@ namespace Pixxl.Constants
     }
     public static class Game
     {
+        public const int PixelSize = 10;
         public const int RoomTemp = 70;
         public const float HeatTransfer = 2f;
         public const float Gravity = 9.81f * Screen.PixelSize;
@@ -24,5 +25,9 @@ namespace Pixxl.Constants
     public static class Visual
     {
         public const int ThermalMax = 500;
+    }
+    public static class Beta
+    {
+        public const bool HeatDensity = false;
     }
 }

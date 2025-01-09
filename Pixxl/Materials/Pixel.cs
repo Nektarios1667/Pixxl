@@ -2,7 +2,6 @@
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using System;
-using Pixxl;
 using Consts = Pixxl.Constants;
 using System.Collections.Generic;
 
@@ -11,7 +10,11 @@ namespace Pixxl.Materials
     public abstract class Pixel
     {
         // Constants
-        public float Density { get; set; }
+        private float _density { get; set; }
+        public float Density {
+            get { return Consts.Beta.HeatDensity ? _density - (float)((Temperature - Constants.Game.RoomTemp) * .001) : _density; }
+            set { _density = value; }
+        }
         public float Conductivity { get; set; }
         public int State { get; set; }
         public int Strength { get; set; }
@@ -121,6 +124,9 @@ namespace Pixxl.Materials
                 float temp = Math.Clamp(Temperature, 0, Consts.Visual.ThermalMax);
                 int saturation = (int) ((temp / Consts.Visual.ThermalMax) * 255);
                 color = new(saturation, saturation, saturation);
+            } else if (Canvas.ColorMode == 3)
+            {
+                color = Registry.Materials.Colors[Id];
             }
 
             Canvas.Batch.FillRectangle(Rect, color);
