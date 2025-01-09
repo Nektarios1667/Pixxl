@@ -39,7 +39,7 @@ namespace Pixxl.Materials
         // Other
         public Canvas Canvas { get; set; }
         public List<Pixel> Neighbors { get; set; }
-        public int Id { get; }
+        public int TypeId { get; }
         public string Type { get; }
         public bool Ignore { get; set; }
 
@@ -54,7 +54,6 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(Pixel));
             Solidifying = new Transformation(-999999, typeof(Pixel));
             Gravity = true;
-            Color = ColorSchemes.Debug();
 
             // Properties
             Neighbors = [];
@@ -63,7 +62,8 @@ namespace Pixxl.Materials
             Temperature = Consts.Game.RoomTemp;
             Velocity = 0f;
             Type = GetType().Name;
-            Id = Registry.Materials.Id(Type);
+            TypeId = Registry.Materials.Id(Type);
+            Color = ColorSchemes.GetColor(TypeId);
         }
 
         // Update and draw
@@ -126,7 +126,7 @@ namespace Pixxl.Materials
                 color = new(saturation, saturation, saturation);
             } else if (Canvas.ColorMode == 3)
             {
-                color = Registry.Materials.Colors[Id];
+                color = Registry.Materials.Colors[TypeId];
             }
 
             Canvas.Batch.FillRectangle(Rect, color);

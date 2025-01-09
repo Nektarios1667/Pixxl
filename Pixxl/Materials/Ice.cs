@@ -19,7 +19,6 @@ namespace Pixxl.Materials
             Melting = new Transformation(32, typeof(Water));
             Solidifying = new Transformation(-999999, typeof(Ice));
             Gravity = false;
-            Color = ColorSchemes.Ice();
         }
     }
 }

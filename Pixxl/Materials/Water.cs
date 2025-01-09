@@ -19,7 +19,6 @@ namespace Pixxl.Materials
             Strength = 999999;
             Melting = new Transformation(212, typeof(Steam));
             Solidifying = new Transformation(32, typeof(Ice));
-            Color = ColorSchemes.Water();
         }
     }
 }

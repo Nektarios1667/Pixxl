@@ -17,7 +17,6 @@ namespace Pixxl.Materials
             Strength = 999999;
             Melting = new Transformation(9200, typeof(Plasma));
             Solidifying = new Transformation(-999999, typeof(Helium));
-            Color = ColorSchemes.Helium();
         }
     }
 }

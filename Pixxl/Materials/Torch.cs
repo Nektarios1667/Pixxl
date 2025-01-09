@@ -19,7 +19,6 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(Torch));
             Solidifying = new Transformation(-999999, typeof(Torch));
             Gravity = false;
-            Color = ColorSchemes.Torch();
         }
 
         public override void Update()

@@ -19,7 +19,6 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(Insulation));
             Solidifying = new Transformation(-999999, typeof(Insulation));
             Gravity = false;
-            Color = ColorSchemes.Insulation();
         }
     }
 }

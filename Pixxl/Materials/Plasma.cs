@@ -18,7 +18,6 @@ namespace Pixxl.Materials
             Strength = 999999;
             Melting = new Transformation(999999, typeof(Plasma));
             Solidifying = new Transformation(9500, typeof(Air));
-            Color = ColorSchemes.Plasma();
         }
     }
 }

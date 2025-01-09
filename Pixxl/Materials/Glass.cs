@@ -18,7 +18,6 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(Glass));
             Solidifying = new Transformation(-999999, typeof(Glass));
             Gravity = false;
-            Color = ColorSchemes.Glass();
         }
     }
 }

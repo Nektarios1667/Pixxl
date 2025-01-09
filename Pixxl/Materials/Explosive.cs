@@ -22,7 +22,6 @@ namespace Pixxl.Materials
             Strength = 50;
             Melting = new Transformation(999999, typeof(Explosive));
             Solidifying = new Transformation(-999999, typeof(Explosive));
-            Color = Color.DarkRed;
         }
 
         public override void Update()

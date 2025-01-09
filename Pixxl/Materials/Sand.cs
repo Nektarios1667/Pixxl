@@ -17,7 +17,6 @@ namespace Pixxl.Materials
             Strength = 50;
             Melting = new Transformation(3100, typeof(Glass));
             Solidifying = new Transformation(-999999, typeof(Sand));
-            Color = ColorSchemes.Sand();
         }
     }
 }

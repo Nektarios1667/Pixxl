@@ -18,7 +18,6 @@ namespace Pixxl.Materials
             Melting = new Transformation(2200, typeof(Lava));
             Solidifying = new Transformation(-999999, typeof(Concrete));
             Gravity = false;
-            Color = ColorSchemes.Concrete();
         }
     }
 }

@@ -22,7 +22,6 @@ namespace Pixxl.Materials
             Strength = 1000;
             Melting = new Transformation(999999, typeof(BlueFire));
             Solidifying = new Transformation(7200, typeof(Fire));
-            Color = ColorSchemes.BlueFire();
         }
         public override void Update()
         {
@@ -40,7 +39,7 @@ namespace Pixxl.Materials
             }
 
             // Glow
-            if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.BlueFire(); }
+            if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.GetColor(TypeId); }
 
             // Spreading
             foreach (Pixel neighbor in Neighbors)

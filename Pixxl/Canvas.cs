@@ -48,7 +48,7 @@ namespace Pixxl
             }
 
             // Selection
-            for (int i = 0; i < MatReg.Names.Length; i++)
+            for (int i = 0; i < MatReg.Names.Count; i++)
             {
                 // 100x30
                 float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
@@ -124,10 +124,6 @@ namespace Pixxl
     public static class ColorSchemes
     {
         static readonly Random rand = new();
-        public static Color SelectColor(Color[] colors)
-        {
-            return colors[rand.Next(0, colors.Length)];
-        }
         public static Color GetVariation(Color color, int range)
         {
             // Break down
@@ -139,26 +135,7 @@ namespace Pixxl
             return new Color(Math.Clamp(r, 0, 255), Math.Clamp(g, 0, 255), Math.Clamp(b, 0, 255));
         }
 
-        public static Color Sand() => GetVariation(MatReg.Colors[MatReg.Id("Sand")], 18);
-        public static Color Concrete() => GetVariation(MatReg.Colors[MatReg.Id("Concrete")], 9);
-        public static Color Helium() => GetVariation(MatReg.Colors[MatReg.Id("Helium")], 12);
-        public static Color Debug() => SelectColor([new(209, 42, 198), new(237, 47, 225), new(166, 18, 151), new(0, 0, 0)]);
-        public static Color Water() => GetVariation(MatReg.Colors[MatReg.Id("Water")], 9);
-        public static Color Glass() => GetVariation(MatReg.Colors[MatReg.Id("Glass")], 9);
-        public static Color Ice() => GetVariation(MatReg.Colors[MatReg.Id("Ice")], 18);
-        public static Color Lava() => GetVariation(MatReg.Colors[MatReg.Id("Lava")], 20);
-        public static Color Plasma() => GetVariation(MatReg.Colors[MatReg.Id("Plasma")], 8);
-        public static Color Steam() => GetVariation(MatReg.Colors[MatReg.Id("Steam")], 6);
-        public static Color Fire() => GetVariation(MatReg.Colors[MatReg.Id("Fire")], 30);
-        public static Color Copper() => GetVariation(MatReg.Colors[MatReg.Id("Copper")], 9);
-        public static Color Insulation() => GetVariation(MatReg.Colors[MatReg.Id("Insulation")], 18);
-        public static Color Faucet() => GetVariation(MatReg.Colors[MatReg.Id("Faucet")], 3);
-        public static Color Coolant() => GetVariation(MatReg.Colors[MatReg.Id("Coolant")], 8);
-        public static Color BlueFire() => GetVariation(MatReg.Colors[MatReg.Id("BlueFire")], 13);
-        public static Color Void() => GetVariation(MatReg.Colors[MatReg.Id("Void")], 5);
-        public static Color CoolantVapor() => GetVariation(MatReg.Colors[MatReg.Id("CoolantVapor")], 14);
-        public static Color Torch() => GetVariation(MatReg.Colors[MatReg.Id("Torch")], 3);
-        public static Color BlueTorch() => GetVariation(MatReg.Colors[MatReg.Id("BlueTorch")], 3);
+        public static Color GetColor(int id) { return GetVariation(MatReg.Colors[id], MatReg.Variations[id]); }
     }
 }
 

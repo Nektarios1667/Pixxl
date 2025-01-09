@@ -22,7 +22,6 @@ namespace Pixxl.Materials
             Strength = 1000;
             Melting = new Transformation(9200, typeof(Plasma));
             Solidifying = new Transformation(600, typeof(Air));
-            Color = ColorSchemes.Fire();
         }
         public override void Update()
         {
@@ -37,7 +36,7 @@ namespace Pixxl.Materials
             }
 
             // Glow
-            if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.Fire(); }
+            if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.GetColor(TypeId); }
 
             // Spreading
             foreach (Pixel neighbor in Neighbors)

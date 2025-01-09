@@ -19,7 +19,6 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(Faucet));
             Solidifying = new Transformation(-999999, typeof(Faucet));
             Gravity = false;
-            Color = ColorSchemes.Faucet();
         }
 
         public override void Update()
