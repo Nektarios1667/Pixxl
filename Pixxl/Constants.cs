@@ -18,7 +18,7 @@ namespace Pixxl.Constants
     {
         public const int PixelSize = 10;
         public const int RoomTemp = 70;
-        public const float HeatTransfer = 2f;
+        public const float HeatTransfer = 1f;
         public const float Gravity = 9.81f * Screen.PixelSize;
         public const float Speed = 1f;
     }
