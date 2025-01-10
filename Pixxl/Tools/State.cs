@@ -19,6 +19,7 @@ namespace Pixxl.Tools
                 data += $"{current.Type};{Math.Round(current.Temperature, 2)}\n";
             }
             // Writing
+            Logger.Log("Saved Pixel state to 'Saves/save.pxs'");
             File.WriteAllText("Saves/save.pxs", data);
         }
         public static void Load(Canvas canvas)
@@ -60,6 +61,7 @@ namespace Pixxl.Tools
                 } catch (Exception e) { Logger.Log($"Error loading pixel #{l}: {e}"); }
                 l++;
             }
+            Logger.Log("Loaded Pixel state from 'Saves/save.pxs'");
         }
     }
 }
