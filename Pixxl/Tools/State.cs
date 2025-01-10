@@ -9,6 +9,14 @@ namespace Pixxl.Tools
 {
     public static class State
     {
+        static State()
+        {
+            if (!Directory.Exists("Logs"))
+            {
+                Directory.CreateDirectory("Logs");
+            }
+            Logger.Log("State initialized");
+        }
         public static void Save(Canvas canvas)
         {
             // Data
