@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Pixxl.Registry
+{
+    public static class Filed
+    {
+        public static string Materials =
+            """
+            Air            | 100, 149, 237 | 0
+            BlueFire       | 11, 106, 230  | 13
+            BlueTorch      | 0, 83, 115    | 3
+            Chiller        | 33, 30, 130   | 5
+            Concrete       | 169, 169, 169 | 9
+            Coolant        | 31, 181, 111  | 8
+            CoolantVapor   | 56, 224, 146  | 14
+            Copper         | 173, 86, 31   | 9
+            Explosive      | 139, 0, 0     | 5
+            Faucet         | 0, 0, 155     | 3
+            Fire           | 189, 46, 21   | 30 
+            Glass          | 190, 222, 232 | 9
+            Helium         | 168, 213, 227 | 12
+            Ice            | 130, 199, 245 | 18
+            Insulation     | 245, 245, 245 | 18
+            Lava           | 201, 67, 26   | 20
+            Plasma         | 187, 57, 227  | 8
+            Sand           | 186, 194, 33  | 9
+            Steam          | 191, 191, 191 | 6
+            Torch          | 55, 0, 0      | 3
+            Void           | 45, 6, 48     | 5
+            Water          | 0, 77, 207    | 9
+            """;
+    }
+}

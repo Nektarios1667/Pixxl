@@ -12,11 +12,14 @@ namespace Pixxl
                 Directory.CreateDirectory("Logs");
             }
             File.WriteAllText("Logs/Log.txt", "");
-            Log("Logger initialized");
+            Log("Initialized Logger");
         }
-        public static void Log(string text)
+        public static void Log(params string[] texts)
         {
-            File.AppendAllText("Logs/Log.txt", $"[{DateTime.Now.ToString("HH:mm:ss")}] {text}\n");
+            foreach (string text in texts)
+            {
+                File.AppendAllText("Logs/Log.txt", $"[{DateTime.Now.ToString("HH:mm:ss")}] {text}\n");
+            }
         }
     }
 }

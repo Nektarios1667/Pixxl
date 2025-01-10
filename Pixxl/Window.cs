@@ -5,9 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Xna = Microsoft.Xna.Framework;
 using Pixxl.Materials;
-using Pixxl.Tools;
 using Consts = Pixxl.Constants;
-using System.Data;
 
 namespace Pixxl
 {
@@ -20,9 +18,8 @@ namespace Pixxl
         private Keys[] previous { get; set; } = [];
         public SpriteFont Font { get; set; }
         public string Selection { get; set; }
-        public 
 
-        Window()
+        public Window()
         {
             _graphics = new GraphicsDeviceManager(this)
             {
@@ -47,7 +44,7 @@ namespace Pixxl
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Font = Content.Load<SpriteFont>("Arial");
-            
+
             // Load canvas at the end
             canvas = new(this, _graphics.GraphicsDevice, _spriteBatch);
             Logger.Log("Loaded content");
