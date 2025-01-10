@@ -11,9 +11,9 @@ namespace Pixxl.Tools
     {
         static State()
         {
-            if (!Directory.Exists("Logs"))
+            if (!Directory.Exists("Saves"))
             {
-                Directory.CreateDirectory("Logs");
+                Directory.CreateDirectory("Saves");
             }
             Logger.Log("State initialized");
         }
@@ -36,11 +36,11 @@ namespace Pixxl.Tools
             string[] lines;
             try
             {
-                lines = File.ReadAllLines("save.pxs");
+                lines = File.ReadAllLines("Saves/save.pxs");
             }
             catch (FileNotFoundException)
             {
-                Logger.Log($"File 'save.pxs' not found."); return;
+                Logger.Log($"File 'save.pxs' not found"); return;
             }
             catch (Exception e)
             {
@@ -53,8 +53,8 @@ namespace Pixxl.Tools
             {
                 grid = new(int.Parse(lines[0].Split("x")[0]), int.Parse(lines[0].Split("x")[1]));
                 pixelSize = int.Parse(lines[1]);
-            } catch(IndexOutOfRangeException) { Logger.Log("File header data corrupted or in wrong format."); return; }
-            catch(FormatException) { Logger.Log("File header data corrupted or in wrong format."); return; }
+            } catch(IndexOutOfRangeException) { Logger.Log("File header data corrupted or in wrong format"); return; }
+            catch(FormatException) { Logger.Log("File header data corrupted or in wrong format"); return; }
 
             // Loading
             int l = 0;

@@ -50,6 +50,9 @@ namespace Pixxl.Registry
                 // Variations
                 if (!int.TryParse(sections[2].Trim(), out int v)) { Logger.Log($"Error loading Registry - Can not parse color variation for '{line}'"); continue; }
                 Variations.Add(v);
+
+                // Log
+                Logger.Log($"Loaded material '{Names.Last()}' to Register");
             }
             Logger.Log("Successfuly loaded Registry");
         }
