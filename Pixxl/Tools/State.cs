@@ -19,7 +19,7 @@ namespace Pixxl.Tools
                 data += $"{current.Type};{Math.Round(current.Temperature, 2)}\n";
             }
             // Writing
-            File.WriteAllText("save.pxs", data);
+            File.WriteAllText("Saves/save.pxs", data);
         }
         public static void Load(Canvas canvas)
         {
@@ -31,11 +31,11 @@ namespace Pixxl.Tools
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine($"File 'save.pxs' not found."); return;
+                Logger.Log($"File 'save.pxs' not found."); return;
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error reading file: {e}"); return;
+                Logger.Log($"Error reading file: {e}"); return;
             }
             // Metadata
             Xna.Vector2 grid;
@@ -44,8 +44,8 @@ namespace Pixxl.Tools
             {
                 grid = new(int.Parse(lines[0].Split("x")[0]), int.Parse(lines[0].Split("x")[1]));
                 pixelSize = int.Parse(lines[1]);
-            } catch(IndexOutOfRangeException) { Console.WriteLine("File header data corrupted or in wrong format."); return; }
-            catch(FormatException) { Console.WriteLine("File header data corrupted or in wrong format."); return; }
+            } catch(IndexOutOfRangeException) { Logger.Log("File header data corrupted or in wrong format."); return; }
+            catch(FormatException) { Logger.Log("File header data corrupted or in wrong format."); return; }
 
             // Loading
             int l = 0;
@@ -55,8 +55,9 @@ namespace Pixxl.Tools
                 {
                     string[] data = line.Split(';');
                     Pixel? created = Canvas.New(canvas, data[0], new(pixelSize * (l % grid.X), (float)Math.Floor(l / grid.X) * pixelSize), temp: float.Parse(data[1]));
+                    if (created == null) { Logger.Log($"Error creating pixel #{l}"); continue; }
                     canvas.Pixels[l] = created;
-                } catch (Exception e) { Console.WriteLine($"Error loading pixel #{l}: {e}"); }
+                } catch (Exception e) { Logger.Log($"Error loading pixel #{l}: {e}"); }
                 l++;
             }
         }

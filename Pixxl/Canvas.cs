@@ -84,7 +84,7 @@ namespace Pixxl
                 for (int i = 0; i < Buttons.Count; i++) { Buttons[i].Draw(); }
             } else
             {
-                Console.WriteLine("Skipping drawing with uninitialized batch...");
+                Logger.Log("Skipping drawing with uninitialized batch...");
             }
         }
         // Static

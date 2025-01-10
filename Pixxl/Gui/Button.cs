@@ -84,7 +84,7 @@ namespace Pixxl.Gui
                 Batch.DrawString(Font, Text, new(Location.X + Border + 3, Location.Y + Border + 3), Foreground);
             } else
             {
-                Console.WriteLine($"Skipping drawing text '{Text}' because of uninitialized font.");
+                Logger.Log($"Skipping drawing text '{Text}' because of uninitialized font.");
             }
         }
 

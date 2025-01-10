@@ -14,15 +14,15 @@ namespace Pixxl.Registry
 
         static Materials()
         {
-            Console.WriteLine("Loading Registry...");
+            Logger.Log("Loading Registry...");
             // Read file
             string[] lines;
             try
             {
-                lines = File.ReadAllLines("Registry.txt").Where(line => !string.IsNullOrEmpty(line)).ToArray();
+                lines = File.ReadAllLines("Registry.pxr").Where(line => !string.IsNullOrEmpty(line)).ToArray();
             } catch(FileNotFoundException e)
             {
-                Console.WriteLine($"Error loading Registry - File not found '{e}'");
+                Logger.Log($"Error loading Registry - File not found");
                 return;
             }
 
@@ -35,7 +35,7 @@ namespace Pixxl.Registry
                 // Checks
                 if (sections.Length != 3)
                 {
-                    Console.WriteLine($"Error loading Registry - Invalid format '{line}'");
+                    Logger.Log($"Error loading Registry - Invalid format '{line}'");
                     continue; // Skip invalid lines
                 }
 
@@ -44,14 +44,14 @@ namespace Pixxl.Registry
 
                 // Colors
                 string[] values = sections[1].Trim().Split(", ");
-                if (!int.TryParse(values[0], out int r) || !int.TryParse(values[1], out int g) || !int.TryParse(values[2], out int b)) { Console.WriteLine($"Error loading Registry - Can not parse color for '{line}'"); continue; }
+                if (!int.TryParse(values[0], out int r) || !int.TryParse(values[1], out int g) || !int.TryParse(values[2], out int b)) { Logger.Log($"Error loading Registry - Can not parse color for '{line}'"); continue; }
                 Colors.Add(new(r, g, b));
 
                 // Variations
-                if (!int.TryParse(sections[2].Trim(), out int v)) { Console.WriteLine($"Error loading Registry - Can not parse color variation for '{line}'"); continue; }
+                if (!int.TryParse(sections[2].Trim(), out int v)) { Logger.Log($"Error loading Registry - Can not parse color variation for '{line}'"); continue; }
                 Variations.Add(v);
             }
-            Console.WriteLine("Successfuly loaded Registry");
+            Logger.Log("Successfuly loaded Registry");
         }
 
         public static int Id(string material)

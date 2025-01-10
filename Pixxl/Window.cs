@@ -33,6 +33,7 @@ namespace Pixxl
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
             Selection = "Concrete";
+            Logger.Log("Initializing window");
         }
 
         protected override void Initialize()
@@ -49,6 +50,7 @@ namespace Pixxl
             
             // Load canvas at the end
             canvas = new(this, _graphics.GraphicsDevice, _spriteBatch);
+            Logger.Log("Loading content");
         }
 
         protected override void Update(GameTime gameTime)
