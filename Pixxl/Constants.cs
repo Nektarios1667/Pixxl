@@ -26,7 +26,4 @@ namespace Pixxl.Constants
     {
         public const int ThermalMax = 500;
     }
-    public static class Beta
-    {
-    }
 }

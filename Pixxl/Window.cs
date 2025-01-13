@@ -18,6 +18,8 @@ namespace Pixxl
         private Keys[] previous = [];
         public SpriteFont Font;
         public string Selection;
+        public Pixel? hovering;
+        public Xna.Vector2 location;
 
         public Window()
         {
@@ -56,8 +58,12 @@ namespace Pixxl
             KeyboardState keyState = Keyboard.GetState();
             Keys[] keys = keyState.GetPressedKeys();
             MouseState mouse = Mouse.GetState();
-            Xna.Vector2 location = new(mouse.Position.X, mouse.Position.Y);
+            location = new(mouse.Position.X, mouse.Position.Y);
             snapped = new ((int)Math.Floor((float)location.X / Consts.Screen.PixelSize), (int)Math.Floor((float)location.Y / Consts.Screen.PixelSize));
+
+            // Hovering
+            int idx = Pixel.Flat(Pixel.ConvertToCoord(location, 'l'));
+            hovering = idx < canvas.Pixels.Length && idx > 0 ? canvas.Pixels[idx] : null;
 
             // Exit
             if (keys.Contains(Keys.Escape))
@@ -100,6 +106,12 @@ namespace Pixxl
             if (canvas.Delta != 0)
             {
                 _spriteBatch.DrawString(Font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
+            }
+
+            // Hover info
+            if (hovering != null)
+            {
+                _spriteBatch.DrawString(Font, $"{hovering.Type}:\n  {hovering.Temperature}", location, Color.Black);
             }
 
             _spriteBatch.End();

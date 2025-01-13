@@ -67,7 +67,7 @@ namespace Pixxl.Materials
         public virtual void Update()
         {
             // Deletion
-            if (Ignore) {  return; }
+            if (Ignore) { Ignore = false; return; }
 
             // Reset
             Neighbors.Clear();
@@ -156,6 +156,7 @@ namespace Pixxl.Materials
             if (target.Density < Density && delta.Y < 0) { return false; } // Moving up and hitting denser
             if (target.Density == Density && target.Temperature > Temperature && delta.Y < 0) { return false; } // Moving up at same density but at cooler temperature
             if (target.Density == Density && target.Temperature < Temperature && delta.Y > 0) { return false; } // Moving down at same density but at warmer temperature
+            if (target.Density == Density && target.Temperature == Temperature) { return false; } // Same stats
 
             return true;
         }
