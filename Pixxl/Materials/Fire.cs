@@ -30,7 +30,6 @@ namespace Pixxl.Materials
             if (Lifespan <= 0)
             {
                 Pixel created = new Air(Location, Canvas);
-                created.Velocity = Velocity;
                 Canvas.Pixels[Flat(Coords)] = created;
                 return;
             }

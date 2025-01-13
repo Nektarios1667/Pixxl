@@ -14,7 +14,7 @@ namespace Pixxl.Materials
         public Fueling(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Lit = true;
+            Lit = false;
             Fuel = 10f;
             Burned = 0f;
             Conductivity = .3f;

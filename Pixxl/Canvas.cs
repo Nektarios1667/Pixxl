@@ -107,7 +107,6 @@ namespace Pixxl
                 if (created == null) { return null; }
 
                 if (temp != null) { created.Temperature = (float)temp; }
-                created.Velocity = vel;
                 return created;
             }
             return null;

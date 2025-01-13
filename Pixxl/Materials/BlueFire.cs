@@ -33,7 +33,6 @@ namespace Pixxl.Materials
             if (Lifespan <= 0)
             {
                 Pixel created = new Air(Location, Canvas);
-                created.Velocity = Velocity;
                 Canvas.Pixels[Flat(Coords)] = created;
                 return;
             }
@@ -47,7 +46,6 @@ namespace Pixxl.Materials
                 if (Canvas.Rand.Next(0, 20) == -1 && Tags.Flammable.Contains(neighbor.Type))
                 {
                     Pixel created = new BlueFire(neighbor.Location, Canvas);
-                    created.Velocity = neighbor.Velocity;
                     Canvas.Pixels[Flat(created.Coords)] = created;
                 }
             }
