@@ -28,6 +28,5 @@ namespace Pixxl.Constants
     }
     public static class Beta
     {
-        public const bool HeatDensity = true;
     }
 }

@@ -11,10 +11,7 @@ namespace Pixxl.Materials
     {
         // Constants
         private float _density { get; set; }
-        public float Density {
-            get { return Consts.Beta.HeatDensity && State == 3 ? _density - (float)(float.Clamp((Temperature - Constants.Game.RoomTemp) * .0005f, -1f, 1f)) : _density; }
-            set { _density = value; }
-        }
+        public float Density { get; set; }
         public float Conductivity { get; set; }
         public int State { get; set; }
         public int Strength { get; set; }
@@ -155,8 +152,10 @@ namespace Pixxl.Materials
             // Later checks
             if (target == this) { return true; } // If self dont check density
             if (!target.Gravity) { return false; } // Pixel doesnt move
-            if (target.Density >= Density && delta.Y > 0) { return false; } // Moving down and hitting denser
-            if (target.Density <= Density && delta.Y < 0) { return false; } // Moving up and hitting denser
+            if (target.Density > Density && delta.Y > 0) { return false; } // Moving down and hitting denser
+            if (target.Density < Density && delta.Y < 0) { return false; } // Moving up and hitting denser
+            if (target.Density == Density && target.Temperature > Temperature && delta.Y < 0) { return false; } // Moving up at same density but at cooler temperature
+            if (target.Density == Density && target.Temperature < Temperature && delta.Y > 0) { return false; } // Moving down at same density but at warmer temperature
 
             return true;
         }
