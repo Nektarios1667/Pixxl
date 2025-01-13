@@ -25,5 +25,6 @@ namespace Pixxl.Constants
     public static class Visual
     {
         public const int ThermalMax = 500;
+        public const int FeedLength = 8;
     }
 }

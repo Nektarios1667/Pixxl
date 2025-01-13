@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Pixxl
 {
     public static class Logger
     {
+        public static List<string> logged = [];
         static Logger()
         {
             if (!Directory.Exists("Logs"))
@@ -18,7 +20,8 @@ namespace Pixxl
         {
             foreach (string text in texts)
             {
-                File.AppendAllText("Logs/Log.txt", $"[{DateTime.Now.ToString("HH:mm:ss")}] {text}\n");
+                logged.Add(text);
+                File.AppendAllText("Logs/Log.txt", $"[{DateTime.Now:HH:mm:ss}] {text}\n");
             }
         }
     }

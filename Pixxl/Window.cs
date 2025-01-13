@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Xna = Microsoft.Xna.Framework;
 using Pixxl.Materials;
 using Consts = Pixxl.Constants;
+using System.Collections.Generic;
 
 namespace Pixxl
 {
@@ -17,6 +18,7 @@ namespace Pixxl
         public Xna.Vector2 snapped;
         private Keys[] previous = [];
         public SpriteFont Font;
+        public SpriteFont SmallFont;
         public string Selection;
         public Pixel? hovering;
         public Xna.Vector2 location;
@@ -46,6 +48,7 @@ namespace Pixxl
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Font = Content.Load<SpriteFont>("Arial");
+            SmallFont = Content.Load<SpriteFont>("ArialSmall");
 
             // Load canvas at the end
             canvas = new(this, _graphics.GraphicsDevice, _spriteBatch);
@@ -108,12 +111,9 @@ namespace Pixxl
                 _spriteBatch.DrawString(Font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
             }
 
-            // Hover info
-            if (hovering != null)
-            {
-                _spriteBatch.DrawString(Font, $"{hovering.Type}:\n  {hovering.Temperature}", location, Color.Black);
-            }
-
+            // Feed
+            string[] feed = Logger.logged.ToArray();
+            _spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), new Vector2(Constants.Screen.Window[0] - 220, 5), Color.Black);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

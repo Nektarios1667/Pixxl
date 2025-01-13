@@ -29,7 +29,7 @@ namespace Pixxl.Materials
         {
             base.Update();
             // Burned out
-            if (Burned >= Fuel) { Canvas.Pixels[Flat(Coords)] = new Air(Location, Canvas); return; }
+            if (Burned >= Fuel) { Canvas.Pixels[Flat(Coords)] = new Fire(Location, Canvas); return; }
 
             // Lit
             if (Lit)
