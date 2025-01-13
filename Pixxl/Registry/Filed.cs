@@ -14,6 +14,7 @@ namespace Pixxl.Registry
             BlueFire       | 11, 106, 230  | 13
             BlueTorch      | 0, 83, 115    | 3
             Chiller        | 33, 30, 130   | 5
+            Coal           | 13, 13, 13    | 10
             Concrete       | 169, 169, 169 | 9
             Coolant        | 31, 181, 111  | 8
             CoolantVapor   | 56, 224, 146  | 14

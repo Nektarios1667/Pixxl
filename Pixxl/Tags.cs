@@ -6,6 +6,6 @@ namespace Pixxl
 {
     public static class Tags
     {
-        public static readonly List<Type> Flammable = [ typeof(Helium) ];
+        public static readonly List<string> Flammable = [ "Coal" ];
     }
 }

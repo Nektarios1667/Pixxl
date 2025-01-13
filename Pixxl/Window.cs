@@ -66,14 +66,14 @@ namespace Pixxl
             // Drawing
             if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
             {
-                if (canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)].GetType().Name == "Air")
+                if (canvas.Pixels[Pixel.Flat(snapped)].GetType().Name == "Air")
                 {
-                    canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = Canvas.New(canvas, Selection, location);
+                    canvas.Pixels[Pixel.Flat(snapped)] = Canvas.New(canvas, Selection, location);
                 }
             }
             else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
             {
-                canvas.Pixels[Pixel.Flat(snapped.Y, snapped.X)] = new Air(location, canvas);
+                canvas.Pixels[Pixel.Flat(snapped)] = new Air(location, canvas);
             }
 
             // Keyboard

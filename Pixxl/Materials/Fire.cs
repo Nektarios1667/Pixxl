@@ -31,7 +31,7 @@ namespace Pixxl.Materials
             {
                 Pixel created = new Air(Location, Canvas);
                 created.Velocity = Velocity;
-                Canvas.Pixels[Flat(Coords.Y, Coords.X)] = created;
+                Canvas.Pixels[Flat(Coords)] = created;
                 return;
             }
 
@@ -41,11 +41,9 @@ namespace Pixxl.Materials
             // Spreading
             foreach (Pixel neighbor in Neighbors)
             {
-                if (Canvas.Rand.Next(0, 20) == -1 && Tags.Flammable.Contains(neighbor.GetType()))
+                if (Tags.Flammable.Contains(neighbor.Type))
                 {
-                    Pixel created = new Fire(neighbor.Location, Canvas);
-                    created.Velocity = neighbor.Velocity;
-                    Canvas.Pixels[Flat(created.Coords.Y, created.Coords.X)] = created;
+                    ((Fueling)neighbor).Lit = true;
                 }
             }
 
