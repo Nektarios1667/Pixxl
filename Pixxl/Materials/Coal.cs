@@ -12,6 +12,7 @@ namespace Pixxl.Materials
         public Coal(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Superheated = true;
             Fuel = 10f;
             Burned = 0f;
             Conductivity = .3f;
