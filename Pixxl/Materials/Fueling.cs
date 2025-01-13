@@ -10,10 +10,12 @@ namespace Pixxl.Materials
         public float Fuel { get; set; }
         public float Burned { get; set; }
         public bool Lit { get; set; }
+        public bool Superheated { get; set; }
         // Constructor
         public Fueling(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Superheated = false;
             Lit = false;
             Fuel = 10f;
             Burned = 0f;
@@ -40,7 +42,7 @@ namespace Pixxl.Materials
                 int idx = Flat(Coord(spawn));
                 if (Canvas.Pixels[idx].Type == "Air")
                 {
-                    Canvas.Pixels[idx] = new Fire(spawn, Canvas);
+                    Canvas.Pixels[idx] = Superheated ? new BlueFire(spawn, Canvas) : new Fire(spawn, Canvas);
                 }
             }
         }

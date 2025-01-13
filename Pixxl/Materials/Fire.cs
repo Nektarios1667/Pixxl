@@ -40,7 +40,7 @@ namespace Pixxl.Materials
             // Spreading
             foreach (Pixel neighbor in Neighbors)
             {
-                if (Tags.Flammable.Contains(neighbor.Type))
+                if (Canvas.Rand.Next(0, 20) == 0 && neighbor.GetType().BaseType == typeof(Fueling))
                 {
                     ((Fueling)neighbor).Lit = true;
                 }

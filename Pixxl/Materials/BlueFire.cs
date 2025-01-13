@@ -43,10 +43,9 @@ namespace Pixxl.Materials
             // Spreading
             foreach (Pixel neighbor in Neighbors)
             {
-                if (Canvas.Rand.Next(0, 20) == -1 && Tags.Flammable.Contains(neighbor.Type))
+                if (Canvas.Rand.Next(0, 5) == 0 && neighbor.GetType().BaseType == typeof(Fueling))
                 {
-                    Pixel created = new BlueFire(neighbor.Location, Canvas);
-                    Canvas.Pixels[Flat(created.Coords)] = created;
+                    ((Fueling)neighbor).Lit = true;
                 }
             }
         }
