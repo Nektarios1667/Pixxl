@@ -19,5 +19,11 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(Lava));
             Solidifying = new Transformation(1800, typeof(Concrete));
         }
+        public override void Update()
+        {
+            base.Update();
+
+            Logger.Log(Density.ToString(), Temperature.ToString());
+        }
     }
 }

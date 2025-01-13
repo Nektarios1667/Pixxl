@@ -12,7 +12,7 @@ namespace Pixxl.Materials
         // Constants
         private float _density { get; set; }
         public float Density {
-            get { return Consts.Beta.HeatDensity && State == 3 ? _density - (float)((Temperature - Constants.Game.RoomTemp) * .001) : _density; }
+            get { return Consts.Beta.HeatDensity && State == 3 ? _density - (float)(float.Clamp((Temperature - Constants.Game.RoomTemp) * .0005f, -1f, 1f)) : _density; }
             set { _density = value; }
         }
         public float Conductivity { get; set; }

@@ -13,11 +13,11 @@ namespace Pixxl
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        public Canvas canvas { get; private set; }
-        public Xna.Vector2 snapped { get; private set; }
-        private Keys[] previous { get; set; } = [];
-        public SpriteFont Font { get; set; }
-        public string Selection { get; set; }
+        public Canvas canvas;
+        public Xna.Vector2 snapped;
+        private Keys[] previous = [];
+        public SpriteFont Font;
+        public string Selection;
 
         public Window()
         {
