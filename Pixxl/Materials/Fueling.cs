@@ -43,6 +43,9 @@ namespace Pixxl.Materials
                 if (Canvas.Pixels[idx].Type == "Air")
                 {
                     Canvas.Pixels[idx] = Superheated ? new BlueFire(spawn, Canvas) : new Fire(spawn, Canvas);
+                } else if (!Canvas.Pixels[idx].Type.EndsWith("Fire"))
+                {
+                    Lit = false;
                 }
             }
         }
