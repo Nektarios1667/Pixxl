@@ -53,7 +53,9 @@ namespace Pixxl
                 // 100x30
                 float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
                 float y = Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(i / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1);
-                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, MatReg.Names[i], Window.Font, Color.Black, MatReg.Colors[i], Functions.Lighten(MatReg.Colors[i], .2f), select, args: [MatReg.Names[i]]);
+                Color bg = MatReg.Colors[i];
+                Color fg = bg.R < 70 && bg.G < 70 && bg.B < 70 ? Color.White : Color.Black;
+                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, MatReg.Names[i], Window.Font, fg, bg, Functions.Lighten(MatReg.Colors[i], .2f), select, args: [MatReg.Names[i]]);
                 Buttons.Add(created);
             }
 

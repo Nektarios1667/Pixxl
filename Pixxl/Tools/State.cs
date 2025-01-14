@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Xml.Linq;
 using Pixxl.Materials;
 using Xna = Microsoft.Xna.Framework;
@@ -28,7 +30,12 @@ namespace Pixxl.Tools
             }
             // Writing
             Logger.Log("Saved Pixel state to 'Saves/save.pxs'");
-            File.WriteAllText("Saves/save.pxs", data);
+
+            // Create a GZipStream to compress the data while writing to the file
+            using FileStream fileStream = new("Saves/save.pxs", FileMode.Create, FileAccess.Write);
+            using GZipStream gzipStream = new(fileStream, CompressionLevel.Optimal);
+            using StreamWriter writer = new(gzipStream);
+            writer.Write(data);
         }
         public static void Load(Canvas canvas)
         {
@@ -36,7 +43,11 @@ namespace Pixxl.Tools
             string[] lines;
             try
             {
-                lines = File.ReadAllLines("Saves/save.pxs");
+                // Open the gzipped file
+                using GZipStream gzipStream = new(new FileStream("Saves/save.pxs", FileMode.Open), CompressionMode.Decompress);
+                using StreamReader reader = new(gzipStream);
+                // Read all lines from the gzipped file
+                lines = reader.ReadToEnd().Split("\n");
             }
             catch (FileNotFoundException)
             {
@@ -60,6 +71,8 @@ namespace Pixxl.Tools
             int l = 0;
             foreach (string line in lines[2..])
             {
+                if (line == "") { continue; }
+
                 try
                 {
                     string[] data = line.Split(';');
