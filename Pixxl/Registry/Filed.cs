@@ -11,6 +11,7 @@ namespace Pixxl.Registry
         public static string Materials =
             """
             Air            | 100, 149, 237 | 0
+            Ash            | 74, 74, 74    | 10
             BlueFire       | 11, 106, 230  | 13
             BlueTorch      | 0, 83, 115    | 3
             Chiller        | 33, 30, 130   | 5
@@ -27,6 +28,7 @@ namespace Pixxl.Registry
             Ice            | 130, 199, 245 | 18
             Insulation     | 245, 245, 245 | 18
             Lava           | 201, 67, 26   | 20
+            Oil            | 5, 5, 5       | 5
             Plasma         | 187, 57, 227  | 8
             Sand           | 186, 194, 33  | 9
             Steam          | 191, 191, 191 | 6

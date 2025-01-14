@@ -21,7 +21,7 @@ namespace Pixxl.Materials
             Burned = 0f;
             Conductivity = .3f;
             Density = 1.5f;
-            State = 3;
+            State = 2;
             Strength = 50;
             Melting = new Transformation(999999, typeof(Coal));
             Solidifying = new Transformation(-999999, typeof(Coal));
@@ -31,7 +31,11 @@ namespace Pixxl.Materials
         {
             base.Update();
             // Burned out
-            if (Burned >= Fuel) { Canvas.Pixels[Flat(Coords)] = Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas); return; }
+            if (Burned >= Fuel) {
+                Pixel creation = State <= 2 && Canvas.Rand.Next(0, 4) == 0 ? new Ash(Location, Canvas) : Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas);
+                Canvas.Pixels[Flat(Coords)] = creation;
+                return;
+            }
 
             // Lit
             if (Lit)

@@ -12,12 +12,10 @@ namespace Pixxl.Materials
         public Coal(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Superheated = true;
             Fuel = 10f;
             Burned = 0f;
             Conductivity = .3f;
             Density = 1.8f;
-            State = 2;
             Strength = 50;
             Melting = new Transformation(999999, typeof(Coal));
             Solidifying = new Transformation(-999999, typeof(Coal));

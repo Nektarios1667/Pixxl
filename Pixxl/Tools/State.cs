@@ -24,7 +24,8 @@ namespace Pixxl.Tools
             for (int i = 0; i < canvas.Pixels.Length; i++)
             {
                 Pixel current = canvas.Pixels[i];
-                data += $"{current.Type};{Math.Round(current.Temperature, 2)}\n";
+                string type = current.GetType().BaseType.Name;
+                data += $"{current.TypeId};{Math.Round(current.Temperature, 2)}\n";
             }
             // Writing
             Logger.Log("Saved Pixel state to 'Saves/save.pxs'");
@@ -63,7 +64,7 @@ namespace Pixxl.Tools
                 try
                 {
                     string[] data = line.Split(';');
-                    Pixel? created = Canvas.New(canvas, data[0], new(pixelSize * (l % grid.X), (float)Math.Floor(l / grid.X) * pixelSize), temp: float.Parse(data[1]));
+                    Pixel? created = Canvas.New(canvas, Registry.Materials.Names[int.Parse(data[0])], new(pixelSize * (l % grid.X), (float)Math.Floor(l / grid.X) * pixelSize), temp: float.Parse(data[1]));
                     if (created == null) { Logger.Log($"Error creating pixel #{l}"); continue; }
                     canvas.Pixels[l] = created;
                 } catch (Exception e) { Logger.Log($"Error loading pixel #{l}: {e}"); }
