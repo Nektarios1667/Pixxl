@@ -12,7 +12,7 @@ namespace Pixxl.Materials
         {
             // Constants
             Conductivity = 110f;
-            Density = .9f;
+            Density = 1.1f;
             State = 3;
             Strength = 600;
             Melting = new Transformation(700, typeof(CoolantVapor));
