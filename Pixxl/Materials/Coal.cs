@@ -16,7 +16,7 @@ namespace Pixxl.Materials
             Fuel = 10f;
             Burned = 0f;
             Conductivity = .3f;
-            Density = 1.5f;
+            Density = 1.8f;
             State = 2;
             Strength = 50;
             Melting = new Transformation(999999, typeof(Coal));

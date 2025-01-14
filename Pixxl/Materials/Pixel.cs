@@ -151,6 +151,7 @@ namespace Pixxl.Materials
 
             // Later checks
             if (target == this) { return true; } // If self dont check density
+            if (target.State != 3) { return false; }
             if (!target.Gravity) { return false; } // Pixel doesnt move
             if (target.Density > Density && delta.Y > 0) { return false; } // Moving down and hitting denser
             if (target.Density < Density && delta.Y < 0) { return false; } // Moving up and hitting denser
