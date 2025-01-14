@@ -18,7 +18,7 @@ namespace Pixxl.Materials
             Conductivity = .5f;
             Density = .0004f;
             Gravity = true;
-            State = 3;
+            State = 4;
             Strength = 1000;
             Melting = new Transformation(999999, typeof(BlueFire));
             Solidifying = new Transformation(7200, typeof(Fire));

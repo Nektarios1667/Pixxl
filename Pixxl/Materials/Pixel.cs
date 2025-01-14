@@ -46,7 +46,7 @@ namespace Pixxl.Materials
             // Constants
             Conductivity = 1f;
             Density = 1f;
-            State = 2; // 0 = Solid, 1 = Rigid Powder, 2 = Powder, 3 = Fluid
+            State = 2; // 0 = Solid, 1 = Rigid Powder, 2 = Powder, 3 = Fluid, 4 = Energy
             Strength = 100;
             Melting = new Transformation(999999, typeof(Pixel));
             Solidifying = new Transformation(-999999, typeof(Pixel));
@@ -77,6 +77,7 @@ namespace Pixxl.Materials
             if (State == 1) { offsets = [0]; }
             if (State == 2) { offsets = [0, -Consts.Screen.PixelSize, Consts.Screen.PixelSize]; }
             if (State == 3) { offsets = [0]; }
+            if (State == 4) { offsets = [0]; }
             
             if (Gravity) { Velocity = Consts.Game.Gravity; }
 
@@ -97,7 +98,7 @@ namespace Pixxl.Materials
             }
 
             // Gas spreading
-            if (State == 3 && !moved && Canvas.Rand.Next(0, 10) <= 1) { GasSpread(); }
+            if (State >= 3 && !moved && Canvas.Rand.Next(0, 10) <= 1) { GasSpread(); }
 
             // Heat transfer
             HeatTransfer();
@@ -151,7 +152,7 @@ namespace Pixxl.Materials
 
             // Later checks
             if (target == this) { return true; } // If self dont check density
-            if (target.State != 3) { return false; }
+            if (target.State < 3) { return false; }
             if (!target.Gravity) { return false; } // Pixel doesnt move
             if (target.Density > Density && delta.Y > 0) { return false; } // Moving down and hitting denser
             if (target.Density < Density && delta.Y < 0) { return false; } // Moving up and hitting denser

@@ -14,7 +14,7 @@ namespace Pixxl.Materials
             Temperature = 11000f;
             Conductivity = .3f;
             Density = .00018f;
-            State = 3;
+            State = 4;
             Strength = 999999;
             Melting = new Transformation(999999, typeof(Plasma));
             Solidifying = new Transformation(9500, typeof(Air));
