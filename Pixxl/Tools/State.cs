@@ -24,7 +24,6 @@ namespace Pixxl.Tools
             for (int i = 0; i < canvas.Pixels.Length; i++)
             {
                 Pixel current = canvas.Pixels[i];
-                string type = current.GetType().BaseType.Name;
                 data += $"{current.TypeId};{Math.Round(current.Temperature, 2)}\n";
             }
             // Writing
