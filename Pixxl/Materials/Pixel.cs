@@ -10,7 +10,6 @@ namespace Pixxl.Materials
     public abstract class Pixel
     {
         // Constants
-        private float _density { get; set; }
         public float Density { get; set; }
         public float Conductivity { get; set; }
         public int State { get; set; }
