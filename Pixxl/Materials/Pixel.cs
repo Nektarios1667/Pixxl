@@ -30,10 +30,24 @@ namespace Pixxl.Materials
         public RectangleF Rect => new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
 
         // Constants
-        private readonly Xna.Vector2[] adjacents = [new(0, Consts.Screen.PixelSize), new(Consts.Screen.PixelSize, 0), new(0, -Consts.Screen.PixelSize), new(-Consts.Screen.PixelSize, 0)];
-
-        // Other
-        public Canvas Canvas { get; set; }
+        private readonly Xna.Vector2[] surrounding = Consts.Game.Diagonals ? [
+            new Xna.Vector2(0, Consts.Game.PixelSize),               // Up
+            new Xna.Vector2(0, -Consts.Game.PixelSize),              // Down
+            new Xna.Vector2(-Consts.Game.PixelSize, 0),              // Left
+            new Xna.Vector2(Consts.Game.PixelSize, 0),               // Right
+            new Xna.Vector2(-Consts.Game.PixelSize, Consts.Game.PixelSize), // Top-left
+            new Xna.Vector2(Consts.Game.PixelSize, Consts.Game.PixelSize),  // Top-right
+            new Xna.Vector2(-Consts.Game.PixelSize, -Consts.Game.PixelSize),// Bottom-left
+            new Xna.Vector2(Consts.Game.PixelSize, -Consts.Game.PixelSize)]  // Bottom-right
+        : [
+            new Xna.Vector2(0, Consts.Game.PixelSize),               // Up
+            new Xna.Vector2(0, -Consts.Game.PixelSize),              // Down
+            new Xna.Vector2(-Consts.Game.PixelSize, 0),              // Left
+            new Xna.Vector2(Consts.Game.PixelSize, 0),               // Right
+        ];
+        
+    // Other
+    public Canvas Canvas { get; set; }
         public List<Pixel> Neighbors { get; set; }
         public int TypeId { get; }
         public string Type { get; }
@@ -187,9 +201,9 @@ namespace Pixxl.Materials
         public virtual void HeatTransfer()
         {
             // Heat transfers
-            for (int n = 0; n < adjacents.Length; n++)
+            for (int n = 0; n < surrounding.Length; n++)
             {
-                Pixel? neighbor = Find(Location + adjacents[n], 'l');
+                Pixel? neighbor = Find(Location + surrounding[n], 'l');
                 if (neighbor != null) { Neighbors.Add(neighbor); }
                 // Lose heat
                 if (neighbor != null && Temperature > neighbor.Temperature)
