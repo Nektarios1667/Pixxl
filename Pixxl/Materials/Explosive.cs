@@ -51,12 +51,12 @@ namespace Pixxl.Materials
                         if (damage >= current.Strength)
                         {
                             Pixel repl = new Air(current.Location, Canvas);
-                            repl.Temperature = current.Temperature + damage / 4; repl.Velocity = current.Velocity;
+                            repl.Temperature = current.Temperature + damage / 2; repl.Velocity = current.Velocity;
                             Canvas.Pixels[Flat(current.Coords)] = repl;
                         } else if (current.GetType().Name == "Air" && Canvas.Rand.Next(0, (int)dist / Range) == 0)
                         {
                             Pixel repl = new Fire(current.Location, Canvas);
-                            repl.Temperature = current.Temperature + damage / 4; repl.Velocity = current.Velocity;
+                            repl.Temperature = current.Temperature + damage / 2; repl.Velocity = current.Velocity;
                             Canvas.Pixels[Flat(current.Coords)].Ignore = true;
                             Canvas.Pixels[Flat(current.Coords)] = repl;
                         }
