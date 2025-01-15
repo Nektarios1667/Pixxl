@@ -30,7 +30,7 @@ namespace Pixxl.Materials
             if (Coords.Y == Consts.Screen.Grid[1] - 1 || Canvas.Pixels[Flat(Coords.X, Coords.Y + 1)].GetType().Name != "Air") { Explode(); }
         }
 
-        public void Explode()
+        public virtual void Explode()
         {
             // Iterate pixels
             for (int y = 0; y < Consts.Screen.Grid[1]; y++)  // Loop through rows
@@ -41,7 +41,7 @@ namespace Pixxl.Materials
                     Pixel current = Canvas.Pixels[Flat(x, y)];
                     int dX = (int)(Coords.X - current.Coords.X);
                     int dY = (int)(Coords.Y - current.Coords.Y);
-                    int dist = Math.Abs(dX) + Math.Abs(dY);
+                    float dist = (float)Math.Sqrt(dX*dX + dY*dY);
 
                     // Damage
                     if (dist <= Range)  
@@ -51,12 +51,13 @@ namespace Pixxl.Materials
                         if (damage >= current.Strength)
                         {
                             Pixel repl = new Air(current.Location, Canvas);
-                            repl.Temperature = current.Temperature + damage / 2; repl.Velocity = current.Velocity;
+                            repl.Temperature = current.Temperature + damage / 4; repl.Velocity = current.Velocity;
                             Canvas.Pixels[Flat(current.Coords)] = repl;
                         } else if (current.GetType().Name == "Air" && Canvas.Rand.Next(0, (int)dist / Range) == 0)
                         {
                             Pixel repl = new Fire(current.Location, Canvas);
-                            repl.Temperature = current.Temperature + damage / 2; repl.Velocity = current.Velocity;
+                            repl.Temperature = current.Temperature + damage / 4; repl.Velocity = current.Velocity;
+                            Canvas.Pixels[Flat(current.Coords)].Ignore = true;
                             Canvas.Pixels[Flat(current.Coords)] = repl;
                         }
                     }
