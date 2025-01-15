@@ -22,8 +22,6 @@ namespace Pixxl.Materials
         public override void Update()
         {
             base.Update();
-
-            Logger.Log(Density.ToString(), Temperature.ToString());
         }
     }
 }
