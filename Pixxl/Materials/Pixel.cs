@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Consts = Pixxl.Constants;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Pixxl.Materials
 {
@@ -22,7 +23,6 @@ namespace Pixxl.Materials
 
         // Properties
         public float Temperature { get; set; }
-        public float Velocity { get; set; }
         public Xna.Vector2 Location { get; set; }
         public int Index => Flat(Coord(Location));
         public Xna.Vector2 Snapped => Snap(Location);
@@ -70,7 +70,6 @@ namespace Pixxl.Materials
             Location = location;
             Canvas = canvas;
             Temperature = temp ?? Consts.Game.RoomTemp;
-            Velocity = 0f;
             Type = GetType().Name;
             TypeId = Registry.Materials.Id(Type);
             Color = ColorSchemes.GetColor(TypeId);
@@ -85,30 +84,9 @@ namespace Pixxl.Materials
             // Reset
             Neighbors.Clear();
 
-            // Left, middle, right
-            int[] offsets = [];
-            if (State == 1) { offsets = [0]; }
-            if (State == 2) { offsets = [0, -Consts.Screen.PixelSize, Consts.Screen.PixelSize]; }
-            if (State == 3) { offsets = [0]; }
-            if (State == 4) { offsets = [0]; }
-            
-            if (Gravity) { Velocity = Consts.Game.Gravity; }
 
             // For the possible moves including diagonals
-            bool moved = false;
-            for (int c = 0; c < offsets.Length; c++)
-            {
-                // Movement
-                Xna.Vector2 next = Predict(new(Location.X + offsets[c], Location.Y), Velocity);
-                // Checks
-                if (CollideCheck(Location, next, 'l'))
-                {
-                    // Move array pixels
-                    Location = Swap(Location, next, 'l');
-                    moved = true;
-                    break;
-                }
-            }
+            bool moved = Movements();
 
             // Gas spreading
             if (State >= 3 && !moved && Canvas.Rand.Next(0, 10) <= 1) { GasSpread(); }
@@ -118,6 +96,39 @@ namespace Pixxl.Materials
 
             // Check changes for melting, evaporating, plasmifying, deplasmifying condensing, hardening
             StateCheck();
+        }
+        public virtual bool Move(int offsetX)
+        {
+            // Movement
+            Xna.Vector2 next = Predict(new(Location.X + offsetX, Location.Y), Consts.Game.Gravity);
+            // Checks
+            if (CollideCheck(Location, next, 'l'))
+            {
+                // Move array pixels
+                Location = Swap(Location, next, 'l');
+                return true;
+            }
+            return false;
+        }
+        public virtual bool Movements()
+        {
+            if (Gravity)
+            {
+                if (Move(0)) { return true; } // down
+                if (State >= 2)
+                {
+                    // This checks if the pixel to the to the right will move down to the bottom-right
+                    // This is done since downwards movement is prioritized over diagonal movement
+                    // The main use is to prevent a bug where fluids trying to move up through fluids will always go left-up
+                    // It is only checked for down-right since the game updates left to right
+                    Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
+                    bool rightPriority = (right == null || !right.Gravity || !right.CollideCheck(right.Location, right.Predict(right.Location, Consts.Game.Gravity), 'l'));
+
+                    if (Move(-Consts.Screen.PixelSize)) { return true; } // down-left
+                    if (rightPriority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
+                }
+            }
+            return false;
         }
         public virtual void Draw()
         {
@@ -184,7 +195,7 @@ namespace Pixxl.Materials
         {
             object[] args = { Location, Canvas };
             Pixel converted = (Pixel)Activator.CreateInstance(transformation.Material, args);
-            converted.Temperature = Temperature; converted.Velocity = Velocity;
+            converted.Temperature = Temperature;
 
             Canvas.Pixels[Flat(Coords)] = converted;
         }
