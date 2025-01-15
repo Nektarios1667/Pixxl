@@ -11,10 +11,14 @@ namespace Pixxl.Materials
         public float Burned { get; set; }
         public bool Lit { get; set; }
         public bool Superheated { get; set; }
+        public bool Internal { get; set; }
+        public bool Ashes { get; set; }
         // Constructor
         public Fueling(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Ashes = true;
+            Internal = false;
             Superheated = false;
             Lit = false;
             Fuel = 10f;
@@ -32,7 +36,7 @@ namespace Pixxl.Materials
             base.Update();
             // Burned out
             if (Burned >= Fuel) {
-                Pixel creation = State <= 2 && Canvas.Rand.Next(0, 4) == 0 ? new Ash(Location, Canvas) : Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas);
+                Pixel creation = State <= 2 && Ashes && Canvas.Rand.Next(0, 4) == 0 ? new Ash(Location, Canvas) : Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas);
                 Canvas.Pixels[Flat(Coords)] = creation;
                 return;
             }
@@ -49,7 +53,7 @@ namespace Pixxl.Materials
                     Canvas.Pixels[idx] = Superheated ? new BlueFire(spawn, Canvas) : new Fire(spawn, Canvas);
                 }
                 // Snuffed
-                else if (Canvas.Pixels[idx].State != 4)
+                else if (Canvas.Pixels[idx].State != 4 && !Internal)
                 {
                     Lit = false;
                 }

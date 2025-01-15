@@ -23,6 +23,7 @@ namespace Pixxl.Registry
             Explosive      | 139, 0, 0     | 5
             Faucet         | 0, 0, 155     | 3
             Fire           | 189, 46, 21   | 30 
+            Fuse           | 138, 107, 90  | 10
             Glass          | 190, 222, 232 | 9
             Helium         | 168, 213, 227 | 12
             Ice            | 130, 199, 245 | 18
