@@ -27,8 +27,8 @@ namespace Pixxl
         {
             _graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = Constants.Screen.Window[0],
-                PreferredBackBufferHeight = Constants.Screen.Window[1]
+                PreferredBackBufferWidth = Consts.Screen.Window[0],
+                PreferredBackBufferHeight = Consts.Screen.Window[1]
             };
             IsFixedTimeStep = false;
             IsMouseVisible = true;
