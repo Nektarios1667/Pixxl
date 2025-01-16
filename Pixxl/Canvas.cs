@@ -43,7 +43,7 @@ namespace Pixxl
             for (int i = 0; i < ToolReg.Names.Length; i++)
             {
                 float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
-                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[i], Window.Font, Color.Black, ToolReg.Colors[i], Functions.Lighten(ToolReg.Colors[i], .2f), ToolReg.Functions[i], args: [this], borderColor:new(45, 45, 45));
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[i], Window.Font, Color.Black, ToolReg.Colors[i], Functions.Lighten(ToolReg.Colors[i], .2f), ToolReg.Functions[i], args: [this], borderColor: new(45, 45, 45));
                 Buttons.Add(created);
             }
 
@@ -56,7 +56,7 @@ namespace Pixxl
                 Color bg = MatReg.Colors[i];
                 int darkValues = 0; if (bg.R < 50) darkValues++; if (bg.G < 50) darkValues++; if (bg.B < 50) darkValues++; // 2/3 rgb values are dark
                 Color fg = darkValues >= 2 ? Color.White : Color.Black;
-                
+
                 // Button
                 Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, MatReg.Names[i], Window.Font, fg, bg, Functions.Lighten(MatReg.Colors[i], .2f), select, args: [MatReg.Names[i]]);
                 Buttons.Add(created);

@@ -7,33 +7,39 @@ using Xna = Microsoft.Xna.Framework;
 using Pixxl.Materials;
 using Consts = Pixxl.Constants;
 using System.Collections.Generic;
+using System.Runtime;
 
 namespace Pixxl
 {
     public class Window : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
         public Canvas canvas;
         public Xna.Vector2 snapped;
-        private Keys[] previous = [];
         public SpriteFont Font;
         public SpriteFont SmallFont;
         public string Selection;
         public Pixel? hovering;
-        public Xna.Vector2 location;
+        public Xna.Vector2 location = new(0, 0);
+
+        private Keys[] previous = [];
+        private Keys[] keys = [];
+        private MouseState mouse;
 
         public Window()
         {
-            _graphics = new GraphicsDeviceManager(this)
+            graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = Consts.Screen.Window[0],
                 PreferredBackBufferHeight = Consts.Screen.Window[1]
             };
-            IsFixedTimeStep = false;
             IsMouseVisible = true;
+            IsFixedTimeStep = false;
+
             Content.RootDirectory = "Content";
             Selection = "Concrete";
+
             Logger.Log("Initialized window");
         }
 
@@ -46,23 +52,22 @@ namespace Pixxl
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
             Font = Content.Load<SpriteFont>("Arial");
             SmallFont = Content.Load<SpriteFont>("ArialSmall");
 
             // Load canvas at the end
-            canvas = new(this, _graphics.GraphicsDevice, _spriteBatch);
+            canvas = new(this, graphics.GraphicsDevice, spriteBatch);
             Logger.Log("Loaded content");
         }
 
         protected override void Update(GameTime gameTime)
         {
             // States
-            KeyboardState keyState = Keyboard.GetState();
-            Keys[] keys = keyState.GetPressedKeys();
-            MouseState mouse = Mouse.GetState();
-            location = new(mouse.Position.X, mouse.Position.Y);
-            snapped = new ((int)Math.Floor((float)location.X / Consts.Screen.PixelSize), (int)Math.Floor((float)location.Y / Consts.Screen.PixelSize));
+            keys = Keyboard.GetState().GetPressedKeys();
+            mouse = Mouse.GetState();
+            location = mouse.Position.ToVector2();
+            snapped = new((int)Math.Floor((float)location.X / Consts.Screen.PixelSize), (int)Math.Floor((float)location.Y / Consts.Screen.PixelSize));
 
             // Hovering
             int idx = Pixel.Flat(Pixel.ConvertToCoord(location, 'l'));
@@ -100,7 +105,7 @@ namespace Pixxl
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin();
+            spriteBatch.Begin();
 
             // Canvas
             canvas.Draw();
@@ -108,13 +113,13 @@ namespace Pixxl
             // Text
             if (canvas.Delta != 0)
             {
-                _spriteBatch.DrawString(Font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
+                spriteBatch.DrawString(Font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
             }
 
             // Feed
             string[] feed = Logger.logged.ToArray();
-            _spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), new Vector2(Constants.Screen.Window[0] - 220, 5), Color.Black);
-            _spriteBatch.End();
+            spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), new Vector2(Constants.Screen.Window[0] - 220, 5), Color.Black);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

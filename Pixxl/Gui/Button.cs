@@ -83,7 +83,7 @@ namespace Pixxl.Gui
             // Background
             Batch.FillRectangle(Rect, State == 0 ? Color : Highlight);
             // Outline
-            Batch.DrawRectangle(Rect, State == 0 ? BorderColor : State == 1 ? new(35, 35, 35) : new(65, 65, 65), Border);
+            Batch.DrawRectangle(Rect, State == 0 ? BorderColor : State == 1 ? Tools.Functions.Lighten(BorderColor, .2f) : Tools.Functions.Lighten(BorderColor, .4f), Border);
 
             // Text
             if (Font != null)
@@ -102,7 +102,7 @@ namespace Pixxl.Gui
         }
         public static bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Point point)
         {
-            return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
+            return PointRectCollide(loc, dim, point.ToVector2());
         }
     }
 }

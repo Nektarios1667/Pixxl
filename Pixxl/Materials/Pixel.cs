@@ -5,6 +5,7 @@ using System;
 using Consts = Pixxl.Constants;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using System.Security.AccessControl;
 
 namespace Pixxl.Materials
 {
@@ -46,12 +47,13 @@ namespace Pixxl.Materials
             new Xna.Vector2(Consts.Game.PixelSize, 0),               // Right
         ];
         
-    // Other
-    public Canvas Canvas { get; set; }
+        // Other
+        public Canvas Canvas { get; set; }
         public List<Pixel> Neighbors { get; set; }
         public int TypeId { get; }
         public string Type { get; }
         public bool Ignore { get; set; }
+        private List<int> Previous {get; set;}
 
         // Constructor
         public Pixel(Xna.Vector2 location, Canvas canvas, float? temp = null)
@@ -66,6 +68,7 @@ namespace Pixxl.Materials
             Gravity = true;
 
             // Properties
+            Previous = [Index];
             Neighbors = [];
             Location = location;
             Canvas = canvas;
@@ -86,16 +89,20 @@ namespace Pixxl.Materials
 
 
             // For the possible moves including diagonals
-            bool moved = Movements();
+            Movements();
 
-            // Gas spreading
-            if (State >= 3 && !moved && Canvas.Rand.Next(0, 10) <= 1) { GasSpread(); }
+            // Fluid spreading
+            if (State >= 3 && (Previous.Contains(Index) || Canvas.Rand.Next(0, 10) == 0)) { FluidSpread(); }
 
             // Heat transfer
             HeatTransfer();
 
             // Check changes for melting, evaporating, plasmifying, deplasmifying condensing, hardening
             StateCheck();
+
+            // Final
+            Previous.Add(Index);
+            if (Previous.Count >= 10) { Previous.RemoveAt(0); }
         }
         public virtual bool Move(int offsetX)
         {
@@ -199,7 +206,7 @@ namespace Pixxl.Materials
 
             Canvas.Pixels[Flat(Coords)] = converted;
         }
-        public virtual void GasSpread()
+        public virtual void FluidSpread()
         {
             int side = Canvas.Rand.Next(0, 10) < 5 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
             Xna.Vector2 next = new(Location.X + side, Location.Y);

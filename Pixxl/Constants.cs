@@ -1,4 +1,5 @@
-﻿using Xna = Microsoft.Xna.Framework;
+﻿using System;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Constants
 {
@@ -12,11 +13,11 @@ namespace Pixxl.Constants
     public static class Gui
     {
         public static readonly Xna.Vector2 ButtonDim = new(100, 30);
-        public static readonly int MenuSize = (int)(ButtonDim.Y * 3f) / Screen.PixelSize;
+        public static readonly int MenuSize = (int)Math.Max(ButtonDim.Y * 3f, Screen.PixelSize) / Screen.PixelSize;
     }
     public static class Game
     {
-        public const int PixelSize = 10;
+        public const int PixelSize = 8;
         public const int RoomTemp = 70;
         public const float HeatTransfer = 1f;
         public const float Gravity = 9.81f * Screen.PixelSize;
