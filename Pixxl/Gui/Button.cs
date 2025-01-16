@@ -34,6 +34,8 @@ namespace Pixxl.Gui
         public int State { get; private set; }
         public bool Last { get; private set; }
         public bool Visible { get; set; }
+        // Centering
+        private Xna.Vector2 offset { get; set; }
         public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, string text, SpriteFont font, Color foreground, Xna.Color color, Xna.Color highlight, Delegate? function, object?[]? args, int border = 3, Color borderColor = default)
         {
             Batch = batch;
@@ -51,6 +53,10 @@ namespace Pixxl.Gui
             State = 0;
             Last = false;
             Visible = true;
+
+            Xna.Vector2 textDim = Font.MeasureString(Text);
+            Xna.Vector2 inside = new(Dimensions.X - Border * 2, Dimensions.Y - Border * 2);
+            offset = Xna.Vector2.Floor((inside - textDim) / 2);
         }
         public void Update(MouseState mouseState)
         {
@@ -78,10 +84,11 @@ namespace Pixxl.Gui
             Batch.FillRectangle(Rect, State == 0 ? Color : Highlight);
             // Outline
             Batch.DrawRectangle(Rect, State == 0 ? BorderColor : State == 1 ? new(35, 35, 35) : new(65, 65, 65), Border);
+
             // Text
             if (Font != null)
             {
-                Batch.DrawString(Font, Text, new(Location.X + Border + 3, Location.Y + Border + 3), Foreground);
+                Batch.DrawString(Font, Text, new(Location.X + Border + offset.X, Location.Y + Border + offset.Y), Foreground);
             } else
             {
                 Logger.Log($"Skipping drawing text '{Text}' because of uninitialized font");

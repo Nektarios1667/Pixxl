@@ -50,11 +50,14 @@ namespace Pixxl
             // Selection
             for (int i = 0; i < MatReg.Names.Count; i++)
             {
-                // 100x30
+                // Button size, background, and foreground
                 float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
                 float y = Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(i / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1);
                 Color bg = MatReg.Colors[i];
-                Color fg = bg.R < 70 && bg.G < 70 && bg.B < 70 ? Color.White : Color.Black;
+                int darkValues = 0; if (bg.R < 50) darkValues++; if (bg.G < 50) darkValues++; if (bg.B < 50) darkValues++; // 2/3 rgb values are dark
+                Color fg = darkValues >= 2 ? Color.White : Color.Black;
+                
+                // Button
                 Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, MatReg.Names[i], Window.Font, fg, bg, Functions.Lighten(MatReg.Colors[i], .2f), select, args: [MatReg.Names[i]]);
                 Buttons.Add(created);
             }
