@@ -13,7 +13,6 @@ namespace Pixxl.Materials
         {
             // Constants
             Fuel = 10f;
-            Burned = 0f;
             Conductivity = .3f;
             Density = 1.8f;
             Strength = 50;

@@ -47,7 +47,9 @@ namespace Pixxl.Materials
                 Burned += Canvas.Delta;
                 // Burn
                 Xna.Vector2 spawn = new(Location.X, Location.Y - Constants.Screen.PixelSize);
+                if (spawn.Y < 0) { return; }
                 int idx = Flat(Coord(spawn));
+
                 if (Canvas.Pixels[idx].Type == "Air")
                 {
                     Canvas.Pixels[idx] = Superheated ? new BlueFire(spawn, Canvas) : new Fire(spawn, Canvas);
