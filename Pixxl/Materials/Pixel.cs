@@ -53,7 +53,8 @@ namespace Pixxl.Materials
         public int TypeId { get; }
         public string Type { get; }
         public bool Ignore { get; set; }
-        private List<int> Previous {get; set;}
+        private Xna.Vector2 Previous {get; set;}
+        private bool Moved { get; set; }
 
         // Constructor
         public Pixel(Xna.Vector2 location, Canvas canvas, float? temp = null)
@@ -68,7 +69,7 @@ namespace Pixxl.Materials
             Gravity = true;
 
             // Properties
-            Previous = [Index];
+            Previous = location;
             Neighbors = [];
             Location = location;
             Canvas = canvas;
@@ -76,6 +77,7 @@ namespace Pixxl.Materials
             Type = GetType().Name;
             TypeId = Registry.Materials.Id(Type);
             Color = ColorSchemes.GetColor(TypeId);
+            Moved = false;
         }
 
         // Update and draw
@@ -92,7 +94,7 @@ namespace Pixxl.Materials
             Movements();
 
             // Fluid spreading
-            if (State >= 3 && (Previous.Contains(Index) || Canvas.Rand.Next(0, 10) == 0)) { FluidSpread(); }
+            if (State >= 3 && (Location == Previous || Canvas.Rand.Next(0, 30) == 0)) { FluidSpread(); }
 
             // Heat transfer
             HeatTransfer();
@@ -101,8 +103,7 @@ namespace Pixxl.Materials
             StateCheck();
 
             // Final
-            Previous.Add(Index);
-            if (Previous.Count >= 10) { Previous.RemoveAt(0); }
+            Previous = Location;
         }
         public virtual bool Move(int offsetX)
         {
@@ -129,10 +130,10 @@ namespace Pixxl.Materials
                     // The main use is to prevent a bug where fluids trying to move up through fluids will always go left-up
                     // It is only checked for down-right since the game updates left to right
                     Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
-                    bool rightPriority = (right == null || !right.Gravity || !right.CollideCheck(right.Location, right.Predict(right.Location, Consts.Game.Gravity), 'l'));
+                    bool priority = (right == null || !right.CollideCheck(right.Location, right.Predict(right.Location, Consts.Game.PixelSize), 'l'));
 
                     if (Move(-Consts.Screen.PixelSize)) { return true; } // down-left
-                    if (rightPriority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
+                    if (priority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
                 }
             }
             return false;
@@ -142,16 +143,18 @@ namespace Pixxl.Materials
             // Calculate red and green values based on the temperature
             Color color = Color;
             // Default is textures
+            int thermax = Consts.Visual.ThermalMax;
+            float percent = Temperature / thermax;
             if (Canvas.ColorMode == 1)
             {
-                float temp = Math.Clamp(Temperature, 0, Consts.Visual.ThermalMax);
-                float r = (temp / Consts.Visual.ThermalMax) * 255; float g = 255 - r; float b = 0;
+                float temp = Math.Clamp(Temperature, 0, thermax);
+                float r = percent * 255; float g = 255 - r; float b = Temperature > thermax * 2 ? (Temperature / thermax) * 25 : 0;
                 color = new((int)r, (int)g, (int)b);
             }
             else if (Canvas.ColorMode == 2)
             {
-                float temp = Math.Clamp(Temperature, 0, Consts.Visual.ThermalMax);
-                int saturation = (int) ((temp / Consts.Visual.ThermalMax) * 255);
+                float temp = Math.Clamp(Temperature, 0, thermax);
+                int saturation = (int) (percent * 255);
                 color = new(saturation, saturation, saturation);
             } else if (Canvas.ColorMode == 3)
             {
@@ -208,7 +211,7 @@ namespace Pixxl.Materials
         }
         public virtual void FluidSpread()
         {
-            int side = Canvas.Rand.Next(0, 10) < 5 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
+            int side = Canvas.Rand.Next(0, 2) == 0 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
             Xna.Vector2 next = new(Location.X + side, Location.Y);
             Pixel? target = Find(next, 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next, 'l'))

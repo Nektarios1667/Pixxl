@@ -89,6 +89,10 @@ namespace Pixxl
             {
                 canvas.Pixels[Pixel.Flat(snapped)] = new Air(location, canvas);
             }
+            else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
+            {
+                canvas.Pixels[Pixel.Flat(snapped)].Temperature += 20;
+            }
 
             // Keyboard
             if (keys.Contains(Keys.OemTilde) && !previous.Contains(Keys.OemTilde))
