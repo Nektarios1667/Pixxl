@@ -73,7 +73,8 @@ namespace Pixxl.Registry
 
         public static int Id(string material)
         {
-            return Names.IndexOf(material);
+            // Return index of material if its found and if not try finding a hidden material with that name
+            return Names.IndexOf(material) is var idx && idx != -1 ? idx : Names.IndexOf($".{material}");
         }
     }
 }

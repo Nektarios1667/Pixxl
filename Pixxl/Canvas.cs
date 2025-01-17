@@ -10,6 +10,7 @@ using MatReg = Pixxl.Registry.Materials;
 using ToolReg = Pixxl.Registry.Tools;
 using Pixxl.Tools;
 using Consts = Pixxl.Constants;
+using System.Linq;
 
 namespace Pixxl
 {
@@ -40,26 +41,29 @@ namespace Pixxl
             Buttons = [];
 
             // Tools
-            for (int i = 0; i < ToolReg.Names.Length; i++)
+            for (int t = 0; t < ToolReg.Names.Length; t++)
             {
-                float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
-                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[i], Window.Font, Color.Black, ToolReg.Colors[i], Functions.Lighten(ToolReg.Colors[i], .2f), ToolReg.Functions[i], args: [this], borderColor: new(45, 45, 45));
+                float x = Consts.Gui.ButtonDim.X * (t % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[t], Window.Font, Color.Black, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], args: [this], borderColor: new(45, 45, 45));
                 Buttons.Add(created);
             }
 
             // Selection
-            for (int i = 0; i < MatReg.Names.Count; i++)
+            int l = 0; int m = 0;
+            for (m = 0; m < MatReg.Names.Count; m++)
             {
+                if (MatReg.Names[m][0] == '.') { continue; } // Skip hidden
                 // Button size, background, and foreground
-                float x = Consts.Gui.ButtonDim.X * (i % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
-                float y = Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(i / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1);
-                Color bg = MatReg.Colors[i];
+                float x = Consts.Gui.ButtonDim.X * (l % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
+                float y = Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(l / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1);
+                Color bg = MatReg.Colors[m];
                 int darkValues = 0; if (bg.R < 50) darkValues++; if (bg.G < 50) darkValues++; if (bg.B < 50) darkValues++; // 2/3 rgb values are dark
                 Color fg = darkValues >= 2 ? Color.White : Color.Black;
 
                 // Button
-                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, MatReg.Names[i], Window.Font, fg, bg, Functions.Lighten(MatReg.Colors[i], .2f), select, args: [MatReg.Names[i]]);
+                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, MatReg.Names[m], Window.Font, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, args: [MatReg.Names[m]]);
                 Buttons.Add(created);
+                l++;
             }
 
             // Fill pixels

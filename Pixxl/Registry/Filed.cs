@@ -10,7 +10,7 @@ namespace Pixxl.Registry
     {
         public static string Materials =
             """
-            Air            | 100, 149, 237 | 0
+            .Air            | 100, 149, 237 | 0
             Ash            | 74, 74, 74    | 10
             BlueFire       | 11, 106, 230  | 13
             BlueTorch      | 0, 83, 115    | 3
@@ -18,7 +18,7 @@ namespace Pixxl.Registry
             Coal           | 13, 13, 13    | 10
             Concrete       | 169, 169, 169 | 9
             Coolant        | 31, 181, 111  | 8
-            CoolantVapor   | 56, 224, 146  | 14
+            .CoolantVapor   | 56, 224, 146  | 14
             Copper         | 173, 86, 31   | 9
             Explosive      | 139, 0, 0     | 5
             Faucet         | 0, 0, 155     | 3
