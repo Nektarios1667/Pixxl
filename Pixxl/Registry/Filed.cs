@@ -20,16 +20,19 @@ namespace Pixxl.Registry
             Coolant        | 31, 181, 111  | 8
             .CoolantVapor  | 56, 224, 146  | 14
             Copper         | 173, 86, 31   | 9
+            Diamond        | 24, 149, 171  | 6
             Explosive      | 139, 0, 0     | 5
             Faucet         | 0, 0, 155     | 3
             Fire           | 189, 46, 21   | 30 
             Fuse           | 138, 107, 90  | 10
             Glass          | 190, 222, 232 | 9
+            Gold           | 189, 183, 8   | 14
             Helium         | 168, 213, 227 | 12
             Ice            | 130, 199, 245 | 18
             Insulation     | 245, 245, 245 | 18
             Lava           | 201, 67, 26   | 20
             .MoltenCopper  | 222, 108, 35  | 9
+            .MoltenGold    | 219, 213, 15  | 8
             Nuke           | 103, 122, 9   | 3
             Oil            | 5, 5, 5       | 4
             Plasma         | 187, 57, 227  | 8
