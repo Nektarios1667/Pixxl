@@ -11,7 +11,7 @@ namespace Pixxl.Materials
         public Chiller(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Temperature = -100f;
+            Temperature = -200f;
             Conductivity = 100f;
             Density = 10f;
             State = 0;
@@ -24,7 +24,7 @@ namespace Pixxl.Materials
         {
             base.Update();
 
-            Temperature = -100f;
+            Temperature = -200f;
         }
 
     }
