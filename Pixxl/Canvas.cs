@@ -43,8 +43,12 @@ namespace Pixxl
             // Tools
             for (int t = 0; t < ToolReg.Names.Length; t++)
             {
+                // Info
                 float x = Consts.Gui.ButtonDim.X * (t % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
-                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[t], Window.Font, Color.Black, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], args: [this], borderColor: new(45, 45, 45));
+                object?[]? args = ToolReg.Args[t] == "Canvas" ? [this] : ToolReg.Args[t] == "Window" ? [Window] : []; // Pass either canvas object or window object
+
+                // Creation
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ButtonDim, ToolReg.Names[t], Window.Font, Color.Black, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], args: args, borderColor: new(45, 45, 45));
                 Buttons.Add(created);
             }
 

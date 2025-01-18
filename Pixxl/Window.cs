@@ -81,7 +81,7 @@ namespace Pixxl
             if (mouse.LeftButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
             {
                 cursor = Selection;
-                if (canvas.Pixels[Pixel.Flat(coord)].GetType().Name == "Air")
+                if (canvas.Pixels[Pixel.Flat(coord)].GetType().Name == "Air" || Selection == "Air")
                 {
                     canvas.Pixels[Pixel.Flat(coord)] = Canvas.New(canvas, Selection, location);
                 }
@@ -130,7 +130,7 @@ namespace Pixxl
             // Cursor
             switch (cursor)
             {
-                case "Erase":
+                case "Erase" or "Air":
                     DrawX(spriteBatch, location, [8, 8], Color.Red, 2); break;
                 case "Normal":
                     DrawX(spriteBatch, location, [8, 8], Color.Black, 3);
@@ -143,6 +143,8 @@ namespace Pixxl
             spriteBatch.End();
             base.Draw(gameTime);
         }
+        
+        // Static methods
         public static bool Inside(Xna.Vector2 point, int[] dimensions)
         {
             return point.X >= 0 && point.X < dimensions[0] && point.Y >= 0 && point.Y < dimensions[1];
@@ -165,6 +167,12 @@ namespace Pixxl
             //  "|" line
             batch.DrawLine(new(location.X, location.Y - dimensions[1] / 2), new(location.X, location.Y + dimensions[1] / 2),
                            color, thickness);
+        }
+
+        // Other static methods
+        public static void EraseMode(Window window)
+        {
+            window.Selection = "Air";
         }
     }
 }
