@@ -6,6 +6,8 @@ using Consts = Pixxl.Constants;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using System.Security.AccessControl;
+using System.Linq;
+using MonoGame.Extended.Serialization.Json;
 
 namespace Pixxl.Materials
 {
@@ -107,7 +109,7 @@ namespace Pixxl.Materials
             // Final
             Previous = Location;
         }
-        public virtual bool Move(int offsetX)
+        public virtual bool Move(int offsetX = 0)
         {
             // Movement
             Xna.Vector2 next = Predict(new(Location.X + offsetX, Location.Y), Consts.Game.Gravity);
@@ -122,22 +124,19 @@ namespace Pixxl.Materials
         }
         public virtual bool Movements()
         {
-            if (Gravity)
-            {
-                if (Move(0)) { return true; } // down
-                if (State >= 2)
-                {
-                    // This checks if the pixel to the to the right will move down to the bottom-right
-                    // This is done since downwards movement is prioritized over diagonal movement
-                    // The main use is to prevent a bug where fluids trying to move up through fluids will always go left-up
-                    // It is only checked for down-right since the game updates left to right
-                    Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
-                    bool priority = (right == null || !right.CollideCheck(right.Location, right.Predict(right.Location, Consts.Game.PixelSize), 'l'));
+            // Checks
+            if (!Gravity) { return false; }
+            if (Move()) { return true; } // Down
+            if (State < 2) { return false; } // Not a fluid or energy
 
-                    if (Move(-Consts.Screen.PixelSize)) { return true; } // down-left
-                    if (priority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
-                }
-            }
+            // This checks if the pixel to the to the right will move down to the bottom-right
+            // This is done since downwards movement is prioritized over diagonal movement
+            Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
+            bool priority = (right == null || !right.CollideCheck(right.Location, right.Predict(right.Location, Consts.Game.PixelSize), 'l'));
+            // Moves
+            if (Move(-Consts.Screen.PixelSize)) { return true; } // down-left
+            if (priority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
+
             return false;
         }
         public virtual void Draw()
@@ -224,16 +223,21 @@ namespace Pixxl.Materials
         public virtual void HeatTransfer()
         {
             // Heat transfers
+            float multiplier = Canvas.Delta * Consts.Game.Speed * Consts.Game.HeatTransfer;
             for (int n = 0; n < surrounding.Length; n++)
             {
+                // Neighbor
                 Pixel? neighbor = Find(Location + surrounding[n], 'l');
-                if (neighbor != null) { Neighbors.Add(neighbor); }
+                if (neighbor == null) { continue; }
+                Neighbors.Add(neighbor);
+
                 // Lose heat
-                if (neighbor != null && Temperature > neighbor.Temperature)
+                if (Temperature > neighbor.Temperature)
                 {
                     // Heat transfer simplified equation
                     float dTemp = Temperature - neighbor.Temperature;
-                    float transfer = Math.Clamp((dTemp / (1f / Conductivity + 1f / neighbor.Conductivity)) * Canvas.Delta * Consts.Game.Speed * Consts.Game.HeatTransfer, float.Epsilon, dTemp / 2);
+                    float conductivity = 1f / Conductivity + 1f / neighbor.Conductivity;
+                    float transfer = Math.Min((dTemp / conductivity) * multiplier, dTemp / 2);
                     Temperature -= transfer;
                     neighbor.Temperature += transfer;
                 }
@@ -241,9 +245,9 @@ namespace Pixxl.Materials
         }
         public Pixel? Find(Xna.Vector2 vec, char mode)
         {
-            if (IndexCheck(vec, 'l'))
+            Xna.Vector2 converted = ConvertToCoord(vec, mode);
+            if (IndexCheck(converted, 'c'))
             {
-                Xna.Vector2 converted = ConvertToCoord(vec, mode);
                 return Canvas.Pixels[Flat(converted)];
             } else
             {
@@ -282,9 +286,9 @@ namespace Pixxl.Materials
             Xna.Vector2 converted;
 
             // Converting to coords based on mode
-            if (mode == 'l') { converted = Coord(loc); } // Location
+            if (mode == 'c') { converted = loc; } // Coordinate
+            else if (mode == 'l') { converted = Coord(loc); } // Location
             else if (mode == 's') { converted = loc * Consts.Screen.PixelSize; } // Snapped location
-            else if (mode == 'c') { converted = loc; } // Coordinate
             else { throw new ArgumentException("Mode should be 'l', 's', or 'c'"); }
 
             return converted;
