@@ -52,10 +52,10 @@ namespace Pixxl.Materials
 
                 if (Canvas.Pixels[idx].Type == "Air")
                 {
-                    Canvas.Pixels[idx] = Superheated ? new BlueFire(spawn, Canvas) : new Fire(spawn, Canvas);
+                    Canvas.Pixels[idx] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(spawn, Canvas) : Superheated ? new BlueFire(spawn, Canvas) : new Fire(spawn, Canvas);
                 }
                 // Snuffed
-                else if (Canvas.Pixels[idx].State != 4 && !Internal)
+                else if (Canvas.Pixels[idx].State != 4  && Canvas.Pixels[idx].Type != "Smoke" && !Internal)
                 {
                     Lit = false;
                 }
