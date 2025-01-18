@@ -18,7 +18,7 @@ namespace Pixxl.Registry
             Coal           | 13, 13, 13    | 10
             Concrete       | 169, 169, 169 | 9
             Coolant        | 31, 181, 111  | 8
-            .CoolantVapor   | 56, 224, 146  | 14
+            .CoolantVapor  | 56, 224, 146  | 14
             Copper         | 173, 86, 31   | 9
             Explosive      | 139, 0, 0     | 5
             Faucet         | 0, 0, 155     | 3
@@ -29,6 +29,7 @@ namespace Pixxl.Registry
             Ice            | 130, 199, 245 | 18
             Insulation     | 245, 245, 245 | 18
             Lava           | 201, 67, 26   | 20
+            .MoltenCopper  | 222, 108, 35  | 9
             Nuke           | 103, 122, 9   | 3
             Oil            | 5, 5, 5       | 4
             Plasma         | 187, 57, 227  | 8

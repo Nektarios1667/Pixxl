@@ -15,7 +15,7 @@ namespace Pixxl.Materials
             Density = 9f;
             State = 0;
             Strength = 200;
-            Melting = new Transformation(1900, typeof(Lava));
+            Melting = new Transformation(2300, typeof(MoltenCopper));
             Solidifying = new Transformation(-999999, typeof(Copper));
             Gravity = false;
         }
