@@ -129,10 +129,6 @@ namespace Pixxl.Materials
             if (Move()) { return true; } // Down
             if (State < 2) { return false; } // Not a fluid or energy
 
-            if (Type == "Sand")
-            {
-                Console.Write('s');
-            }
             // This checks if the pixel to the to the right will move down to the bottom-right
             // This is done since downwards movement is prioritized over diagonal movement
             Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
