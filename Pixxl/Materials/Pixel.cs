@@ -129,12 +129,18 @@ namespace Pixxl.Materials
             if (Move()) { return true; } // Down
             if (State < 2) { return false; } // Not a fluid or energy
 
+            if (Type == "Sand")
+            {
+                Console.Write('s');
+            }
             // This checks if the pixel to the to the right will move down to the bottom-right
             // This is done since downwards movement is prioritized over diagonal movement
             Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
-            bool priority = (right == null || !right.CollideCheck(right.Location, right.Predict(right.Location, Consts.Game.PixelSize), 'l'));
+            Xna.Vector2 rightMove = right != null ? Predict(right.Location, Consts.Game.PixelSize) : new(0, 0);
+            bool priority = (right == null || Coord(rightMove).Y != Location.Y || !right.CollideCheck(right.Location, rightMove, 'l'));
             // Moves
             if (Move(-Consts.Screen.PixelSize)) { return true; } // down-left
+
             if (priority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
 
             return false;
