@@ -8,6 +8,7 @@ using Pixxl.Materials;
 using Consts = Pixxl.Constants;
 using System.Collections.Generic;
 using System.Runtime;
+using MonoGame.Extended;
 
 namespace Pixxl
 {
@@ -16,16 +17,16 @@ namespace Pixxl
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         public Canvas canvas;
-        public Xna.Vector2 snapped;
+        public Xna.Vector2 coord;
         public SpriteFont Font;
         public SpriteFont SmallFont;
         public string Selection;
-        public Pixel? hovering;
         public Xna.Vector2 location = new(0, 0);
 
         private Keys[] previous = [];
         private Keys[] keys = [];
         private MouseState mouse;
+        private string cursor;
 
         public Window()
         {
@@ -34,11 +35,14 @@ namespace Pixxl
                 PreferredBackBufferWidth = Consts.Screen.Window[0],
                 PreferredBackBufferHeight = Consts.Screen.Window[1]
             };
-            IsMouseVisible = true;
+            IsMouseVisible = false;
+            graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
+            graphics.ApplyChanges();
 
             Content.RootDirectory = "Content";
-            Selection = "Concrete";
+            Selection = "Sand";
+            cursor = Selection;
 
             Logger.Log("Initialized window");
         }
@@ -67,32 +71,26 @@ namespace Pixxl
             keys = Keyboard.GetState().GetPressedKeys();
             mouse = Mouse.GetState();
             location = mouse.Position.ToVector2();
-            snapped = new((int)Math.Floor((float)location.X / Consts.Screen.PixelSize), (int)Math.Floor((float)location.Y / Consts.Screen.PixelSize));
-
-            // Hovering
-            int idx = Pixel.Flat(Pixel.ConvertToCoord(location, 'l'));
-            hovering = idx < canvas.Pixels.Length && idx > 0 ? canvas.Pixels[idx] : null;
+            coord = new((int)Math.Floor((float)location.X / Consts.Screen.PixelSize), (int)Math.Floor((float)location.Y / Consts.Screen.PixelSize));
 
             // Exit
             if (keys.Contains(Keys.Escape))
                 Exit();
 
             // Drawing
-            if (mouse.LeftButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
+            if (mouse.LeftButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
             {
-                if (canvas.Pixels[Pixel.Flat(snapped)].GetType().Name == "Air")
+                cursor = Selection;
+                if (canvas.Pixels[Pixel.Flat(coord)].GetType().Name == "Air")
                 {
-                    canvas.Pixels[Pixel.Flat(snapped)] = Canvas.New(canvas, Selection, location);
+                    canvas.Pixels[Pixel.Flat(coord)] = Canvas.New(canvas, Selection, location);
                 }
             }
-            else if (mouse.MiddleButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
+            else if (mouse.MiddleButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
             {
-                canvas.Pixels[Pixel.Flat(snapped)] = new Air(location, canvas);
-            }
-            else if (mouse.RightButton == ButtonState.Pressed && snapped.X >= 0 && snapped.X <= Consts.Screen.Grid[0] - 1 && snapped.Y >= 0 && snapped.Y <= Consts.Screen.Grid[1] - 1)
-            {
-                canvas.Pixels[Pixel.Flat(snapped)].Temperature += 20;
-            }
+                cursor = "Erase";
+                canvas.Pixels[Pixel.Flat(coord)] = new Air(location, canvas);
+            } else { cursor = "Normal"; }
 
             // Keyboard
             if (keys.Contains(Keys.OemTilde) && !previous.Contains(Keys.OemTilde))
@@ -109,10 +107,15 @@ namespace Pixxl
 
         protected override void Draw(GameTime gameTime)
         {
+            // Start
             spriteBatch.Begin();
+            GraphicsDevice.Clear(Color.DarkGray);
 
             // Canvas
             canvas.Draw();
+
+            // Outline
+            spriteBatch.DrawRectangle(new(0, 0, Consts.Screen.Window[0], Consts.Screen.Window[1] ), Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2);
 
             // Text
             if (canvas.Delta != 0)
@@ -122,9 +125,46 @@ namespace Pixxl
 
             // Feed
             string[] feed = Logger.logged.ToArray();
-            spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), new Vector2(Constants.Screen.Window[0] - 220, 5), Color.Black);
+            spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), new Vector2(Consts.Screen.Window[0] - 220, 5), Color.Black);
+
+            // Cursor
+            switch (cursor)
+            {
+                case "Erase":
+                    DrawX(spriteBatch, location, [8, 8], Color.Red, 2); break;
+                case "Normal":
+                    DrawX(spriteBatch, location, [8, 8], Color.Black, 3);
+                    DrawX(spriteBatch, location, [8, 8], Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2); break;
+                default:
+                    DrawPlus(spriteBatch, location, [12, 12], Color.Green, 3); break;
+            }
+
+            // Drawing
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+        public static bool Inside(Xna.Vector2 point, int[] dimensions)
+        {
+            return point.X >= 0 && point.X < dimensions[0] && point.Y >= 0 && point.Y < dimensions[1];
+        }
+        public static bool Inside(Xna.Point point, int[] dimensions) { return Inside(point.ToVector2(), dimensions); }
+        public static void DrawX(SpriteBatch batch, Xna.Vector2 location, int[] dimensions, Color color, int thickness = 2)
+        {
+            //  "\" line
+            batch.DrawLine(new(location.X - dimensions[0] / 2, location.Y - dimensions[1] / 2), new(location.X + dimensions[0] / 2, location.Y + dimensions[1] / 2),
+                           color, thickness);
+            //  "/" line
+            batch.DrawLine(new(location.X + dimensions[0] / 2, location.Y - dimensions[1] / 2), new(location.X - dimensions[0] / 2, location.Y + dimensions[1] / 2),
+                           color, thickness);
+        }
+        public static void DrawPlus(SpriteBatch batch, Xna.Vector2 location, int[] dimensions, Color color, int thickness = 1)
+        {
+            //  "-" line
+            batch.DrawLine(new(location.X - dimensions[0] / 2, location.Y), new(location.X + dimensions[0] / 2, location.Y),
+                           color, thickness);
+            //  "|" line
+            batch.DrawLine(new(location.X, location.Y - dimensions[1] / 2), new(location.X, location.Y + dimensions[1] / 2),
+                           color, thickness);
         }
     }
 }
