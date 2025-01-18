@@ -28,6 +28,7 @@ namespace Pixxl.Registry
             Fuse           | 138, 107, 90  | 10
             Glass          | 190, 222, 232 | 9
             Gold           | 189, 183, 8   | 14
+            Grass          | 0, 175, 0     | 8
             Gravel         | 97, 97, 97    | 18
             Helium         | 168, 213, 227 | 12
             Ice            | 130, 199, 245 | 18

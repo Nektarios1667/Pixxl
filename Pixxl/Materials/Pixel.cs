@@ -34,24 +34,25 @@ namespace Pixxl.Materials
 
         // Constants
         private readonly Xna.Vector2[] surrounding = Consts.Game.Diagonals ? [
-            new Xna.Vector2(0, Consts.Game.PixelSize),               // Up
-            new Xna.Vector2(0, -Consts.Game.PixelSize),              // Down
-            new Xna.Vector2(-Consts.Game.PixelSize, 0),              // Left
+            new Xna.Vector2(0, -Consts.Game.PixelSize),               // Up
+            new Xna.Vector2(Consts.Game.PixelSize, -Consts.Game.PixelSize),  // Top-right
             new Xna.Vector2(Consts.Game.PixelSize, 0),               // Right
-            new Xna.Vector2(-Consts.Game.PixelSize, Consts.Game.PixelSize), // Top-left
-            new Xna.Vector2(Consts.Game.PixelSize, Consts.Game.PixelSize),  // Top-right
-            new Xna.Vector2(-Consts.Game.PixelSize, -Consts.Game.PixelSize),// Bottom-left
-            new Xna.Vector2(Consts.Game.PixelSize, -Consts.Game.PixelSize)]  // Bottom-right
+            new Xna.Vector2(Consts.Game.PixelSize, Consts.Game.PixelSize),  // Bottom-right
+            new Xna.Vector2(0, Consts.Game.PixelSize),              // Down
+            new Xna.Vector2(-Consts.Game.PixelSize, Consts.Game.PixelSize),// Bottom-left
+            new Xna.Vector2(-Consts.Game.PixelSize, 0),              // Left
+            new Xna.Vector2(-Consts.Game.PixelSize, -Consts.Game.PixelSize),] // Top-left
+
         : [
             new Xna.Vector2(0, Consts.Game.PixelSize),               // Up
-            new Xna.Vector2(0, -Consts.Game.PixelSize),              // Down
-            new Xna.Vector2(-Consts.Game.PixelSize, 0),              // Left
             new Xna.Vector2(Consts.Game.PixelSize, 0),               // Right
+            new Xna.Vector2(0, Consts.Game.PixelSize),              // Down
+            new Xna.Vector2(-Consts.Game.PixelSize, 0),              // Left
         ];
         
         // Other
         public Canvas Canvas { get; set; }
-        public List<Pixel> Neighbors { get; set; }
+        public List<Pixel?> Neighbors { get; set; }
         public int TypeId { get; }
         public string Type { get; }
         public bool Ignore { get; set; }
@@ -230,8 +231,8 @@ namespace Pixxl.Materials
             {
                 // Neighbor
                 Pixel? neighbor = Find(Location + surrounding[n], 'l');
-                if (neighbor == null) { continue; }
                 Neighbors.Add(neighbor);
+                if (neighbor == null) { continue; }
 
                 // Lose heat
                 if (Temperature > neighbor.Temperature)
