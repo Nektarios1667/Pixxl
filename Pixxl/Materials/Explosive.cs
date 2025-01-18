@@ -46,8 +46,8 @@ namespace Pixxl.Materials
                     // Damage
                     if (dist <= Range)  
                     {
-                        //    damage = -dxr^-1 + d where d = Damage, x = Distance, r = Range
-                        float damage = (float)(Explosion * dist * (1 / Range) + Explosion);
+                        // damage = -dxr^-1 + d where d = Damage, x = Distance, r = Range
+                        float damage = (Explosion / Range) * (Range - dist);
                         if (damage >= current.Strength)
                         {
                             Pixel repl = new Air(current.Location, Canvas);

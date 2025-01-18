@@ -37,7 +37,7 @@ namespace Pixxl.Registry
             Oil            | 5, 5, 5       | 4
             Plasma         | 187, 57, 227  | 8
             Propane        | 191, 145, 145 | 7
-            Sand           | 186, 194, 33  | 9
+            Sand           | 184, 144, 24  | 9
             Steam          | 191, 191, 191 | 6
             Torch          | 55, 0, 0      | 3
             Void           | 45, 6, 48     | 5

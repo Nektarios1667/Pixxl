@@ -14,7 +14,7 @@ namespace Pixxl.Materials
             Conductivity = .05f;
             Density = 2.8f;
             State = 0;
-            Strength = 600;
+            Strength = 400;
             Melting = new Transformation(2200, typeof(Lava));
             Solidifying = new Transformation(-999999, typeof(Concrete));
             Gravity = false;
