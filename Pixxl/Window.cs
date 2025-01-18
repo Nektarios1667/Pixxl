@@ -36,9 +36,7 @@ namespace Pixxl
                 PreferredBackBufferHeight = Consts.Screen.Window[1]
             };
             IsMouseVisible = false;
-            graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
-            graphics.ApplyChanges();
 
             Content.RootDirectory = "Content";
             Selection = "Sand";
