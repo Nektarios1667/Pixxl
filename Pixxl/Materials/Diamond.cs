@@ -15,7 +15,7 @@ namespace Pixxl.Materials
             Density = 3.51f;
             State = 2;
             Strength = 1000;
-            Melting = new Transformation(999999, typeof(Diamond));
+            Melting = new Transformation(8500, typeof(Plasma));
             Solidifying = new Transformation(-999999, typeof(Diamond));
         }
     }

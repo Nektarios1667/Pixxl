@@ -16,7 +16,7 @@ namespace Pixxl.Materials
             Density = 2.4f;
             State = 3;
             Strength = 1000;
-            Melting = new Transformation(999999, typeof(Lava));
+            Melting = new Transformation(8500, typeof(Plasma));
             Solidifying = new Transformation(1800, typeof(Concrete));
         }
         public override void Update()
