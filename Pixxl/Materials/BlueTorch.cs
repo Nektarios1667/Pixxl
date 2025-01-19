@@ -30,7 +30,7 @@ namespace Pixxl.Materials
             int idx = Flat(Coord(spawn));
             if (Canvas.Pixels[idx].Type == "Air")
             {
-                Canvas.Pixels[idx].Ignore = true;
+                Canvas.Pixels[idx].Skip = true;
                 Canvas.Pixels[idx] = new BlueFire(spawn, Canvas);
             }
         }

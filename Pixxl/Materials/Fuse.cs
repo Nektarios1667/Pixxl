@@ -47,7 +47,7 @@ namespace Pixxl.Materials
                 // Surrounding fire
                 if (Lit && neighbor.Type == "Air")
                 {
-                    Canvas.Pixels[Flat(neighbor.Coords)].Ignore = true;
+                    Canvas.Pixels[Flat(neighbor.Coords)].Skip = true;
                     Canvas.Pixels[Flat(neighbor.Coords)] = new Fire(neighbor.Location, Canvas);
                 }
             }

@@ -55,9 +55,8 @@ namespace Pixxl.Materials
         public List<Pixel?> Neighbors { get; set; }
         public int TypeId { get; }
         public string Type { get; }
-        public bool Ignore { get; set; }
+        public bool Skip { get; set; }
         private Xna.Vector2 Previous {get; set;}
-        private bool Moved { get; set; }
 
         // Constructor
         public Pixel(Xna.Vector2 location, Canvas canvas, float? temp = null)
@@ -80,14 +79,13 @@ namespace Pixxl.Materials
             Type = GetType().Name;
             TypeId = Registry.Materials.Id(Type);
             Color = ColorSchemes.GetColor(TypeId);
-            Moved = false;
         }
 
         // Update and draw
         public virtual void Update()
         {
             // Deletion
-            if (Ignore) { Ignore = false; return; }
+            if (Skip) { Skip = false; return; }
 
             // Reset
             Neighbors.Clear();
@@ -101,6 +99,7 @@ namespace Pixxl.Materials
                 if ((Location == Previous && Canvas.Rand.Next(0, Math.Min((int)Density * 3, 8)) == 0)) { FluidSpread(); }
                 else if (Canvas.Rand.Next(0, Math.Clamp((int)Density * 10, 10, 40)) == 0) { FluidSpread(); }
             }
+
             // Heat transfer
             HeatTransfer();
 
@@ -299,10 +298,6 @@ namespace Pixxl.Materials
         public static Xna.Vector2 Coord(Xna.Vector2 vec)
         {
             return Xna.Vector2.Floor(vec / Consts.Screen.PixelSize);
-        }
-        public static Xna.Vector2 Coord(float x, float y)
-        {
-            return Xna.Vector2.Floor(new Xna.Vector2(x, y) / Consts.Screen.PixelSize);
         }
         public static Xna.Vector2 Snap(Xna.Vector2 vec)
         {

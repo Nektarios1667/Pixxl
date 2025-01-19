@@ -57,7 +57,7 @@ namespace Pixxl.Materials
                         {
                             Pixel repl = new Fire(current.Location, Canvas);
                             repl.Temperature = current.Temperature + damage / 2;
-                            Canvas.Pixels[Flat(current.Coords)].Ignore = true;
+                            Canvas.Pixels[Flat(current.Coords)].Skip = true;
                             Canvas.Pixels[Flat(current.Coords)] = repl;
                         }
                     }

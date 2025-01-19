@@ -32,7 +32,7 @@ namespace Pixxl.Materials
             int idx = Flat(Coord(spawn));
             if (Canvas.Pixels[idx].Type == "Air" && cycle == 0)
             {
-                Canvas.Pixels[idx].Ignore = true;
+                Canvas.Pixels[idx].Skip = true;
                 Canvas.Pixels[idx] = new Water(spawn, Canvas);
             }
             cycle = (cycle + 1) % 2;
