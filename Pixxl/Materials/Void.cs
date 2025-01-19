@@ -25,9 +25,9 @@ namespace Pixxl.Materials
             base.Update();
 
             // Destrory
-            foreach (Pixel neighbor in Neighbors)
+            foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor.Type != "Air" && neighbor.Type != "Void")
+                if (neighbor != null && neighbor.Type != "Air" && neighbor.Type != "Void")
                 {
                     Canvas.Pixels[Flat(Coord(neighbor.Location))] = new Air(neighbor.Snapped, Canvas);
                 }

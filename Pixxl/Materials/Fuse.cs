@@ -32,8 +32,9 @@ namespace Pixxl.Materials
 
             // Fuse travel
             bool exposed = false;
-            foreach (Pixel neighbor in Neighbors)
+            foreach (Pixel? neighbor in Neighbors)
             {
+                if (neighbor == null) { continue; }
                 // Exposed to fuse
                 if (neighbor.Type == "Fuse" && ((Fuse)neighbor).Lit)
                 {

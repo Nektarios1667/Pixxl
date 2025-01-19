@@ -25,10 +25,10 @@ namespace Pixxl.Materials
             base.Update();
 
             // Fire travel
-            foreach (Pixel neighbor in Neighbors)
+            foreach (Pixel? neighbor in Neighbors)
             {
                 // Exposed to burning item
-                if (neighbor.GetType().BaseType.Name == "Fueling" && ((Fueling)neighbor).Lit)
+                if (neighbor != null && neighbor.GetType().BaseType.Name == "Fueling" && ((Fueling)neighbor).Lit)
                 {
                     Lit = true;
                 }

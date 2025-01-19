@@ -38,9 +38,9 @@ namespace Pixxl.Materials
             if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.GetColor(TypeId); }
 
             // Spreading
-            foreach (Pixel neighbor in Neighbors)
+            foreach (Pixel? neighbor in Neighbors)
             {
-                if (Canvas.Rand.Next(0, 20) == 0 && neighbor.GetType().BaseType == typeof(Fueling))
+                if (neighbor != null && Canvas.Rand.Next(0, 20) == 0 && neighbor.GetType().BaseType == typeof(Fueling))
                 {
                     ((Fueling)neighbor).Lit = true;
                 }
