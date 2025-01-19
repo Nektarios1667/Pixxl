@@ -33,30 +33,30 @@ namespace Pixxl.Materials
         public RectangleF Rect => new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
 
         // Constants
-        private readonly Xna.Vector2[] surrounding = Consts.Game.Diagonals ? [
-            new Xna.Vector2(0, -Consts.Game.PixelSize),               // Up
-            new Xna.Vector2(Consts.Game.PixelSize, -Consts.Game.PixelSize),  // Top-right
-            new Xna.Vector2(Consts.Game.PixelSize, 0),               // Right
-            new Xna.Vector2(Consts.Game.PixelSize, Consts.Game.PixelSize),  // Bottom-right
-            new Xna.Vector2(0, Consts.Game.PixelSize),              // Down
-            new Xna.Vector2(-Consts.Game.PixelSize, Consts.Game.PixelSize),// Bottom-left
-            new Xna.Vector2(-Consts.Game.PixelSize, 0),              // Left
-            new Xna.Vector2(-Consts.Game.PixelSize, -Consts.Game.PixelSize),] // Top-left
-
-        : [
-            new Xna.Vector2(0, Consts.Game.PixelSize),               // Up
-            new Xna.Vector2(Consts.Game.PixelSize, 0),               // Right
-            new Xna.Vector2(0, Consts.Game.PixelSize),              // Down
-            new Xna.Vector2(-Consts.Game.PixelSize, 0),              // Left
+        private readonly int[] surrounding = Consts.Game.Diagonals ? [
+            -Consts.Screen.Grid[0],      // Up
+            -Consts.Screen.Grid[0] + 1,  // Top-right
+            1,                           // Right
+            Consts.Screen.Grid[0] + 1,   // Bottom-right
+            Consts.Screen.Grid[0],       // Down
+            Consts.Screen.Grid[0] - 1,   // Bottom-left
+            -1,                          // Left
+            -Consts.Screen.Grid[0] - 1   // Top-left
+        ] : [
+            -Consts.Screen.Grid[0],  // Up
+            1,                       // Right
+            Consts.Screen.Grid[0],   // Down
+            -1,                      // Left
         ];
-        
+
         // Other
         public Canvas Canvas { get; set; }
         public List<Pixel?> Neighbors { get; set; }
         public int TypeId { get; }
         public string Type { get; }
         public bool Skip { get; set; }
-        private Xna.Vector2 Previous {get; set;}
+        public bool SkipHeat { get; set; }
+        private Xna.Vector2 Previous { get; set; }
 
         // Constructor
         public Pixel(Xna.Vector2 location, Canvas canvas, float? temp = null)
@@ -89,7 +89,7 @@ namespace Pixxl.Materials
 
             // Reset
             Neighbors.Clear();
-
+            GetNeighbors();
 
             // For the possible moves including diagonals
             Movements();
@@ -101,7 +101,8 @@ namespace Pixxl.Materials
             }
 
             // Heat transfer
-            HeatTransfer();
+            if (!SkipHeat) { HeatTransfer(); }
+            else { SkipHeat = false; }
 
             // Check changes for melting, evaporating, plasmifying, deplasmifying condensing, hardening
             StateCheck();
@@ -157,7 +158,7 @@ namespace Pixxl.Materials
             else if (Canvas.ColorMode == 2)
             {
                 float temp = Math.Clamp(Temperature, 0, thermax);
-                int saturation = (int) (percent * 255);
+                int saturation = (int)(percent * 255);
                 color = new(saturation, saturation, saturation);
             } else if (Canvas.ColorMode == 3)
             {
@@ -226,15 +227,10 @@ namespace Pixxl.Materials
         {
             // Heat transfers
             float multiplier = Canvas.Delta * Consts.Game.Speed * Consts.Game.HeatTransfer;
-            for (int n = 0; n < surrounding.Length; n++)
+            foreach (Pixel? neighbor in Neighbors)
             {
-                // Neighbor
-                Pixel? neighbor = Find(Location + surrounding[n], 'l');
-                Neighbors.Add(neighbor);
-                if (neighbor == null) { continue; }
-
                 // Lose heat
-                if (Temperature > neighbor.Temperature)
+                if (neighbor != null && Temperature > neighbor.Temperature)
                 {
                     // Heat transfer simplified equation
                     float dTemp = Temperature - neighbor.Temperature;
@@ -242,7 +238,19 @@ namespace Pixxl.Materials
                     float transfer = Math.Min((dTemp / conductivity) * multiplier, dTemp / 2);
                     Temperature -= transfer;
                     neighbor.Temperature += transfer;
+                    neighbor.SkipHeat = true;
                 }
+            }
+        }
+        public virtual void GetNeighbors()
+        {
+            int idx = Index;
+            for (int n = 0; n < surrounding.Length; n++)
+            {
+                // Neighbor
+                Pixel? neighbor = Find(Index + surrounding[n]);
+                Neighbors.Add(neighbor);
+                if (neighbor == null) { continue; }
             }
         }
         public Pixel? Find(Xna.Vector2 vec, char mode)
@@ -255,6 +263,11 @@ namespace Pixxl.Materials
             {
                 return null;
             }
+        }
+        public Pixel? Find(int idx)
+        {
+            if (idx >= 0 && idx < Canvas.Pixels.Length) { return Canvas.Pixels[idx]; }
+            else { return null; }
         }
         public Xna.Vector2 Swap(Xna.Vector2 first, Xna.Vector2 second, char mode)
         {
