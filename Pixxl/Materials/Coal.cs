@@ -18,7 +18,6 @@ namespace Pixxl.Materials
             Strength = 50;
             Melting = new Transformation(999999, typeof(Coal));
             Solidifying = new Transformation(-999999, typeof(Coal));
-            Superheated = true;
         }
     }
 }

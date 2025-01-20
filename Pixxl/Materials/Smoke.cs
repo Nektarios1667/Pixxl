@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             // Constants
             Temperature = 800f;
             Conductivity = .03f;
-            Density = .001f;
+            Density = .0003f;
             State = 3;
             Strength = 100;
             Melting = new Transformation(9200, typeof(Plasma));
