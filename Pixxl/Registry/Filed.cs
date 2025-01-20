@@ -45,6 +45,7 @@ namespace Pixxl.Registry
             Propane        | 191, 145, 145 | 7
             Sand           | 184, 144, 24  | 9
             Smoke          | 120, 100, 100 | 14
+            Sodium         | 224, 227, 152 | 11
             Steam          | 191, 191, 191 | 6
             Steel          | 30, 34, 36    | 4
             Torch          | 55, 0, 0      | 3

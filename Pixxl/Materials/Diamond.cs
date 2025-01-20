@@ -11,7 +11,7 @@ namespace Pixxl.Materials
         public Diamond(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Conductivity = 2400f;
+            Conductivity = 540f;
             Density = 3.51f;
             State = 2;
             Strength = 1000;
