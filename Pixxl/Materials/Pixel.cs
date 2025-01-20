@@ -51,7 +51,7 @@ namespace Pixxl.Materials
 
         // Other
         public Canvas Canvas { get; set; }
-        public List<Pixel?> Neighbors { get; set; }
+        public Pixel?[] Neighbors { get; set; }
         public int TypeId { get; }
         public string Type { get; }
         public bool Skip { get; set; }
@@ -72,7 +72,7 @@ namespace Pixxl.Materials
 
             // Properties
             Previous = location;
-            Neighbors = [];
+            Neighbors = new Pixel?[surrounding.Length];
             Location = location;
             Canvas = canvas;
             Temperature = temp ?? Consts.Game.RoomTemp;
@@ -88,7 +88,6 @@ namespace Pixxl.Materials
             if (Skip) { Skip = false; return; }
 
             // Reset
-            Neighbors.Clear();
             GetNeighbors();
 
             // For the possible moves including diagonals
@@ -249,7 +248,7 @@ namespace Pixxl.Materials
             {
                 // Neighbor
                 Pixel? neighbor = Find(Index + surrounding[n]);
-                Neighbors.Add(neighbor);
+                Neighbors[n] = neighbor;
                 if (neighbor == null) { continue; }
             }
         }
