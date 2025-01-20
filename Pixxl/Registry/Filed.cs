@@ -21,7 +21,7 @@ namespace Pixxl.Registry
             .CoolantVapor  | 56, 224, 146  | 14
             Copper         | 173, 86, 31   | 9
             Diamond        | 24, 149, 171  | 6
-            Dirt           | 54, 28, 12    | 15
+            Dirt           | 74, 40, 18    | 15
             Explosive      | 139, 0, 0     | 5
             Faucet         | 0, 0, 155     | 3
             Fire           | 189, 46, 21   | 30 
@@ -33,7 +33,7 @@ namespace Pixxl.Registry
             Helium         | 168, 213, 227 | 12
             Ice            | 130, 199, 245 | 18
             Insulation     | 245, 245, 245 | 18
-            Lava           | 201, 67, 26   | 20
+            Lava           | 186, 28, 0    | 20
             .MoltenCopper  | 222, 108, 35  | 9
             .MoltenGold    | 219, 213, 15  | 8
             .MoltenSteel   | 120, 126, 130 | 6
@@ -44,11 +44,11 @@ namespace Pixxl.Registry
             Sand           | 184, 144, 24  | 9
             Smoke          | 120, 100, 100 | 14
             Steam          | 191, 191, 191 | 6
-            Steel          | 91, 98, 102   | 8
+            Steel          | 30, 34, 36    | 4
             Torch          | 55, 0, 0      | 3
             Void           | 45, 6, 48     | 5
             Water          | 0, 77, 207    | 9
-            Wood           | 66, 34, 5     | 7
+            Wood           | 43, 17, 2     | 7
             """;
     }
 }
