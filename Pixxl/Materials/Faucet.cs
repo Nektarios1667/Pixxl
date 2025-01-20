@@ -28,12 +28,11 @@ namespace Pixxl.Materials
             base.Update();
 
             // Water
-            Xna.Vector2 spawn = new(Location.X, Location.Y + Constants.Screen.PixelSize);
-            int idx = Flat(Coord(spawn));
-            if (Canvas.Pixels[idx].Type == "Air" && cycle == 0)
+            Pixel? down = Neighbors[4];
+            if (down != null && down.Type == "Air" && cycle == 0)
             {
-                Canvas.Pixels[idx].Skip = true;
-                Canvas.Pixels[idx] = new Water(spawn, Canvas);
+                down.Skip = true;
+                Canvas.Pixels[down.Index] = new Water(down.Location, Canvas);
             }
             cycle = (cycle + 1) % 2;
         }

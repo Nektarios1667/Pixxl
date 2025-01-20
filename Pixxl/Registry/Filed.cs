@@ -10,6 +10,7 @@ namespace Pixxl.Registry
     {
         public static string Materials =
             """
+            Acid           | 25, 217, 0    | 6
             .Air           | 100, 149, 237 | 0
             Ash            | 54, 54, 54    | 8
             BlueFire       | 11, 106, 230  | 13

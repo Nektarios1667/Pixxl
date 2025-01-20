@@ -29,7 +29,7 @@ namespace Pixxl.Materials
             {
                 if (neighbor != null && neighbor.Type != "Air" && neighbor.Type != "Void")
                 {
-                    Canvas.Pixels[Flat(Coord(neighbor.Location))] = new Air(neighbor.Snapped, Canvas);
+                    Canvas.Pixels[neighbor.Index] = new Air(neighbor.Location, Canvas);
                 }
             }
         }

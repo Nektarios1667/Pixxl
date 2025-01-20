@@ -26,12 +26,11 @@ namespace Pixxl.Materials
             base.Update();
 
             // Water
-            Xna.Vector2 spawn = new(Location.X, Location.Y - Constants.Screen.PixelSize);
-            int idx = Flat(Coord(spawn));
-            if (Canvas.Pixels[idx].Type == "Air")
+            Pixel? above = Neighbors[0];
+            if (above != null && above.Type == "Air")
             {
-                Canvas.Pixels[idx].Skip = true;
-                Canvas.Pixels[idx] = new BlueFire(spawn, Canvas);
+                above.Skip = true;
+                Canvas.Pixels[above.Index] = new BlueFire(above.Location, Canvas);
             }
         }
     }
