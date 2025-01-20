@@ -36,6 +36,7 @@ namespace Pixxl.Registry
             Lava           | 201, 67, 26   | 20
             .MoltenCopper  | 222, 108, 35  | 9
             .MoltenGold    | 219, 213, 15  | 8
+            .MoltenSteel   | 120, 126, 130 | 6
             Nuke           | 103, 122, 9   | 3
             Oil            | 5, 5, 5       | 4
             Plasma         | 187, 57, 227  | 8
@@ -43,9 +44,11 @@ namespace Pixxl.Registry
             Sand           | 184, 144, 24  | 9
             Smoke          | 120, 100, 100 | 14
             Steam          | 191, 191, 191 | 6
+            Steel          | 91, 98, 102   | 8
             Torch          | 55, 0, 0      | 3
             Void           | 45, 6, 48     | 5
             Water          | 0, 77, 207    | 9
+            Wood           | 66, 34, 5     | 7
             """;
     }
 }

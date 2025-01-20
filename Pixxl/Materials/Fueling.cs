@@ -2,6 +2,7 @@
 using Xna = Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace Pixxl.Materials
 {
@@ -13,6 +14,7 @@ namespace Pixxl.Materials
         public bool Superheated { get; set; }
         public bool Internal { get; set; }
         public bool Ashes { get; set; }
+        private readonly string[] nonSnuffable = { "Smoke", "Fire", "BlueFire" };
         // Constructor
         public Fueling(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
@@ -34,6 +36,7 @@ namespace Pixxl.Materials
         public override void Update()
         {
             base.Update();
+
             // Burned out
             if (Burned >= Fuel) {
                 Pixel creation = State <= 2 && Ashes && Canvas.Rand.Next(0, 4) == 0 ? new Ash(Location, Canvas) : Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas);
@@ -41,23 +44,26 @@ namespace Pixxl.Materials
                 return;
             }
 
-            // Lit
+            // Burn
             if (Lit)
             {
                 Burned += Canvas.Delta;
-                // Burn
-                Xna.Vector2 spawn = new(Location.X, Location.Y - Constants.Screen.PixelSize);
-                if (spawn.Y < 0) { return; }
-                int idx = Flat(Coord(spawn));
-
-                if (Canvas.Pixels[idx].Type == "Air")
+                // Neighbors
+                int n = 0;
+                foreach (Pixel? neighbor in Neighbors)
                 {
-                    Canvas.Pixels[idx] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(spawn, Canvas) : Superheated ? new BlueFire(spawn, Canvas) : new Fire(spawn, Canvas);
-                }
-                // Snuffed
-                else if (Canvas.Pixels[idx].State != 4  && Canvas.Pixels[idx].Type != "Smoke" && !Internal)
-                {
-                    Lit = false;
+                    if (neighbor == null) { n++; continue; }
+                    if (neighbor.Type == "Air") {
+                        Canvas.Pixels[neighbor.Index] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
+                            : Superheated ? new BlueFire(neighbor.Location, Canvas)
+                            : new Fire(neighbor.Location, Canvas);
+                    }
+                    else if (n == 0 && neighbor.State != 4 && !nonSnuffable.Contains(neighbor.Type) && !Internal) // Snuffed
+                    {
+                        Lit = false;
+                        break;
+                    }
+                    n++;
                 }
             }
         }
