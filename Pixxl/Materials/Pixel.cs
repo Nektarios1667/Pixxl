@@ -3,11 +3,6 @@ using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using System;
 using Consts = Pixxl.Constants;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using System.Security.AccessControl;
-using System.Linq;
-using MonoGame.Extended.Serialization.Json;
 
 namespace Pixxl.Materials
 {
@@ -114,10 +109,10 @@ namespace Pixxl.Materials
             // Movement
             Xna.Vector2 next = Predict(new(Location.X + offsetX, Location.Y), Consts.Game.Gravity);
             // Checks
-            if (CollideCheck(Location, next, 'l'))
+            if (CollideCheck(Location, next))
             {
                 // Move array pixels
-                Location = Swap(Location, next, 'l');
+                Location = Swap(Location, next);
                 return true;
             }
             return false;
@@ -133,7 +128,7 @@ namespace Pixxl.Materials
             // This is done since downwards movement is prioritized over diagonal movement
             Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
             Xna.Vector2 rightMove = right != null ? new(right.Location.X, right.Location.Y + Consts.Game.PixelSize) : new(0, 0);
-            bool priority = (right == null || Coord(rightMove) == Coord(right.Location) || !right.CollideCheck(right.Location, rightMove, 'l'));
+            bool priority = (right == null || Coord(rightMove) == Coord(right.Location) || !right.CollideCheck(right.Location, rightMove));
             // Moves
             if (Move(-Consts.Screen.PixelSize)) { return true; } // down-left
 
@@ -171,16 +166,14 @@ namespace Pixxl.Materials
         {
             return new(vec.X, vec.Y + Math.Min(velocity * Canvas.Delta * Consts.Game.Speed, Consts.Screen.PixelSize));
         }
-        public virtual bool CollideCheck(Xna.Vector2 loc, Xna.Vector2 dest, char mode)
+        public virtual bool CollideCheck(Xna.Vector2 loc, Xna.Vector2 dest)
         {
             // Setup
-            Xna.Vector2 destCoord = ConvertToCoord(dest, mode);
+            Xna.Vector2 destCoord = Coord(dest);
 
-            // Basic checks before getting pixel, if it exists
-            if (destCoord.X < 0 || destCoord.X > Consts.Screen.Grid[0] - 1) { return false; } // Out of bounds width
-            if (destCoord.Y < 0 || destCoord.Y > Consts.Screen.Grid[1] - 1) { return false; } // Out of bounds height
-            if (!Gravity) { return false; } // Not affected
+            // Basic checks
             if (loc == dest) { return false; } // Not moving
+            if (!Gravity) { return false; } // Not affected
 
             // If in bounds then check the available pixel
             if (!IndexCheck(dest, 'l')) { return false; }
@@ -193,9 +186,12 @@ namespace Pixxl.Materials
             if (!target.Gravity) { return false; } // Pixel doesnt move
             if (target.Density > Density && delta.Y > 0) { return false; } // Moving down and hitting denser
             if (target.Density < Density && delta.Y < 0) { return false; } // Moving up and hitting denser
-            if (target.Density == Density && target.Temperature > Temperature && delta.Y < 0) { return false; } // Moving up at same density but at cooler temperature
-            if (target.Density == Density && target.Temperature < Temperature && delta.Y > 0) { return false; } // Moving down at same density but at warmer temperature
-            if (target.Density == Density && target.Temperature == Temperature) { return false; } // Same stats
+            if (target.Density == Density)
+            {
+                if (target.Temperature > Temperature && delta.Y < 0) { return false; } // Moving up at same density but at cooler temperature
+                if (target.Temperature < Temperature && delta.Y > 0) { return false; } // Moving down at same density but at warmer temperature
+                if (target.Temperature == Temperature) { return false; } // Same stats
+            }
 
             return true;
         }
@@ -217,9 +213,9 @@ namespace Pixxl.Materials
             int side = Canvas.Rand.Next(0, 2) == 0 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
             Xna.Vector2 next = new(Location.X + side, Location.Y);
             Pixel? target = Find(next, 'l');
-            if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next, 'l'))
+            if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next))
             {
-                Location = Swap(Location, next, 'l');
+                Location = Swap(Location, next);
             }
         }
         public virtual void HeatTransfer()
@@ -243,14 +239,12 @@ namespace Pixxl.Materials
         }
         public virtual void GetNeighbors()
         {
-            int idx = Index;
             for (int n = 0; n < surrounding.Length; n++)
             {
                 // Neighbor
                 Pixel? neighbor = Find(Index + surrounding[n]);
                 // If the neighbor's X is too far it means that the neighbor carried over to the previous or next line so make it null instead
-                Neighbors[n] = neighbor == null || Math.Abs(Coords.X - neighbor.Coords.X) > 1 ? null : neighbor;
-                if (neighbor == null) { continue; }
+                Neighbors[n] = neighbor == null || Math.Abs(Location.X - neighbor.Location.X) > Consts.Game.PixelSize ? null : neighbor;
             }
         }
         public Pixel? Find(Xna.Vector2 vec, char mode)
@@ -269,11 +263,11 @@ namespace Pixxl.Materials
             if (idx >= 0 && idx < Canvas.Pixels.Length) { return Canvas.Pixels[idx]; }
             else { return null; }
         }
-        public Xna.Vector2 Swap(Xna.Vector2 first, Xna.Vector2 second, char mode)
+        public Xna.Vector2 Swap(Xna.Vector2 first, Xna.Vector2 second)
         {
             // Info
-            Xna.Vector2 firstCoord = ConvertToCoord(first, mode);
-            Xna.Vector2 secondCoord = ConvertToCoord(second, mode);
+            Xna.Vector2 firstCoord = Coord(first);
+            Xna.Vector2 secondCoord = Coord(second);
             Pixel? firstPixel = Find(firstCoord, 'c');
             Pixel? secondPixel = Find(secondCoord, 'c');
 
