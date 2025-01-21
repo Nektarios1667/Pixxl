@@ -25,12 +25,15 @@ namespace Pixxl.Materials
         }
         public override void Update()
         {
+            // Base
+            base.Update();
+
             // Life
             Lifespan -= Canvas.Delta;
             if (Lifespan <= 0)
             {
-                Pixel created = new Air(Location, Canvas);
-                Canvas.Pixels[Flat(Coords)] = created;
+                Skip = true;
+                Canvas.Pixels[Index] = new Air(Location, Canvas);
                 return;
             }
 
@@ -45,9 +48,6 @@ namespace Pixxl.Materials
                     ((Fueling)neighbor).Lit = true;
                 }
             }
-
-            // Base
-            base.Update();
         }
     }
 }
