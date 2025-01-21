@@ -27,24 +27,26 @@ namespace Pixxl.Materials
         public override void Update()
         {
             base.Update();
-            if (Coords.Y == Consts.Screen.Grid[1] - 1 || Canvas.Pixels[Flat(Coords.X, Coords.Y + 1)].GetType().Name != "Air") { Explode(); }
+            Xna.Vector2 coords = Coords;
+            if (coords.Y == Consts.Screen.Grid[1] - 1 || Canvas.Pixels[Flat(coords.X, coords.Y + 1)].GetType().Name != "Air") { Explode(); }
         }
 
         public virtual void Explode()
         {
+            Xna.Vector2 coords = Coords;
             // Iterate pixels
             for (int y = 0; y < Consts.Screen.Grid[1]; y++)  // Loop through rows
             {
                 for (int x = 0; x < Consts.Screen.Grid[0]; x++)  // Loop through columns
                 {
                     // Pre checks
-                    if (Math.Abs(Coords.X - x) > Range || Math.Abs(Coords.Y - y) > Range) { continue; }
+                    if (Math.Abs(coords.X - x) > Range || Math.Abs(coords.Y - y) > Range) { continue; }
 
                     // Pixel data
                     Pixel current = Canvas.Pixels[Flat(x, y)];
                     int idx = current.Index;
-                    int dX = (int)(Coords.X - current.Coords.X);
-                    int dY = (int)(Coords.Y - current.Coords.Y);
+                    int dX = (int)(coords.X - current.Coords.X);
+                    int dY = (int)(coords.Y - current.Coords.Y);
                     float dist = (float)Math.Sqrt(dX*dX + dY*dY);
 
                     // Damage
@@ -57,7 +59,7 @@ namespace Pixxl.Materials
                             Fire repl = new Fire(current.Location, Canvas);
                             repl.Temperature = damage * 2;
                             repl.Lifespan += Canvas.Rand.NextSingle();
-                            Canvas.Pixels[current.Index].Skip = true;
+                            current.Skip = true;
                             Canvas.Pixels[current.Index] = repl;
                         }
                     }
@@ -67,7 +69,7 @@ namespace Pixxl.Materials
             // Remove self
             Pixel self = new Air(Location, Canvas);
             self.Temperature = Temperature;
-            Canvas.Pixels[Flat(Coords)] = self;
+            Canvas.Pixels[Index] = self;
         }
     }
 }

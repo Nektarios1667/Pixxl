@@ -31,6 +31,7 @@ namespace Pixxl.Materials
             base.Update();
 
             // Fuse travel
+            int idx = Index;
             bool exposed = false;
             foreach (Pixel? neighbor in Neighbors)
             {
@@ -47,8 +48,8 @@ namespace Pixxl.Materials
                 // Surrounding fire
                 if (Lit && neighbor.Type == "Air")
                 {
-                    Canvas.Pixels[Flat(neighbor.Coords)].Skip = true;
-                    Canvas.Pixels[Flat(neighbor.Coords)] = new Fire(neighbor.Location, Canvas);
+                    Canvas.Pixels[idx].Skip = true;
+                    Canvas.Pixels[idx] = new Fire(neighbor.Location, Canvas);
                 }
             }
 

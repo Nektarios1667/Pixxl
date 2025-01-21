@@ -26,7 +26,7 @@ namespace Pixxl.Materials
             Pixel? down = Neighbors[4];
             if (down != null && down.Strength < 500 && Canvas.Rand.Next(0, down.Strength) == 0)
             {
-                Canvas.Pixels[down.Index].Skip = true;
+                down.Skip = true;
                 Canvas.Pixels[down.Index] = new Air(down.Location, Canvas);
             }
         }

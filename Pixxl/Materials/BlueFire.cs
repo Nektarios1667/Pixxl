@@ -33,7 +33,7 @@ namespace Pixxl.Materials
             if (Lifespan <= 0)
             {
                 Pixel created = new Air(Location, Canvas);
-                Canvas.Pixels[Flat(Coords)] = created;
+                Canvas.Pixels[Index] = created;
                 return;
             }
 

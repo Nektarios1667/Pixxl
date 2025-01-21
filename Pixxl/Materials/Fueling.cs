@@ -40,7 +40,7 @@ namespace Pixxl.Materials
             // Burned out
             if (Burned >= Fuel) {
                 Pixel creation = State <= 2 && Ashes && Canvas.Rand.Next(0, 4) == 0 ? new Ash(Location, Canvas) : Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas);
-                Canvas.Pixels[Flat(Coords)] = creation;
+                Canvas.Pixels[Index] = creation;
                 return;
             }
 
