@@ -113,7 +113,7 @@ namespace Pixxl
         }
         public static Pixel? New(Canvas canvas, string type, Xna.Vector2 loc, float? temp = null, float vel = 0)
         {
-            Type? typeObj = Type.GetType($"Pixxl.Materials.{type}");
+            Type? typeObj = Type.GetType($"Pixxl.Materials.{(type[0] == '.' ? type[1..] : type)}");
             if (typeObj != null)
             {
                 Pixel? created = (Pixel)Activator.CreateInstance(typeObj, loc, canvas);

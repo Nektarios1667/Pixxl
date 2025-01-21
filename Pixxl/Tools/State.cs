@@ -31,7 +31,7 @@ namespace Pixxl.Tools
             // Writing
             Logger.Log("Saved Pixel state to 'Saves/save.pxs'");
 
-            // Create a GZipStream to compress the data while writing to the file
+            //Create a GZipStream to compress the data while writing to the file
             using FileStream fileStream = new("Saves/save.pxs", FileMode.Create, FileAccess.Write);
             using GZipStream gzipStream = new(fileStream, CompressionLevel.Optimal);
             using StreamWriter writer = new(gzipStream);
@@ -68,9 +68,11 @@ namespace Pixxl.Tools
             catch(FormatException) { Logger.Log("File header data corrupted or in wrong format"); return; }
 
             // Loading
-            int l = 0;
-            foreach (string line in lines[2..])
+            string line;
+            string[] pixels = lines[2..];
+            for (int l = 0; l < pixels.Length; l++)
             {
+                line = pixels[l];
                 if (line == "") { continue; }
 
                 try
@@ -80,7 +82,6 @@ namespace Pixxl.Tools
                     if (created == null) { Logger.Log($"Error creating pixel #{l}"); continue; }
                     canvas.Pixels[l] = created;
                 } catch (Exception e) { Logger.Log($"Error loading pixel #{l}: {e}"); }
-                l++;
             }
             Logger.Log("Loaded Pixel state from 'Saves/save.pxs'");
         }
