@@ -27,10 +27,10 @@ namespace Pixxl.Materials
         // Properties
         public float Temperature { get; set; }
         public Xna.Vector2 Location { get; set; }
-        public int Index => Flat(Coord(Location));
-        public Xna.Vector2 Snapped => Snap(Location);
-        public Xna.Vector2 Coords => Coord(Location);
-        public RectangleF Rect => new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
+        public int Index { get; set; }
+        public Xna.Vector2 Snapped { get; set; }
+        public Xna.Vector2 Coords { get; set; }
+        public RectangleF Rect { get; set; }
 
         // Constants
         private readonly int[] surrounding = Consts.Game.Diagonals ? [
@@ -79,6 +79,12 @@ namespace Pixxl.Materials
             Type = GetType().Name;
             TypeId = Registry.Materials.Id(Type);
             Color = ColorSchemes.GetColor(TypeId);
+
+            // Locations
+            Coords = Coord(Location);
+            Index = Flat(Coords);
+            Snapped = Snap(Location);
+            Rect = new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
         }
 
         // Update and draw
@@ -86,6 +92,9 @@ namespace Pixxl.Materials
         {
             // Deletion
             if (Skip) { Skip = false; return; }
+
+            // Set positions
+            if (Previous != Location) { UpdatePositions(); }
 
             // Reset
             GetNeighbors();
@@ -167,6 +176,13 @@ namespace Pixxl.Materials
             Canvas.Batch.FillRectangle(Rect, color);
         }
         // Methods
+        public virtual void UpdatePositions()
+        {
+            Snapped = Snap(Location);
+            Coords = ConvertToCoord(Snapped, 's');
+            Index = Flat(Coords);
+            Rect = new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
+        }
         public Xna.Vector2 Predict(Xna.Vector2 vec, float velocity)
         {
             return new(vec.X, vec.Y + Math.Min(velocity * Canvas.Delta * Consts.Game.Speed, Consts.Screen.PixelSize));

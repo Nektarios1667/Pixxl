@@ -37,8 +37,12 @@ namespace Pixxl.Materials
             {
                 for (int x = 0; x < Consts.Screen.Grid[0]; x++)  // Loop through columns
                 {
+                    // Pre checks
+                    if (Math.Abs(Coords.X - x) > Range || Math.Abs(Coords.Y - y) > Range) { continue; }
+
                     // Pixel data
                     Pixel current = Canvas.Pixels[Flat(x, y)];
+                    int idx = current.Index;
                     int dX = (int)(Coords.X - current.Coords.X);
                     int dY = (int)(Coords.Y - current.Coords.Y);
                     float dist = (float)Math.Sqrt(dX*dX + dY*dY);
@@ -48,17 +52,13 @@ namespace Pixxl.Materials
                     {
                         // damage = -dxr^-1 + d where d = Damage, x = Distance, r = Range
                         float damage = (Explosion / Range) * (Range - dist);
-                        if (damage >= current.Strength)
+                        if (damage >= current.Strength || (current.GetType().Name == "Air" && Canvas.Rand.Next(0, (int)dist / Range) == 0))
                         {
-                            Pixel repl = new Air(current.Location, Canvas);
-                            repl.Temperature = current.Temperature + damage / 2;
-                            Canvas.Pixels[Flat(current.Coords)] = repl;
-                        } else if (current.GetType().Name == "Air" && Canvas.Rand.Next(0, (int)dist / Range) == 0)
-                        {
-                            Pixel repl = new Fire(current.Location, Canvas);
-                            repl.Temperature = current.Temperature + damage / 2;
-                            Canvas.Pixels[Flat(current.Coords)].Skip = true;
-                            Canvas.Pixels[Flat(current.Coords)] = repl;
+                            Fire repl = new Fire(current.Location, Canvas);
+                            repl.Temperature = damage * 2;
+                            repl.Lifespan += Canvas.Rand.NextSingle();
+                            Canvas.Pixels[current.Index].Skip = true;
+                            Canvas.Pixels[current.Index] = repl;
                         }
                     }
                 }

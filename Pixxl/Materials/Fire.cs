@@ -8,7 +8,7 @@ namespace Pixxl.Materials
 {
     public class Fire : Pixel
     {
-        float Lifespan { get; set; }
+        public float Lifespan { get; set; }
         // Constructor
         public Fire(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
@@ -21,7 +21,7 @@ namespace Pixxl.Materials
             State = 4;
             Strength = 1000;
             Melting = new Transformation(9200, typeof(Plasma));
-            Solidifying = new Transformation(600, typeof(Air));
+            Solidifying = new Transformation(40, typeof(Air));
         }
         public override void Update()
         {
