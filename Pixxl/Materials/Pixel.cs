@@ -249,7 +249,7 @@ namespace Pixxl.Materials
                 // Neighbor
                 Pixel? neighbor = Find(Index + surrounding[n]);
                 // If the neighbor's X is too far it means that the neighbor carried over to the previous or next line so make it null instead
-                Neighbors[n] = neighbor == null || Math.Abs(Location.X - neighbor.Location.X) > 1 ? null : neighbor;
+                Neighbors[n] = neighbor == null || Math.Abs(Coords.X - neighbor.Coords.X) > 1 ? null : neighbor;
                 if (neighbor == null) { continue; }
             }
         }
