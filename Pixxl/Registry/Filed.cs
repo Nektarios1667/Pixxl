@@ -38,7 +38,7 @@ namespace Pixxl.Registry
             Lava           | 186, 28, 0    | 20
             .MoltenCopper  | 222, 108, 35  | 9
             .MoltenGold    | 219, 213, 15  | 8
-            .MoltenSteel   | 120, 126, 130 | 6
+            .MoltenSteel   | 47, 60, 66    | 6
             Nuke           | 103, 122, 9   | 3
             Oil            | 5, 5, 5       | 4
             Plasma         | 187, 57, 227  | 8
