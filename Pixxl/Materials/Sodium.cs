@@ -35,7 +35,7 @@ namespace Pixxl.Materials
             {
                 if (neighbor == null) { continue; } // null neighbor
                 if (!Reacting && neighbor.Type == "Water") { Reacting = true; touchingWater = true; }
-                else if (Reacting && neighbor.Type == "Air") { Canvas.Pixels[neighbor.Index] = new Fire(neighbor.Location, Canvas); }
+                else if (Reacting && neighbor.Type == "Air") { neighbor.Skip = true; Canvas.Pixels[neighbor.Index] = new Fire(neighbor.Location, Canvas); }
             }
 
             // Not touching water anymore

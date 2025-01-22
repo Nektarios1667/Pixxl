@@ -27,10 +27,15 @@ namespace Pixxl.Materials
         public override void Update()
         {
             base.Update();
-            Xna.Vector2 coords = Coords;
-            if (coords.Y == Consts.Screen.Grid[1] - 1 || Canvas.Pixels[Flat(coords.X, coords.Y + 1)].GetType().Name != "Air") { Explode(); }
+            
+            if (ExplodeCheck()) { Explode(); }
         }
-
+        public virtual bool ExplodeCheck()
+        {
+            Xna.Vector2 coords = Coords;
+            if (coords.Y == Consts.Screen.Grid[1] - 1 || Canvas.Pixels[Flat(coords.X, coords.Y + 1)].GetType().Name != "Air") { return true; }
+            return false;
+        }
         public virtual void Explode()
         {
             Xna.Vector2 coords = Coords;
@@ -58,7 +63,7 @@ namespace Pixxl.Materials
                         {
                             Fire repl = new Fire(current.Location, Canvas);
                             repl.Temperature = damage * 2;
-                            repl.Lifespan += Canvas.Rand.NextSingle();
+                            repl.Lifespan -= Canvas.Rand.NextSingle();
                             current.Skip = true;
                             Canvas.Pixels[current.Index] = repl;
                         }
