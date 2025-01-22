@@ -44,19 +44,19 @@ namespace Pixxl.Materials
             // Default is textures
             int thermax = Constants.Visual.ThermalMax;
             float percent = Temperature / thermax;
-            if (Canvas.ColorMode == 1)
+            if (Canvas.ViewMode == 1)
             {
                 float temp = Math.Clamp(Temperature, 0, thermax);
                 float r = percent * 255; float g = 255 - r; float b = Temperature > thermax * 2 ? (Temperature / thermax) * 25 : 0;
                 color = new((int)r, (int)g, (int)b);
             }
-            else if (Canvas.ColorMode == 2)
+            else if (Canvas.ViewMode == 2)
             {
                 float temp = Math.Clamp(Temperature, 0, thermax);
                 int saturation = (int)(percent * 255);
                 color = new(saturation, saturation, saturation);
             }
-            else if (Canvas.ColorMode == 3)
+            else if (Canvas.ViewMode == 3)
             {
                 color = Registry.Materials.Colors[TypeId];
             }

@@ -97,7 +97,7 @@ namespace Pixxl
             // Keyboard
             if (keys.Contains(Keys.OemTilde) && !previous.Contains(Keys.OemTilde))
             {
-                canvas.ColorMode = (canvas.ColorMode + 1) % 4;
+                canvas.ViewMode = (canvas.ViewMode + 1) % 4;
             }
             previous = keys.ToArray();
 
@@ -125,7 +125,7 @@ namespace Pixxl
             // Info
             if (canvas.Delta != 0)
             {
-                spriteBatch.DrawString(Font, $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 ? Consts.Game.Speed : 0)}x\nColormode: {ColorModes[canvas.ColorMode]}", new Vector2(20, 20), canvas.ColorMode != 2 ? Color.Black: Color.White);
+                spriteBatch.DrawString(Font, $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}", new Vector2(20, 20), canvas.ViewMode != 2 ? Color.Black: Color.White);
             }
 
             // Feed
