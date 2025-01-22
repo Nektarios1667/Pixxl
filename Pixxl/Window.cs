@@ -22,6 +22,9 @@ namespace Pixxl
         public SpriteFont SmallFont;
         public string Selection;
         public Xna.Vector2 location = new(0, 0);
+        public int Running = 2; // 0 = paused; 1 = one frame; 2 = running
+        public float Delta = 0;
+        public string[] ColorModes = ["Regular", "Colored Thermal", "Grayscale Thermal", "Monotexture"];
 
         private Keys[] previous = [];
         private Keys[] keys = [];
@@ -70,6 +73,7 @@ namespace Pixxl
             mouse = Mouse.GetState();
             location = mouse.Position.ToVector2();
             coord = new((int)Math.Floor((float)location.X / Consts.Screen.PixelSize), (int)Math.Floor((float)location.Y / Consts.Screen.PixelSize));
+            Delta = (float)gameTime.ElapsedGameTime.Milliseconds / 1000f;
 
             // Exit
             if (keys.Contains(Keys.Escape))
@@ -98,8 +102,11 @@ namespace Pixxl
             previous = keys.ToArray();
 
             // Canvas update
-            canvas.Update((float)gameTime.ElapsedGameTime.Milliseconds / 1000f, mouse);
+            if (Running >= 1) { canvas.UpdatePixels(Delta, mouse); }
+            if (Running == 1) { Running = 0; } // If one frame then pause afterwards
+            canvas.UpdateGui(Delta, mouse);
 
+            // Base
             base.Update(gameTime);
         }
 
@@ -115,10 +122,10 @@ namespace Pixxl
             // Outline
             spriteBatch.DrawRectangle(new(0, 0, Consts.Screen.Window[0], Consts.Screen.Window[1] ), Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2);
 
-            // Text
+            // Info
             if (canvas.Delta != 0)
             {
-                spriteBatch.DrawString(Font, $"Delta: {Math.Round(canvas.Delta * 1000, 1)}\nFPS: {Math.Round(1 / canvas.Delta, 0)}", new Vector2(20, 20), Color.Black);
+                spriteBatch.DrawString(Font, $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 ? Consts.Game.Speed : 0)}x\nColormode: {ColorModes[canvas.ColorMode]}", new Vector2(20, 20), canvas.ColorMode != 2 ? Color.Black: Color.White);
             }
 
             // Feed
@@ -168,9 +175,9 @@ namespace Pixxl
         }
 
         // Other static methods
-        public static void EraseMode(Window window)
-        {
-            window.Selection = "Air";
-        }
+        public static void EraseMode(Window window) { window.Selection = "Air"; }
+        public static void TogglePlay(Window window) { window.Running = window.Running <= 1 ? 2 : 0; }
+        public static void RunFrame(Window window) { window.Running = 1; }
+        public static void SpeedUp(Window window) { window.Running = 2; Consts.Game.Speed = Consts.Game.Speed % 3 + 1; }
     }
 }

@@ -23,7 +23,7 @@ namespace Pixxl.Constants
         public const int RoomTemp = 70;
         public const float HeatTransfer = 1f;
         public const float Gravity = 9.81f * Screen.PixelSize;
-        public const float Speed = 1f;
+        public static float Speed = 1f;
         public const bool Diagonals = true;
     }
     public static class Visual

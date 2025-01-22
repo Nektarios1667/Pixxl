@@ -74,7 +74,7 @@ namespace Pixxl
             Pixels = Cleared(this);
         }
         // Updating
-        public void Update(float delta, MouseState mouseState)
+        public void UpdatePixels(float delta, MouseState mouseState)
         {
             // Delta
             Delta = delta;
@@ -82,7 +82,9 @@ namespace Pixxl
             // Pixels
             Pixel[] copy = (Pixel[])(Pixels.Clone());
             for (int i = 0; i < copy.Length; i++) { copy[i].Update(); }
-
+        }
+        public void UpdateGui(float delta, MouseState mouseState)
+        {
             // Buttons
             for (int i = 0; i < Buttons.Count; i++) { Buttons[i].Update(mouseState); }
         }
