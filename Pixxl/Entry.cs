@@ -9,7 +9,8 @@ namespace Pixxl
         {
             using (var game = new Window())
             {
-                game.Run();
+                try { game.Run(); }
+                catch (Exception ex) { Logger.Log($"Exception occured: {ex}"); }
             }
         }
     }

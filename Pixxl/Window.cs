@@ -153,6 +153,12 @@ namespace Pixxl
             spriteBatch.End();
             base.Draw(gameTime);
         }
+        protected override void OnExiting(object sender, ExitingEventArgs args)
+        {
+            // Log closing
+            Logger.Log("Window closed");
+            base.OnExiting(sender, args);
+        }
         public bool KeyPress(Keys key)
         {
             return keys.Contains(key) && !previous.Contains(key);
