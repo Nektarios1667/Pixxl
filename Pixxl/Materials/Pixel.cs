@@ -91,7 +91,7 @@ namespace Pixxl.Materials
             // Fluid spreading
             if (State >= 3) {
                 if ((Location == Previous && Canvas.Rand.Next(0, Math.Min((int)Density * 3, 8)) == 0)) { FluidSpread(); }
-                else if (Canvas.Rand.Next(0, Math.Clamp((int)Density * 10, 10, 40)) == 0) { FluidSpread(); }
+                else if (Canvas.Rand.Next(0, Math.Clamp((int)Density * 20, 10, 40)) == 0) { FluidSpread(); }
             }
 
             // Heat transfer
