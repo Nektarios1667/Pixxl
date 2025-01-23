@@ -94,11 +94,15 @@ namespace Pixxl
                 canvas.Pixels[Pixel.Flat(coord)] = new Air(location, canvas);
             } else { cursor = "Normal"; }
 
-            // Keyboard
-            if (keys.Contains(Keys.OemTilde) && !previous.Contains(Keys.OemTilde))
-            {
-                canvas.ViewMode = (canvas.ViewMode + 1) % 4;
-            }
+            // Hotkeys
+            if (KeyPress(Keys.S)) { Tools.State.Save(canvas); }
+            if (KeyPress(Keys.L)) { Tools.State.Load(canvas); }
+            if (KeyPress(Keys.V)) { Canvas.ChangeViewMode(canvas); }
+            if (KeyPress(Keys.E)) { EraseMode(this); }
+            if (KeyPress(Keys.P)) { TogglePlay(this); }
+            if (KeyPress(Keys.R)) { RunFrame(this); }
+            if (KeyPress(Keys.D)) { CycleSpeed(this); }
+
             previous = keys.ToArray();
 
             // Canvas update
@@ -149,7 +153,10 @@ namespace Pixxl
             spriteBatch.End();
             base.Draw(gameTime);
         }
-        
+        public bool KeyPress(Keys key)
+        {
+            return keys.Contains(key) && !previous.Contains(key);
+        }
         // Static methods
         public static bool Inside(Xna.Vector2 point, int[] dimensions)
         {
@@ -179,7 +186,7 @@ namespace Pixxl
         public static void EraseMode(Window window) { window.Selection = "Air"; }
         public static void TogglePlay(Window window) { window.Running = window.Running <= 1 ? 2 : 0; }
         public static void RunFrame(Window window) { window.Running = 1; }
-        public static void SpeedUp(Window window)
+        public static void CycleSpeed(Window window)
         {
             window.Running = 2;
             Consts.Game.Speed = (int)(Consts.Game.Speed + 1f) % 4;
