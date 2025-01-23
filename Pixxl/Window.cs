@@ -125,7 +125,8 @@ namespace Pixxl
             // Info
             if (canvas.Delta != 0)
             {
-                spriteBatch.DrawString(Font, $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}", new Vector2(20, 20), canvas.ViewMode != 2 ? Color.Black: Color.White);
+                string info = $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}";
+                spriteBatch.DrawString(Font, info, new Vector2(20, 20), canvas.ViewMode != 2 ? Color.Black: Color.White);
             }
 
             // Feed
@@ -178,6 +179,11 @@ namespace Pixxl
         public static void EraseMode(Window window) { window.Selection = "Air"; }
         public static void TogglePlay(Window window) { window.Running = window.Running <= 1 ? 2 : 0; }
         public static void RunFrame(Window window) { window.Running = 1; }
-        public static void SpeedUp(Window window) { window.Running = 2; Consts.Game.Speed = Consts.Game.Speed % 3 + 1; }
+        public static void SpeedUp(Window window)
+        {
+            window.Running = 2;
+            Consts.Game.Speed = (int)(Consts.Game.Speed + 1f) % 4;
+            if (Consts.Game.Speed == 0) { Consts.Game.Speed = .5f; }
+        }
     }
 }
