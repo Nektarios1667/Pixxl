@@ -1,7 +1,7 @@
 ## Overview
 Pixxl is a simulation written in C# can create unique interactions between materials.
 Different materials have a unique density, thermal conductivity, strength, falling behavior, and properties.
-(![PixxlSnapshot](https://github.com/user-attachments/assets/a660fb43-2d32-474a-b14f-1300ecff1446)
+![PixxlSnapshot](https://github.com/user-attachments/assets/a660fb43-2d32-474a-b14f-1300ecff1446)
 
 
 ## Controls
