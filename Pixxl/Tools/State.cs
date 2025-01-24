@@ -19,39 +19,40 @@ namespace Pixxl.Tools
             }
             Logger.Log("State initialized");
         }
-        public static void Save(Canvas canvas)
+        public static void Save(Canvas canvas, int saveNumber) { SavePixels(canvas.Pixels, saveNumber); }
+        public static void SavePixels(Pixel[] pixels, int saveNumber)
         {
             // Data
             string data = $"{Constants.Screen.Grid[0]}x{Constants.Screen.Grid[1]}\n{Constants.Screen.PixelSize}\n";
-            for (int i = 0; i < canvas.Pixels.Length; i++)
+            for (int i = 0; i < pixels.Length; i++)
             {
-                Pixel current = canvas.Pixels[i];
+                Pixel current = pixels[i];
                 data += $"{current.TypeId};{Math.Round(current.Temperature, 2)}\n";
             }
             // Writing
-            Logger.Log("Saved Pixel state to 'Saves/save.pxs'");
+            Logger.Log($"Saved Pixel state to 'Saves/save-{saveNumber}.pxs'");
 
             //Create a GZipStream to compress the data while writing to the file
-            using FileStream fileStream = new("Saves/save.pxs", FileMode.Create, FileAccess.Write);
+            using FileStream fileStream = new($"Saves/save-{saveNumber}.pxs", FileMode.Create, FileAccess.Write);
             using GZipStream gzipStream = new(fileStream, CompressionLevel.Optimal);
             using StreamWriter writer = new(gzipStream);
             writer.Write(data);
         }
-        public static void Load(Canvas canvas)
+        public static void Load(Canvas canvas, int saveNumber)
         {
             // Reading
             string[] lines;
             try
             {
                 // Open the gzipped file
-                using GZipStream gzipStream = new(new FileStream("Saves/save.pxs", FileMode.Open), CompressionMode.Decompress);
+                using GZipStream gzipStream = new(new FileStream($"Saves/save-{saveNumber}.pxs", FileMode.Open), CompressionMode.Decompress);
                 using StreamReader reader = new(gzipStream);
                 // Read all lines from the gzipped file
                 lines = reader.ReadToEnd().Split("\n");
             }
             catch (FileNotFoundException)
             {
-                Logger.Log($"File 'save.pxs' not found"); return;
+                Logger.Log($"File 'save-{saveNumber}.pxs' not found"); return;
             }
             catch (Exception e)
             {

@@ -18,7 +18,7 @@ namespace Pixxl
     {
         public Pixel[] Pixels { get; set; }
         public Window Window { get; set; }
-        public List<Pixxl.Gui.Button> Buttons { get; set; }
+        public List<Pixxl.Gui.Widget> Widgets { get; set; }
         public int[] Size { get; set; }
         public SpriteBatch Batch { get; set; }
         public GraphicsDevice Device { get; set; }
@@ -26,11 +26,12 @@ namespace Pixxl
         public float Delta { get; private set; }
         public Random Rand = new();
         public int ViewMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal, 3 = Monotexture
-
-
+        public object? Focus { get; set; }
+        public Popup SavesPopup { get; set; }
         public Canvas(Window window, GraphicsDevice device, SpriteBatch batch)
         {
             Window = window;
+            Focus = window;
             Size = Consts.Screen.Grid;
             Pixels = new Pixel[Consts.Screen.Grid[0] * Consts.Screen.Grid[1]];
             Batch = batch;
@@ -38,9 +39,9 @@ namespace Pixxl
             void select(string selection) => Window.Selection = selection;
 
             // Create buttons
-            Buttons = [];
+            Widgets = [];
 
-            // Tools
+            // Tools buttons
             for (int t = 0; t < ToolReg.Names.Length; t++)
             {
                 // Info
@@ -48,11 +49,11 @@ namespace Pixxl
                 object?[]? args = ToolReg.Args[t] == "Canvas" ? [this] : ToolReg.Args[t] == "Window" ? [Window] : []; // Pass either canvas object or window object
 
                 // Creation
-                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ToolDim, ToolReg.Names[t], Window.Font, Color.Black, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], args: args, borderColor: new(45, 45, 45));
-                Buttons.Add(created);
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ToolDim, Color.Black, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], ToolReg.Names[t], Window.Font, args: args, borderColor: new(45, 45, 45));
+                Widgets.Add(created);
             }
 
-            // Selection
+            // Materials buttons
             int l = 0; int m = 0;
             for (m = 0; m < MatReg.Names.Count; m++)
             {
@@ -65,10 +66,23 @@ namespace Pixxl
                 Color fg = darkValues >= 2 ? Color.White : Color.Black;
 
                 // Button
-                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, MatReg.Names[m], Window.Font, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, args: [MatReg.Names[m]]);
-                Buttons.Add(created);
+                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]]);
+                Widgets.Add(created);
                 l++;
             }
+
+            // Save
+            int saveX = Consts.Screen.Window[0] / 2 - 400;
+            SavesPopup = new(Batch, new(saveX, 100), new(400, 550), Color.LightCyan, "Saves", Window.Font);
+            for (int s = 0; s < 10; s++)
+            {
+                TextBox label = new(Batch, new(saveX + 20, s * 50 + 155), Color.Black, $"Save {s + 1}", Window.Font);
+                Button clearButton = new(Batch, new(saveX + 100, s * 50 + 150), new(80, 30), Color.Black, new(175, 175, 225), new(200, 200, 225), State.SavePixels, args: [Cleared(this), s + 1], font: Window.Font, text: "Clear");
+                Button saveButton = new(Batch, new(saveX + 200, s * 50 + 150), new(80, 30), Color.Black, new(225, 175, 175), new(225, 200, 200), State.Save, args: [this, s + 1], font: Window.Font, text: "Save");
+                Button loadButton = new(Batch, new(saveX + 300, s * 50 + 150), new(80, 30), Color.Black, new(175, 225, 175), new(200, 225, 200), State.Load, args: [this, s + 1], font: Window.Font, text: "Load");
+                SavesPopup.AddWidgets(clearButton, saveButton, loadButton, label);
+            }
+            Widgets.Add(SavesPopup);
 
             // Fill pixels
             Pixels = Cleared(this);
@@ -85,8 +99,12 @@ namespace Pixxl
         }
         public void UpdateGui(float delta, MouseState mouseState)
         {
-            // Buttons
-            for (int i = 0; i < Buttons.Count; i++) { Buttons[i].Update(mouseState); }
+            // Widgets
+            Focus = Window;
+            for (int i = 0; i < Widgets.Count; i++) {
+                if (Widgets[i].GetType().Name == "Popup" && ((Popup)Widgets[i]).Visible) { Focus = Widgets[i]; }
+                Widgets[i].Update(mouseState);
+            }
         }
         // Drawing
         public void Draw() {
@@ -95,8 +113,8 @@ namespace Pixxl
                 // Pixels
                 for (int i = 0; i < Pixels.Length; i++) { Pixels[i].Draw(); }
 
-                // Buttons
-                for (int i = 0; i < Buttons.Count; i++) { Buttons[i].Draw(); }
+                // Widgets
+                for (int i = 0; i < Widgets.Count; i++) { Widgets[i].Draw(); }
             } else
             {
                 Logger.Log("Skipping drawing with uninitialized batch...");
@@ -126,10 +144,8 @@ namespace Pixxl
             }
             return null;
         }
-        public static void ChangeViewMode(Canvas canvas)
-        {
-            canvas.ViewMode = (canvas.ViewMode + 1) % 4;
-        }
+        public static void ChangeViewMode(Canvas canvas) { canvas.ViewMode = (canvas.ViewMode + 1) % 4; }
+        public static void Saves(Canvas canvas) { canvas.SavesPopup.Visible = true; }
     }
 }
 

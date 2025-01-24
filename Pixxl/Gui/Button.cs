@@ -13,10 +13,9 @@ using System.Runtime.CompilerServices;
 
 namespace Pixxl.Gui
 {
-    public class Button
+    public class Button : Widget
     {
         public SpriteBatch Batch { get; private set; }
-        public Xna.Vector2 Location { get; private set; }
         public Xna.Vector2 Dimensions { get; private set; }
         public string Text { get; private set; }
         public Rectangle Rect
@@ -25,7 +24,7 @@ namespace Pixxl.Gui
         }
         public Xna.Color Color { get; private set; }
         public Xna.Color Highlight { get; private set; }
-        public SpriteFont Font { get; private set; }
+        public SpriteFont? Font { get; private set; }
         public Color Foreground { get; private set; }
         public Delegate? Function { get; private set; }
         public int Border { get; private set; }
@@ -33,10 +32,9 @@ namespace Pixxl.Gui
         public object?[]? Args { get; private set; }
         public int State { get; private set; }
         public bool Last { get; private set; }
-        public bool Visible { get; set; }
         // Centering
         private Xna.Vector2 offset { get; set; }
-        public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, string text, SpriteFont font, Color foreground, Xna.Color color, Xna.Color highlight, Delegate? function, object?[]? args, int border = 3, Color borderColor = default)
+        public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Color foreground, Xna.Color color, Xna.Color highlight, Delegate? function, string text = "", SpriteFont? font = null, object?[]? args = null, int border = 3, Color borderColor = default)
         {
             Batch = batch;
             Location = location;
@@ -52,13 +50,12 @@ namespace Pixxl.Gui
             Args = args;
             State = 0;
             Last = false;
-            Visible = true;
 
-            Xna.Vector2 textDim = Font.MeasureString(Text);
+            Xna.Vector2 textDim = Font != null ? Font.MeasureString(Text) : new(0, 0);
             Xna.Vector2 inside = new(Dimensions.X - Border * 2, Dimensions.Y - Border * 2);
             offset = Xna.Vector2.Floor((inside - textDim) / 2);
         }
-        public void Update(MouseState mouseState)
+        public override void Update(MouseState mouseState)
         {
             // Hovering
             bool pressed = false;
@@ -75,7 +72,7 @@ namespace Pixxl.Gui
             } else { State = 0; }
             Last = pressed;
         }
-        public void Draw()
+        public override void Draw()
         {
             // Not drawing
             if (!Visible) { return; }
@@ -89,20 +86,10 @@ namespace Pixxl.Gui
             if (Font != null)
             {
                 Batch.DrawString(Font, Text, new(Location.X + Border + offset.X, Location.Y + Border + offset.Y), Foreground);
-            } else
+            } else if (Text != "")
             {
                 Logger.Log($"Skipping drawing text '{Text}' because of uninitialized font");
             }
-        }
-
-        // Static methods
-        public static bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Vector2 point)
-        {
-            return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
-        }
-        public static bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Point point)
-        {
-            return PointRectCollide(loc, dim, point.ToVector2());
         }
     }
 }

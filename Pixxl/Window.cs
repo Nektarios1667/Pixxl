@@ -80,23 +80,26 @@ namespace Pixxl
                 Exit();
 
             // Drawing
-            if (mouse.LeftButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
+            if (canvas.Focus == this)
             {
-                cursor = Selection;
-                if (canvas.Pixels[Pixel.Flat(coord)].GetType().Name == "Air" || Selection == "Air")
+                if (mouse.LeftButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
                 {
-                    canvas.Pixels[Pixel.Flat(coord)] = Canvas.New(canvas, Selection, location);
+                    cursor = Selection;
+                    if (canvas.Pixels[Pixel.Flat(coord)].GetType().Name == "Air" || Selection == "Air")
+                    {
+                        canvas.Pixels[Pixel.Flat(coord)] = Canvas.New(canvas, Selection, location);
+                    }
                 }
-            }
-            else if (mouse.MiddleButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
-            {
-                cursor = "Erase";
-                canvas.Pixels[Pixel.Flat(coord)] = new Air(location, canvas);
+                else if (mouse.MiddleButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
+                {
+                    cursor = "Erase";
+                    canvas.Pixels[Pixel.Flat(coord)] = new Air(location, canvas);
+                } else { cursor = "Draw"; }
             } else { cursor = "Normal"; }
 
             // Hotkeys
-            if (KeyPress(Keys.S)) { Tools.State.Save(canvas); }
-            if (KeyPress(Keys.L)) { Tools.State.Load(canvas); }
+            if (KeyPress(Keys.S)) { Tools.State.Save(canvas, 0); }
+            if (KeyPress(Keys.L)) { Tools.State.Load(canvas, 0); }
             if (KeyPress(Keys.V)) { Canvas.ChangeViewMode(canvas); }
             if (KeyPress(Keys.E)) { EraseMode(this); }
             if (KeyPress(Keys.P)) { TogglePlay(this); }
@@ -143,6 +146,8 @@ namespace Pixxl
                 case "Erase" or "Air":
                     DrawX(spriteBatch, location, [8, 8], Color.Red, 2); break;
                 case "Normal":
+                    DrawX(spriteBatch, location, [8, 8], Color.Gray, 2); break;
+                case "Draw":
                     DrawX(spriteBatch, location, [8, 8], Color.Black, 3);
                     DrawX(spriteBatch, location, [8, 8], Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2); break;
                 default:
