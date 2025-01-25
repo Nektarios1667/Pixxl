@@ -66,6 +66,9 @@ namespace Pixxl.Gui
         }
         public override void Update(Window window)
         {
+            // Hidden
+            if (!Visible) { return; }
+
             // Hovering
             MouseState mouseState = window.mouse;
             if (mouseState.LeftButton == ButtonState.Pressed)

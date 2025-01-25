@@ -112,6 +112,9 @@ namespace Pixxl.Gui
         }
         public override void Update(Window window)
         {
+            // Hidden
+            if (!Visible) { return; }
+
             // Blink
             if (Selected) { blink = (blink + window.Delta) % 1.4f; }
             else blink = .7f;
