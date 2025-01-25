@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace Pixxl
 {
@@ -10,7 +11,7 @@ namespace Pixxl
             using (var game = new Window())
             {
                 try { game.Run(); }
-                catch (Exception ex) { Logger.Log($"Exception occured: {ex}"); }
+                catch (Exception ex) { Logger.Log($"Exception occured: {ex}"); throw; }
             }
         }
     }

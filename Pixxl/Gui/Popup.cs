@@ -64,9 +64,10 @@ namespace Pixxl.Gui
             Title = title;
 
         }
-        public override void Update(MouseState mouseState)
+        public override void Update(Window window)
         {
             // Hovering
+            MouseState mouseState = window.mouse;
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 // Clicks
@@ -84,7 +85,7 @@ namespace Pixxl.Gui
             } else { Dragging = false; }
 
             // Widgets update
-            foreach (Widget widget in Widgets) { widget.Update(mouseState); }
+            foreach (Widget widget in Widgets) { widget.Update(window); }
 
             // Previous
             Previous = mouseState;

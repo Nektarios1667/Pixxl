@@ -27,8 +27,8 @@ namespace Pixxl
         public string[] ColorModes = ["Regular", "Colored Thermal", "Grayscale Thermal", "Monotexture"];
 
         private Keys[] previous = [];
-        private Keys[] keys = [];
-        private MouseState mouse;
+        public Keys[] keys = [];
+        public MouseState mouse;
         private string cursor;
 
         public Window()
@@ -98,20 +98,21 @@ namespace Pixxl
             } else { cursor = "Normal"; }
 
             // Hotkeys
-            if (KeyPress(Keys.S)) { Tools.State.Save(canvas, 0); }
-            if (KeyPress(Keys.L)) { Tools.State.Load(canvas, 0); }
-            if (KeyPress(Keys.V)) { Canvas.ChangeViewMode(canvas); }
-            if (KeyPress(Keys.E)) { EraseMode(this); }
-            if (KeyPress(Keys.P)) { TogglePlay(this); }
-            if (KeyPress(Keys.R)) { RunFrame(this); }
-            if (KeyPress(Keys.D)) { CycleSpeed(this); }
+            if (canvas.Focus == this)
+            {
+                if (KeyPress(Keys.V)) { Canvas.ChangeViewMode(canvas); }
+                if (KeyPress(Keys.E)) { EraseMode(this); }
+                if (KeyPress(Keys.P)) { TogglePlay(this); }
+                if (KeyPress(Keys.R)) { RunFrame(this); }
+                if (KeyPress(Keys.D)) { CycleSpeed(this); }
+            }
 
             previous = keys.ToArray();
 
             // Canvas update
-            if (Running >= 1) { canvas.UpdatePixels(Delta, mouse); }
+            if (Running >= 1) { canvas.UpdatePixels(Delta); }
             if (Running == 1) { Running = 0; } // If one frame then pause afterwards
-            canvas.UpdateGui(Delta, mouse);
+            canvas.UpdateGui(Delta);
 
             // Base
             base.Update(gameTime);
@@ -146,7 +147,7 @@ namespace Pixxl
                 case "Erase" or "Air":
                     DrawX(spriteBatch, location, [8, 8], Color.Red, 2); break;
                 case "Normal":
-                    DrawX(spriteBatch, location, [8, 8], Color.Gray, 2); break;
+                    DrawX(spriteBatch, location, [8, 8], Color.Black, 2); break;
                 case "Draw":
                     DrawX(spriteBatch, location, [8, 8], Color.Black, 3);
                     DrawX(spriteBatch, location, [8, 8], Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2); break;

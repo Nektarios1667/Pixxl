@@ -18,7 +18,7 @@ namespace Pixxl.Gui
         public Xna.Vector2 Location { get; set; }
         public bool Visible { get; set; }
         public Widget() { Visible = true; }
-        public abstract void Update(MouseState mouseState);
+        public abstract void Update(Window window);
         public abstract void Draw();
 
         // Static methods

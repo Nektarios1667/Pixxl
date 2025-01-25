@@ -55,9 +55,10 @@ namespace Pixxl.Gui
             Xna.Vector2 inside = new(Dimensions.X - Border * 2, Dimensions.Y - Border * 2);
             offset = Xna.Vector2.Floor((inside - textDim) / 2);
         }
-        public override void Update(MouseState mouseState)
+        public override void Update(Window window)
         {
             // Hovering
+            MouseState mouseState = window.mouse;
             bool pressed = false;
             if (PointRectCollide(Location, Dimensions, mouseState.Position))
             {

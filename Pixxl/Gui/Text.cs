@@ -28,7 +28,7 @@ namespace Pixxl.Gui
             Font = font;
             Color = color;
         }
-        public override void Update(MouseState mouseState) {}
+        public override void Update(Window _) {}
         public override void Draw()
         {
             // Not drawing

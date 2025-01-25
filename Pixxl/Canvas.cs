@@ -71,12 +71,14 @@ namespace Pixxl
                 l++;
             }
 
-            // Save
+            // Saves
             int saveX = Consts.Screen.Window[0] / 2 - 400;
             SavesPopup = new(Batch, new(saveX, 100), new(400, 550), Color.LightCyan, "Saves", Window.Font);
+            SavesPopup.Visible = false;
             for (int s = 0; s < 10; s++)
             {
-                TextBox label = new(Batch, new(saveX + 20, s * 50 + 155), Color.Black, $"Save {s + 1}", Window.Font);
+                //Input nameInput = new(Batch, new(saveX + 400, s * 50 + 153), new(80, 25), Color.Black, new(215, 255, 255), new(225, 255, 255), Window.Font, border: 3);
+                TextBox label = new(Batch, new(saveX + 20, s * 50 + 155), Color.Black, $"Slot {s + 1}", Window.Font);
                 Button clearButton = new(Batch, new(saveX + 100, s * 50 + 150), new(80, 30), Color.Black, new(175, 175, 225), new(200, 200, 225), State.SavePixels, args: [Cleared(this), s + 1], font: Window.Font, text: "Clear");
                 Button saveButton = new(Batch, new(saveX + 200, s * 50 + 150), new(80, 30), Color.Black, new(225, 175, 175), new(225, 200, 200), State.Save, args: [this, s + 1], font: Window.Font, text: "Save");
                 Button loadButton = new(Batch, new(saveX + 300, s * 50 + 150), new(80, 30), Color.Black, new(175, 225, 175), new(200, 225, 200), State.Load, args: [this, s + 1], font: Window.Font, text: "Load");
@@ -88,7 +90,7 @@ namespace Pixxl
             Pixels = Cleared(this);
         }
         // Updating
-        public void UpdatePixels(float delta, MouseState mouseState)
+        public void UpdatePixels(float delta)
         {
             // Delta
             Delta = delta;
@@ -97,13 +99,13 @@ namespace Pixxl
             Pixel[] copy = (Pixel[])(Pixels.Clone());
             for (int i = 0; i < copy.Length; i++) { copy[i].Update(); }
         }
-        public void UpdateGui(float delta, MouseState mouseState)
+        public void UpdateGui(float delta)
         {
             // Widgets
             Focus = Window;
             for (int i = 0; i < Widgets.Count; i++) {
                 if (Widgets[i].GetType().Name == "Popup" && ((Popup)Widgets[i]).Visible) { Focus = Widgets[i]; }
-                Widgets[i].Update(mouseState);
+                Widgets[i].Update(Window);
             }
         }
         // Drawing
