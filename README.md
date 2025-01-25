@@ -104,10 +104,11 @@ To log something to the logs file, use the Logger.Log() function and pass in the
 After each run a text file will be saved containing the logs of the program.  
 The logs are located in `/pixxl/Logs/` and are named based on their date and time.
 
-## Quicksave
-The quick save files are located in `/pixxl/Saves/save.pxs`.  
-The file is compressed and unreadable unless unzipped using gzip.  
-The first 2 lines contains metadata about gridsize and pixel size, and the rest of the lines are each a pixel and its data.  
+## Saves
+The save files are located in `/pixxl/Saves/`.  
+There can be up to ten save files but if nothing has been saved then there will be none.  
+The files are compressed and unreadable unless unzipped using gzip.  
+The first 2 lines contains metadata about gridsize and pixel size, and the rest of the lines are individual pixels and its data.  
 
 ## [License](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en  )
 Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA) license. Distributing and changing this code is allowed if you give appropriate credit, provide a link to the license, and indicate if changes were made. You may not use the material for commercial purposes. If you remix, transform, or build upon this code, you must distribute your contributions under the same license as the original. You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
