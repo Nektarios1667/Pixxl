@@ -35,6 +35,7 @@ namespace Pixxl.Registry
             Gold           | 189, 183, 8   | 14 | [Powder] Transfers heat well but not very strong.
             Grass          | 0, 175, 0     | 8  | [Rigid Powder] Grows slowly over time.
             Gravel         | 97, 97, 97    | 18 | [Powder] Crushed of stone.
+            Grenade        | 3, 36, 4      | 8  | [Powder] Creates a weak explosion in a larger area after a short delay.
             Helium         | 168, 213, 227 | 12 | [Gas] Lighter-than-air unreactive gas.
             Ice            | 130, 199, 245 | 18 | [Solid] Frozen water that melts when warmed up.
             Insulation     | 245, 245, 245 | 18 | [Solid] Transfers heat at a very slow rate.
