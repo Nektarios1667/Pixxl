@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
 using System.Xml.Linq;
 using Pixxl.Gui;
 using Pixxl.Materials;
@@ -20,8 +21,17 @@ namespace Pixxl.Tools
             }
             Logger.Log("State initialized");
         }
-        public static void Save(Canvas canvas, int saveNumber) { SavePixels(canvas.Pixels, saveNumber); }
+        public static void SaveCanvas(Canvas canvas, int saveNumber) { SavePixels(canvas.Pixels, saveNumber); }
         public static void SavePixels(Pixel[] pixels, int saveNumber)
+        {
+            // Logging
+            Logger.Log($"Saving to slot {saveNumber}...");
+
+            // Thread
+            Thread saveThread = new(() => Save(pixels, saveNumber));
+            saveThread.Start();
+        }
+        private static void Save(Pixel[] pixels, int saveNumber)
         {
             // Data
             string data = $"{Constants.Screen.Grid[0]}x{Constants.Screen.Grid[1]}\n{Constants.Screen.PixelSize}\n";
@@ -30,16 +40,26 @@ namespace Pixxl.Tools
                 Pixel current = pixels[i];
                 data += $"{current.TypeId};{Math.Round(current.Temperature, 2)}\n";
             }
-            // Writing
-            Logger.Log($"Saved Pixel state to 'Saves/save-{saveNumber}.pxs'");
 
             //Create a GZipStream to compress the data while writing to the file
             using FileStream fileStream = new($"Saves/save-{saveNumber}.pxs", FileMode.Create, FileAccess.Write);
             using GZipStream gzipStream = new(fileStream, CompressionLevel.Optimal);
             using StreamWriter writer = new(gzipStream);
             writer.Write(data);
+
+            // Logging
+            Logger.Log($"Saved to slot {saveNumber}");
         }
-        public static void Load(Canvas canvas, int saveNumber)
+        public static void LoadCanvas(Canvas canvas, int saveNumber)
+        {
+            // Logging
+            Logger.Log($"Loading from slot {saveNumber}...");
+
+            // Thread
+            Thread saveThread = new(() => Load(canvas, saveNumber));
+            saveThread.Start();
+        }
+        private static void Load(Canvas canvas, int saveNumber)
         {
             // Reading
             string[] lines;
@@ -85,7 +105,7 @@ namespace Pixxl.Tools
                     canvas.Pixels[l] = created;
                 } catch (Exception e) { Logger.Log($"Error loading pixel #{l}: {e}"); }
             }
-            Logger.Log("Loaded Pixel state from 'Saves/save.pxs'");
+            Logger.Log($"Loaded from slot {saveNumber}");
         }
     }
 }
