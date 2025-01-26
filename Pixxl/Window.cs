@@ -9,6 +9,7 @@ using Consts = Pixxl.Constants;
 using System.Collections.Generic;
 using System.Runtime;
 using MonoGame.Extended;
+using Pixxl.Gui;
 
 namespace Pixxl
 {
@@ -110,7 +111,7 @@ namespace Pixxl
             previous = keys.ToArray();
 
             // Canvas update
-            if (Running >= 1) { canvas.UpdatePixels(Delta); }
+            if (Running >= 1 && canvas.Focus == this) { canvas.UpdatePixels(Delta); }
             if (Running == 1) { Running = 0; } // If one frame then pause afterwards
             canvas.UpdateGui(Delta);
 
@@ -133,7 +134,7 @@ namespace Pixxl
             // Info
             if (canvas.Delta != 0)
             {
-                string info = $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}";
+                string info = $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 && canvas.Focus == this ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}";
                 spriteBatch.DrawString(Font, info, new Vector2(20, 20), canvas.ViewMode != 2 ? Color.Black: Color.White);
             }
 

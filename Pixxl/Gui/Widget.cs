@@ -26,9 +26,21 @@ namespace Pixxl.Gui
         {
             return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
         }
+        public static bool PointRectCollide(Xna.Point loc, Xna.Vector2 dim, Xna.Vector2 point)
+        {
+            return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
+        }
+        public static bool PointRectCollide(Xna.Point loc, Xna.Point dim, Xna.Vector2 point)
+        {
+            return (point.X >= loc.X && point.X <= loc.X + dim.X) && (point.Y >= loc.Y && point.Y <= loc.Y + dim.Y);
+        }
         public static bool PointRectCollide(Xna.Vector2 loc, Xna.Vector2 dim, Xna.Point point)
         {
             return PointRectCollide(loc, dim, point.ToVector2());
+        }
+        public static bool PointRectCollide(Rectangle rect, Xna.Point point)
+        {
+            return PointRectCollide(rect.Location, rect.Size, point.ToVector2());
         }
     }
 }

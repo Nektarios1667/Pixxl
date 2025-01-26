@@ -55,19 +55,22 @@ namespace Pixxl
 
             // Materials buttons
             int l = 0; int m = 0;
+            int infoboxY = Consts.Screen.Window[1] - Consts.Gui.MenuSize * Consts.Game.PixelSize - 44;
             for (m = 0; m < MatReg.Names.Count; m++)
             {
                 if (MatReg.Names[m][0] == '.') { continue; } // Skip hidden
                 // Button size, background, and foreground
-                float x = Consts.Gui.ButtonDim.X * (l % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X));
-                float y = Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(l / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1);
+                int x = (int)(Consts.Gui.ButtonDim.X * (l % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)));
+                int y = (int)(Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(l / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1));
                 Color bg = MatReg.Colors[m];
                 int darkValues = 0; if (bg.R < 50) darkValues++; if (bg.G < 50) darkValues++; if (bg.B < 50) darkValues++; // 2/3 rgb values are dark
                 Color fg = darkValues >= 2 ? Color.White : Color.Black;
 
                 // Button
                 Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]]);
-                Widgets.Add(created);
+                int infoboxX = x + 300 <= Consts.Screen.Window[0] ? (int)x : Consts.Screen.Window[0] - 300;
+                Infobox infobox = new(Batch, new(infoboxX, infoboxY), new(300, 40), new((int)x, (int)y, (int)Consts.Gui.ButtonDim.X, (int)Consts.Gui.ButtonDim.Y), bg, fg, MatReg.Descriptions[m], Window.Font);
+                Widgets.Add(created); Widgets.Add(infobox);
                 l++;
             }
 
@@ -168,20 +171,5 @@ namespace Pixxl
         }
 
         public static Color GetColor(int id) { return GetVariation(MatReg.Colors[id], MatReg.Variations[id]); }
-    }
-}
-
-namespace Pixxl.Tools
-{
-    public static class Functions
-    {
-        public static Color Lighten(Color color, float percentage)
-        {
-            int r = color.R; int g = color.G; int b = color.B;
-            r += (int)((255 - r) * percentage);
-            g += (int)((255 - g) * percentage);
-            b += (int)((255 - b) * percentage);
-            return new(r, g, b);
-        }
     }
 }

@@ -8,9 +8,10 @@ namespace Pixxl.Registry
 {
     public static class Materials
     {
-        public static readonly List<string> Names = new();
-        public static readonly List<Color> Colors = new();
-        public static readonly List<int> Variations = new();
+        public static readonly List<string> Names = [];
+        public static readonly List<Color> Colors = [];
+        public static readonly List<int> Variations = [];
+        public static readonly List<string> Descriptions = [];
 
         static Materials()
         {
@@ -28,6 +29,7 @@ namespace Pixxl.Registry
                     Names.Add(reg.Value.Name);
                     Colors.Add(reg.Value.Color);
                     Variations.Add(reg.Value.Variation);
+                    Descriptions.Add(reg.Value.Description);
                 }
             }
             Logger.Log("Successfuly loaded Registry");
@@ -38,12 +40,11 @@ namespace Pixxl.Registry
             string[] sections = line.Split('|');
 
             // Checks
-            if (sections.Length != 3)
+            if (sections.Length != 4)
             {
                 Logger.Log($"Error loading Registry - Invalid format '{line}'");
                 return null; // Skip invalid lines
             }
-
 
             // Colors
             string[] values = sections[1].Trim().Split(", ");
@@ -52,9 +53,12 @@ namespace Pixxl.Registry
             // Variations
             if (!int.TryParse(sections[2].Trim(), out int variation)) { Logger.Log($"Error loading Registry - Can not parse color variation for '{line}'"); return null; }
 
+            // Description
+            string description = sections[3].Trim();
+
             // Log
             Logger.Log($"Loaded material '{sections[0].Trim()}' to Register");
-            return new(sections[0].Trim(), new Color(r, g, b), variation);
+            return new(sections[0].Trim(), new Color(r, g, b), variation, description);
         }
 
         public struct Registered
@@ -62,12 +66,14 @@ namespace Pixxl.Registry
             public string Name { get; set; }
             public Color Color { get; set; }
             public int Variation { get; set; }
+            public string Description { get; set; }
 
-            public Registered(string name, Color color, int variation)
+            public Registered(string name, Color color, int variation, string description)
             {
                 Name = name;
                 Color = color;
                 Variation = variation;
+                Description = description;
             }
         }
 
