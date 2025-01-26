@@ -51,7 +51,7 @@ namespace Pixxl.Materials
         public string Type { get; }
         public bool Skip { get; set; }
         public bool SkipHeat { get; set; }
-        private Xna.Vector2 Previous { get; set; }
+        public Xna.Vector2 Previous { get; set; }
 
         // Constructor
         public Pixel(Xna.Vector2 location, Canvas canvas, float? temp = null)
@@ -79,7 +79,7 @@ namespace Pixxl.Materials
         // Update and draw
         public virtual void Update()
         {
-            // Deletion
+            // Skip
             if (Skip) { Skip = false; return; }
 
             // Reset
@@ -124,14 +124,14 @@ namespace Pixxl.Materials
             if (Move()) { return true; } // Down
             if (State < 2) { return false; } // Not a fluid or energy
 
-            // This checks if the pixel to the to the right will move down to the bottom-right
-            // This is done since downwards movement is prioritized over diagonal movement
-            Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
-            Xna.Vector2 rightMove = right != null ? new(right.Location.X, right.Location.Y + Consts.Game.PixelSize) : new(0, 0);
-            bool priority = (right == null || Coord(rightMove) == Coord(right.Location) || !right.CollideCheck(right.Location, rightMove));
             // Moves
             if (Move(-Consts.Screen.PixelSize)) { return true; } // down-left
 
+            // Move right
+            // Check if other pixel will move down into down right since adjacent has higher priority
+            Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
+            Xna.Vector2 rightMove = right != null ? new(right.Location.X, right.Location.Y + Consts.Game.PixelSize) : new(0, 0);
+            bool priority = (right == null || !right.Gravity || Coord(rightMove) == Coord(right.Location) || !right.CollideCheck(right.Location, rightMove));
             if (priority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
 
             return false;

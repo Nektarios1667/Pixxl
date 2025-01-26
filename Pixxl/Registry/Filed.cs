@@ -9,6 +9,7 @@ namespace Pixxl.Registry
     public static class Filed
     {
         public static string Materials =
+            // Name           | RGB color | Variation  | Description
             """
             Acid           | 25, 217, 0    | 6  | [Liquid] Burns through weaker materials.
             .Air           | 100, 149, 237 | 0  | [Gas]
@@ -26,6 +27,8 @@ namespace Pixxl.Registry
             Explosive      | 139, 0, 0     | 5  | [Powder] Small explosive that explodes when it hits something.
             Faucet         | 0, 0, 155     | 3  | [Solid] Indestructable material that water comes out of.
             Fire           | 189, 46, 21   | 30 | [Energy] A hot flame.
+            Flare          | 105, 26, 41   | 5  | [Powdered] Flare that burns and releases red smoke for a long time.
+            .FlareSmoke    | 171, 34, 60   | 15 | [Gas]
             Fuse           | 138, 107, 90  | 10 | [Solid] Fast burning material used for controlled timing.
             Glass          | 190, 222, 232 | 9  | [Solid] Weak glass.
             Glowshard      | 255, 0, 255   | 0  | [Powder] Colorful shards stonger than diamond, and prettier too.
