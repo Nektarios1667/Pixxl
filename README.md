@@ -49,11 +49,11 @@ __Nuke__ - explosion will destroy materials and create plasma.
 4. The C# file and class for the material should be the same and will appear with the same name in game.
 5. After creating the code for the material, open 'Filed.cs' under the 'Registry' folder.
 6. Add a line to the string variable 'Materials' inside of the 'Filed' class.
-7. The line for the material should be the following: `material name` | `RGB color` | `max RGB color variation`
+7. The line for the material should be the following: `name` | `RGB color` | `max RGB color variation` | `description`
 8. Adding a '.' at the beginning of the name in the registry will cause it to be hidden from the tool bar.
 9. It is recommended to add spaces so that the bars line up with the other lines, and that the materials are sorted alphabetically.
 10. *__Note__*: the material name should be the same as the material file and class.
-11. *__Warning__*: ensure the color variation will not cause the RGB values to be less than 0 or greater than 255, as this will cause it to crash.
+11. *__Warning__*: ensure the color variation will not cause the RGB values to be less than 0 or greater than 255, as this will cause undesired colors.
 12. Once all these steps are complete, run the program to see the new material added/
 
 ### Modifying a material
@@ -62,9 +62,9 @@ __Nuke__ - explosion will destroy materials and create plasma.
 3. Locate the material you want to modify.
 4. Open it up and change the properties and behavior.
 5. If you want to change the color open the `Filed.cs` file in the `Registry` folder, and locate the line in the `Materials` string with the materials name.
-6. The line for the material should be the following: `material name` | `RGB color` | `max RGB color variation`
+6. The line for the material should be the following: `name` | `RGB color` | `max RGB color variation` | `description`
 7. Change the color and/or variation as save the file.
-8. *__Warning__*: ensure the color variation will not cause the RGB values to be less than 0 or greater than 255, as this will cause it to crash.
+8. *__Warning__*: ensure the color variation will not cause the RGB values to be less than 0 or greater than 255, as this will cause undesired colors.
 9. Save the files and run the program to see the changes.
    
 ### Adding a tool button
