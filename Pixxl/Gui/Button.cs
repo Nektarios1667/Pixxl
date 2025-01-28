@@ -62,11 +62,10 @@ namespace Pixxl.Gui
 
             // Hovering
             MouseState mouseState = window.mouse;
-            bool pressed = false;
+            bool pressed = mouseState.LeftButton == ButtonState.Pressed;
             if (PointRectCollide(Location, Dimensions, mouseState.Position))
             {
                 // Clicking
-                pressed = mouseState.LeftButton == ButtonState.Pressed;
                 if (pressed && !Last)
                 {
                     State = 2;
