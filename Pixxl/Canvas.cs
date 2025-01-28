@@ -63,8 +63,9 @@ namespace Pixxl
                 int x = (int)(Consts.Gui.ButtonDim.X * (l % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)));
                 int y = (int)(Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(l / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1));
                 Color bg = MatReg.Colors[m];
-                int darkValues = 0; if (bg.R < 50) darkValues++; if (bg.G < 50) darkValues++; if (bg.B < 50) darkValues++; // 2/3 rgb values are dark
-                Color fg = darkValues >= 2 ? Color.White : Color.Black;
+                int darkValues = 0; if (bg.R < 60) darkValues++; if (bg.G < 60) darkValues++; if (bg.B < 60) darkValues++; // 2/3 rgb values are dark
+                bool prominentColor = bg.R > 165 || bg.G > 165 || bg.B > 165;
+                Color fg = darkValues >= 2 && !prominentColor ? Color.White : Color.Black;
 
                 // Button
                 Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]]);

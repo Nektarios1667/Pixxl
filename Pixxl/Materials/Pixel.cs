@@ -229,6 +229,7 @@ namespace Pixxl.Materials
                 {
                     // Heat transfer simplified equation
                     float dTemp = Temperature - neighbor.Temperature;
+                    if (dTemp < .01) { continue; }
                     float conductivity = 1f / Conductivity + 1f / neighbor.Conductivity;
                     float transfer = Math.Min((dTemp / conductivity) * multiplier, dTemp / 2);
                     Temperature -= transfer;

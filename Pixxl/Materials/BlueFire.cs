@@ -15,7 +15,7 @@ namespace Pixxl.Materials
             // Constants
             Lifespan = .3f;
             Temperature = 9400f;
-            Conductivity = .5f;
+            Conductivity = .2f;
             Density = .0005f;
             Gravity = true;
             State = 4;
