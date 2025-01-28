@@ -12,7 +12,7 @@ namespace Pixxl.Registry
             // Name           | RGB color | Variation  | Description
             """
             Acid           | 25, 217, 0    | 6  | [Liquid] Burns through weaker materials.
-            .Air           | 100, 149, 237 | 0  | [Gas]
+            .Air           | 100, 149, 237 | 0  | [Gas] Regular unreactive air that rises when hot.
             Ash            | 54, 54, 54    | 8  | [Powder] Left behind after solids burn.
             BlueFire       | 11, 106, 230  | 13 | [Energy] Superhot fire.
             BlueTorch      | 0, 83, 115    | 3  | [Solid] Indestructable torch that burns superhot.
@@ -20,7 +20,7 @@ namespace Pixxl.Registry
             Coal           | 13, 13, 13    | 10 | [Powder] Solid fuel that burns for a few seconds.
             Concrete       | 160, 160, 160 | 9  | [Solid] Stronger material with little destruction from explosives and acid.
             Coolant        | 31, 181, 111  | 8  | [Liquid] Heat-absoribing liquid that turns to gas easily.
-            .CoolantVapor  | 56, 224, 146  | 14 | [Gas]
+            .CoolantVapor  | 56, 224, 146  | 14 | [Gas] Coolant in its vapor form.
             Copper         | 173, 86, 31   | 9  | [Solid] Metal that transfers heat well.
             Diamond        | 24, 149, 171  | 6  | [Powder] Strong, heat-conductive material resistent to almost anything.
             Dirt           | 74, 40, 18    | 15 | [Powder] Earthy dirt.
@@ -28,7 +28,7 @@ namespace Pixxl.Registry
             Faucet         | 0, 0, 155     | 3  | [Solid] Indestructable material that water comes out of.
             Fire           | 189, 46, 21   | 30 | [Energy] A hot flame.
             Flare          | 105, 26, 41   | 5  | [Powdered] Flare that burns and releases red smoke for a long time.
-            .FlareSmoke    | 171, 34, 60   | 15 | [Gas]
+            .FlareSmoke    | 171, 34, 60   | 15 | [Gas] Red smoke released by a flare.
             Fuse           | 138, 107, 90  | 10 | [Solid] Fast burning material used for controlled timing.
             Glass          | 190, 222, 232 | 9  | [Solid] Weak glass.
             Glowshard      | 255, 0, 255   | 0  | [Powder] Colorful shards stonger than diamond, and prettier too.
@@ -39,10 +39,10 @@ namespace Pixxl.Registry
             Helium         | 168, 213, 227 | 12 | [Gas] Lighter-than-air unreactive gas.
             Ice            | 130, 199, 245 | 18 | [Solid] Frozen water that melts when warmed up.
             Insulation     | 245, 245, 245 | 18 | [Solid] Transfers heat at a very slow rate.
-            Lava           | 186, 28, 0    | 20 | [Liquid] Liquified molten rock.
-            .MoltenCopper  | 222, 108, 35  | 9  | [Liquid]
-            .MoltenGold    | 219, 213, 15  | 8  | [Liquid]
-            .MoltenSteel   | 47, 60, 66    | 6  | [Liquid]
+            Lava           | 186, 28, 0    | 20 | [Liquid] Molten rock.
+            .MoltenCopper  | 222, 108, 35  | 9  | [Liquid] Liquified copper.
+            .MoltenGold    | 219, 213, 15  | 8  | [Liquid] Liquified gold.
+            .MoltenSteel   | 47, 60, 66    | 6  | [Liquid] Liquified steel.
             Nuke           | 103, 122, 9   | 3  | [Solid] Creates a massive explosion when it hits the ground.
             Oil            | 5, 5, 5       | 4  | [Liquid] Liquid fuel that burns for a time.
             Plasma         | 187, 57, 227  | 8  | [Energy/Gas] Plasmified air at extreme temperatures.
