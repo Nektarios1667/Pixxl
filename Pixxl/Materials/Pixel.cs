@@ -250,7 +250,7 @@ namespace Pixxl.Materials
         public Pixel? Find(Xna.Vector2 vec, char mode)
         {
             Xna.Vector2 converted = ConvertToCoord(vec, mode);
-            if (IndexCheck(converted, 'c'))
+            if (CoordCheck(converted))
             {
                 return Canvas.Pixels[Flat(converted)];
             } else
@@ -284,9 +284,18 @@ namespace Pixxl.Materials
         // Static methods
         public static bool IndexCheck(Xna.Vector2 loc, char mode)
         {
+            if (mode == 'c') { return CoordCheck(loc); }
             Xna.Vector2 coord = ConvertToCoord(loc, mode);
-            if (coord.X < 0 || coord.X >= Consts.Screen.Grid[0]) { return false; }
-            if (coord.Y < 0 || coord.Y >= Consts.Screen.Grid[1]) { return false; }
+            int[] grid = Consts.Screen.Grid;
+            if (coord.X < 0 || coord.X >= grid[0]) { return false; }
+            if (coord.Y < 0 || coord.Y >= grid[1]) { return false; }
+            return true;
+        }
+        public static bool CoordCheck(Xna.Vector2 coord)
+        {
+            int[] grid = Consts.Screen.Grid;
+            if (coord.X < 0 || coord.X >= grid[0]) { return false; }
+            if (coord.Y < 0 || coord.Y >= grid[1]) { return false; }
             return true;
         }
         public static Xna.Vector2 ConvertToCoord(Xna.Vector2 loc, char mode)
