@@ -32,7 +32,7 @@ namespace Pixxl.Materials
             if (above != null && Canvas.Rand.Next(0, 200) == 0 && above.Type == "Air") {
                 Grass created = new Grass(above.Location, Canvas);
                 if (Canvas.Rand.Next(0, 3) == 0) { created.End = true; }
-                Canvas.Pixels[above.Index] = created;
+                Canvas.Pixels[above.GetIndex()] = created;
             }
         }
     }

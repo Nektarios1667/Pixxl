@@ -32,8 +32,9 @@ namespace Pixxl.Materials
             Lifespan -= Canvas.Delta;
             if (Lifespan <= 0)
             {
-                Skip = true;
+                UpdatePositions('i');
                 Canvas.Pixels[Index] = new Air(Location, Canvas);
+                Skip = true;
                 return;
             }
 

@@ -42,17 +42,17 @@ namespace Pixxl.Materials
             // Above
             if (above != null && above.Type == "Air")
             {
-                Canvas.Pixels[above.Index] = new FlareSmoke(above.Location, Canvas); above.Skip = true;
+                Canvas.Pixels[above.GetIndex()] = new FlareSmoke(above.Location, Canvas); above.Skip = true;
             }
             // Above left
             if (aboveLeft != null && aboveLeft.Type == "Air" && Canvas.Rand.Next(0, 10) == 0)
             {
-                Canvas.Pixels[aboveLeft.Index] = new FlareSmoke(aboveLeft.Location, Canvas); aboveLeft.Skip = true;
+                Canvas.Pixels[aboveLeft.GetIndex()] = new FlareSmoke(aboveLeft.Location, Canvas); aboveLeft.Skip = true;
             }
             // Above left
             if (aboveRight != null && aboveRight.Type == "Air" && Canvas.Rand.Next(0, 10) == 0)
             {
-                Canvas.Pixels[aboveRight.Index] = new FlareSmoke(aboveRight.Location, Canvas); aboveRight.Skip = true;
+                Canvas.Pixels[aboveRight.GetIndex()] = new FlareSmoke(aboveRight.Location, Canvas); aboveRight.Skip = true;
             }
         }
     }

@@ -30,7 +30,7 @@ namespace Pixxl.Materials
             if (above != null && above.Type == "Air")
             {
                 above.Skip = true;
-                Canvas.Pixels[above.Index] = new Fire(above.Location, Canvas);
+                Canvas.Pixels[above.GetIndex()] = new Fire(above.Location, Canvas);
             }
         }
     }

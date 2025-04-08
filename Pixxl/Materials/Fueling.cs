@@ -55,7 +55,7 @@ namespace Pixxl.Materials
                     if (neighbor == null) { n++; continue; }
                     if (neighbor.Type == "Air") {
                         neighbor.Skip = true;
-                        Canvas.Pixels[neighbor.Index] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
+                        Canvas.Pixels[neighbor.GetIndex()] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
                             : Superheated ? new BlueFire(neighbor.Location, Canvas)
                             : new Fire(neighbor.Location, Canvas);
                     }

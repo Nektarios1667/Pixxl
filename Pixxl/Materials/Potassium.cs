@@ -28,7 +28,7 @@ namespace Pixxl.Materials
             {
                 if (neighbor != null && neighbor.Type == "Water") {
                     neighbor.Skip = true;
-                    Canvas.Pixels[neighbor.Index] = new Fire(neighbor.Location, Canvas);
+                    Canvas.Pixels[neighbor.GetIndex()] = new Fire(neighbor.Location, Canvas);
                     return true;
                 }
             }

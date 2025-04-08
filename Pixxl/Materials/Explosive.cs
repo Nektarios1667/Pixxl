@@ -49,9 +49,9 @@ namespace Pixxl.Materials
 
                     // Pixel data
                     Pixel current = Canvas.Pixels[Flat(x, y)];
-                    int idx = current.Index;
-                    int dX = (int)(coords.X - current.Coords.X);
-                    int dY = (int)(coords.Y - current.Coords.Y);
+                    int idx = current.GetIndex();
+                    int dX = (int)(coords.X - current.GetCoords().X);
+                    int dY = (int)(coords.Y - current.GetCoords().Y);
                     float dist = (float)Math.Sqrt(dX*dX + dY*dY);
 
                     // Damage
@@ -61,11 +61,11 @@ namespace Pixxl.Materials
                         float damage = (Explosion / Range) * (Range - dist);
                         if (damage >= current.Strength || (current.GetType().Name == "Air" && Canvas.Rand.Next(0, (int)dist / Range) == 0))
                         {
-                            Fire repl = new Fire(current.Location, Canvas);
+                            Fire repl = new(current.Location, Canvas);
                             repl.Temperature = damage * 2;
                             repl.Lifespan -= Canvas.Rand.NextSingle();
                             current.Skip = true;
-                            Canvas.Pixels[current.Index] = repl;
+                            Canvas.Pixels[idx] = repl;
                         }
                     }
                 }

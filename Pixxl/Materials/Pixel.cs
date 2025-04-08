@@ -3,6 +3,7 @@ using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using System;
 using Consts = Pixxl.Constants;
+using System.Linq;
 
 namespace Pixxl.Materials
 {
@@ -22,9 +23,9 @@ namespace Pixxl.Materials
         // Properties
         public float Temperature { get; set; }
         public Xna.Vector2 Location { get; set; }
-        public int Index => Flat(Coord(Location));
-        public Xna.Vector2 Snapped => Snap(Location);
-        public Xna.Vector2 Coords => Coord(Location);
+        public int Index { get; set; }
+        public Xna.Vector2 Snapped { get; set; }
+        public Xna.Vector2 Coords { get; set; }
         public RectangleF Rect => new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
 
         // Constants
@@ -69,6 +70,9 @@ namespace Pixxl.Materials
             Previous = location;
             Neighbors = new Pixel?[surrounding.Length];
             Location = location;
+            Snapped = Snap(Location);
+            Coords = ConvertToCoord(Snapped, 's');
+            Index = Flat(Coords);
             Canvas = canvas;
             Temperature = temp ?? Consts.Game.RoomTemp;
             Type = GetType().Name;
@@ -83,7 +87,12 @@ namespace Pixxl.Materials
             if (Skip) { Skip = false; return; }
 
             // Reset
+            UpdatePositions('s', 'c', 'i');
             GetNeighbors();
+
+            // Heat transfer
+            if (!SkipHeat) { HeatTransfer(); }
+            else { SkipHeat = false; }
 
             // For the possible moves including diagonals
             Movements();
@@ -93,12 +102,9 @@ namespace Pixxl.Materials
                 if ((Location == Previous && Canvas.Rand.Next(0, Math.Min((int)Density * 3, 8)) == 0)) { FluidSpread(); }
                 else if (Canvas.Rand.Next(0, Math.Clamp((int)Density * 20, 10, 40)) == 0) { FluidSpread(); }
             }
+            UpdatePositions('s', 'c', 'i');
 
-            // Heat transfer
-            if (!SkipHeat) { HeatTransfer(); }
-            else { SkipHeat = false; }
-
-            // Check changes for melting, evaporating, plasmifying, deplasmifying condensing, hardening
+            // Check changes for melting, evaporating, plasmifying, deplasmifying, condensing, solidifying
             StateCheck();
 
             // Final
@@ -138,6 +144,7 @@ namespace Pixxl.Materials
         }
         public virtual void Draw()
         {
+            UpdatePositions('s', 'c', 'i');
             // Calculate red and green values based on the temperature
             Color color = Color;
             // Default is textures
@@ -162,6 +169,12 @@ namespace Pixxl.Materials
             Canvas.Batch.FillRectangle(Rect, color);
         }
         // Methods
+        public void UpdatePositions(params char[] positions)
+        {
+            if (positions.Contains('s')) { Snapped = Snap(Location); }
+            if (positions.Contains('c')) { Coords = Coord(Location); }
+            if (positions.Contains('i')) { Index = Flat(Coord(Location)); }
+        }
         public Xna.Vector2 Predict(Xna.Vector2 vec, float velocity)
         {
             return new(vec.X, vec.Y + Math.Min(velocity * Canvas.Delta * Consts.Game.Speed, Consts.Screen.PixelSize));
@@ -202,11 +215,20 @@ namespace Pixxl.Materials
         }
         public virtual void Transform(Transformation transformation)
         {
-            object[] args = { Location, Canvas };
-            Pixel converted = (Pixel)Activator.CreateInstance(transformation.Material, args);
-            converted.Temperature = Temperature;
+            if (TypeId == 35)
+            {
+                Console.WriteLine("");
+            }
 
-            Canvas.Pixels[Index] = converted;
+            Pixel? converted = (Pixel?)Activator.CreateInstance(transformation.Material, [Location, Canvas]);
+            if (converted != null)
+            {
+                UpdatePositions('i');
+                converted.Temperature = Temperature;
+                Canvas.Pixels[Index] = converted;
+                Skip = true;
+                return;
+            }
         }
         public virtual void FluidSpread()
         {
@@ -244,9 +266,12 @@ namespace Pixxl.Materials
                 // Neighbor
                 Pixel? neighbor = Find(Index + surrounding[n]);
                 // If the neighbor's X is too far it means that the neighbor carried over to the previous or next line so make it null instead
-                Neighbors[n] = neighbor == null || Math.Abs(Coords.X - neighbor.Coords.X) > 1 ? null : neighbor;
+                Neighbors[n] = neighbor == null || Math.Abs(Coords.X - neighbor.GetCoords().X) > 1 ? null : neighbor;
             }
         }
+        public int GetIndex() { return Flat(Coord(Location)); }
+        public Xna.Vector2 GetCoords() {  return Coord(Location); }
+        public Xna.Vector2 GetSnapped() { return Snap(Location); }
         public Pixel? Find(Xna.Vector2 vec, char mode)
         {
             Xna.Vector2 converted = ConvertToCoord(vec, mode);
@@ -306,7 +331,7 @@ namespace Pixxl.Materials
             // Converting to coords based on mode
             if (mode == 'c') { converted = loc; } // Coordinate
             else if (mode == 'l') { converted = Coord(loc); } // Location
-            else if (mode == 's') { converted = loc * Consts.Screen.PixelSize; } // Snapped location
+            else if (mode == 's') { converted = loc / Consts.Screen.PixelSize; } // Snapped location
             else { throw new ArgumentException("Mode should be 'l', 's', or 'c'"); }
 
             return converted;

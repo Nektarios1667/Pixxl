@@ -27,7 +27,7 @@ namespace Pixxl.Materials
             if (down != null && down.Strength < 500 && Canvas.Rand.Next(0, down.Strength) == 0)
             {
                 down.Skip = true;
-                Canvas.Pixels[down.Index] = new Air(down.Location, Canvas);
+                Canvas.Pixels[down.GetIndex()] = new Air(down.Location, Canvas);
             }
         }
     }
