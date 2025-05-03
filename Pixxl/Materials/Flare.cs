@@ -30,6 +30,7 @@ namespace Pixxl.Materials
             if (Burned >= Fuel)
             {
                 Canvas.Pixels[Index] = new FlareSmoke(Location, Canvas);
+                Canvas.Pixels[Index].Skip = true;
                 return;
             }
 
@@ -42,17 +43,17 @@ namespace Pixxl.Materials
             // Above
             if (above != null && above.Type == "Air")
             {
-                Canvas.Pixels[above.GetIndex()] = new FlareSmoke(above.Location, Canvas); above.Skip = true;
+                Canvas.Pixels[above.GetIndex()] = new FlareSmoke(above.Location, Canvas);
             }
             // Above left
             if (aboveLeft != null && aboveLeft.Type == "Air" && Canvas.Rand.Next(0, 10) == 0)
             {
-                Canvas.Pixels[aboveLeft.GetIndex()] = new FlareSmoke(aboveLeft.Location, Canvas); aboveLeft.Skip = true;
+                Canvas.Pixels[aboveLeft.GetIndex()] = new FlareSmoke(aboveLeft.Location, Canvas);
             }
             // Above left
             if (aboveRight != null && aboveRight.Type == "Air" && Canvas.Rand.Next(0, 10) == 0)
             {
-                Canvas.Pixels[aboveRight.GetIndex()] = new FlareSmoke(aboveRight.Location, Canvas); aboveRight.Skip = true;
+                Canvas.Pixels[aboveRight.GetIndex()] = new FlareSmoke(aboveRight.Location, Canvas);
             }
         }
     }

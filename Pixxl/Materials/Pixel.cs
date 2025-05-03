@@ -91,8 +91,7 @@ namespace Pixxl.Materials
             GetNeighbors();
 
             // Heat transfer
-            if (!SkipHeat) { HeatTransfer(); }
-            else { SkipHeat = false; }
+            HeatTransfer();
 
             // For the possible moves including diagonals
             Movements();
@@ -255,7 +254,6 @@ namespace Pixxl.Materials
                     float transfer = Math.Min((dTemp / conductivity) * multiplier, dTemp / 2);
                     Temperature -= transfer;
                     neighbor.Temperature += transfer;
-                    neighbor.SkipHeat = true;
                 }
             }
         }
