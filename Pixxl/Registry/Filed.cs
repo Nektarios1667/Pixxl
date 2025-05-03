@@ -16,7 +16,7 @@ namespace Pixxl.Registry
             Ash            | 54, 54, 54    | 8  | [Powder] Left behind after solids burn.
             BlueFire       | 11, 106, 230  | 13 | [Energy] Superhot fire.
             BlueTorch      | 0, 83, 115    | 3  | [Solid] Indestructable torch that burns superhot.
-            Chiller        | 33, 30, 130   | 5  | [Chiller] Indestructable material that cools the area.
+            Chiller        | 33, 30, 130   | 5  | [Solid] Indestructable material that cools the area.
             Coal           | 13, 13, 13    | 10 | [Powder] Solid fuel that burns for a few seconds.
             Concrete       | 160, 160, 160 | 9  | [Solid] Stronger material with little destruction from explosives and acid.
             Coolant        | 31, 181, 111  | 8  | [Liquid] Heat-absoribing liquid that turns to gas easily.
