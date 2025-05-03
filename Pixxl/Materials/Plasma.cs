@@ -19,5 +19,13 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(Plasma));
             Solidifying = new Transformation(9500, typeof(Air));
         }
+
+        public override void Update()
+        {
+            base.Update();
+
+            // Naturally cool down
+            Temperature -= Canvas.Delta * 100;
+        }
     }
 }
