@@ -214,11 +214,6 @@ namespace Pixxl.Materials
         }
         public virtual void Transform(Transformation transformation)
         {
-            if (TypeId == 35)
-            {
-                Console.WriteLine("");
-            }
-
             Pixel? converted = (Pixel?)Activator.CreateInstance(transformation.Material, [Location, Canvas]);
             if (converted != null)
             {

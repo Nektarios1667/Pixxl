@@ -45,6 +45,7 @@ namespace Pixxl.Materials
             {
                 UpdatePositions('i');
                 Canvas.Pixels[Index] = new Air(Location, Canvas);
+                Canvas.Pixels[Index].Temperature = Math.Max(Temperature / 5, Constants.Game.RoomTemp);
                 Skip = true;
                 return;
             }

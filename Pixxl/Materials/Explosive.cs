@@ -3,6 +3,7 @@ using Xna = Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using Consts = Pixxl.Constants;
+using System.Text;
 
 namespace Pixxl.Materials
 {
@@ -19,6 +20,7 @@ namespace Pixxl.Materials
         public int Explosion { get; set; }
         public int Range { get; set; }
         private bool exploded = false;
+        private int rangeSq;
         public Explosive(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
@@ -50,27 +52,31 @@ namespace Pixxl.Materials
             exploded = true;
 
             Xna.Vector2 coords = Coords;
-            // Iterate pixels
-            for (int y = 0; y < Consts.Screen.Grid[1]; y++)  // Loop through rows
-            {
-                for (int x = 0; x < Consts.Screen.Grid[0]; x++)  // Loop through columns
-                {
-                    // Pre checks
-                    if (Math.Abs(coords.X - x) > Range || Math.Abs(coords.Y - y) > Range) { continue; }
+            rangeSq = Range * Range;
 
+            // Get scan range
+            int minX = Math.Max(0, (int)(coords.X - Range));
+            int maxX = Math.Min(Consts.Screen.Grid[0] - 1, (int)(coords.X + Range));
+            int minY = Math.Max(0, (int)(coords.Y - Range));
+            int maxY = Math.Min(Consts.Screen.Grid[1] - 1, (int)(coords.Y + Range));
+
+            // Iterate pixels
+            for (int y = minY; y <= maxY; y++) // Rows
+            {
+                for (int x = minX; x <= maxX; x++) { // Columns
                     // Pixel data
                     Pixel current = Canvas.Pixels[Flat(x, y)];
                     int idx = current.GetIndex();
                     int dX = (int)(coords.X - current.GetCoords().X);
                     int dY = (int)(coords.Y - current.GetCoords().Y);
-                    float dist = (float)Math.Sqrt(dX*dX + dY*dY);
+                    float distSq = dX*dX + dY*dY;
 
                     // Damage
-                    if (dist <= Range)  
+                    if (distSq <= rangeSq)  
                     {
-                        // damage = -dxr^-1 + d where d = Damage, x = Distance, r = Range
-                        float damage = (Explosion / Range) * (Range - dist);
-                        if (damage >= current.Strength || (current.GetType().Name == "Air" && Canvas.Rand.Next(0, (int)dist / Range) == 0))
+                        // damage = x * (1 - d/r)
+                        float damage = Explosion * (1f - (distSq / rangeSq));
+                        if (damage >= current.Strength || current.Type == "Air")
                         {
                             if (current is IExplosive explosive)
                             {
@@ -79,8 +85,7 @@ namespace Pixxl.Materials
                             else
                             {
                                 Fire repl = new(current.Location, Canvas);
-                                repl.Temperature = damage * 2;
-                                repl.Lifespan -= Canvas.Rand.NextSingle();
+                                repl.Temperature = (damage * 2);
                                 Canvas.Pixels[idx] = repl;
                                 current.Skip = true;
                                 repl.Skip = true;
@@ -92,7 +97,8 @@ namespace Pixxl.Materials
 
             // Remove self
             Pixel self = new Air(Location, Canvas);
-            self.Temperature = Temperature;
+            self.Temperature = Explosion * 2;
+            self.Skip = true;
             Canvas.Pixels[Index] = self;
             Skip = true;
         }

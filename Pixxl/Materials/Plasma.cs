@@ -25,7 +25,7 @@ namespace Pixxl.Materials
             base.Update();
 
             // Naturally cool down
-            Temperature -= Canvas.Delta * 100;
+            Temperature -= Canvas.Delta * 125;
         }
     }
 }
