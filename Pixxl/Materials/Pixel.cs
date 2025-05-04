@@ -236,6 +236,13 @@ namespace Pixxl.Materials
         }
         public virtual void HeatTransfer()
         {
+            // Skip repeated heat calculations
+            if (SkipHeat)
+            {
+                SkipHeat = false;
+                return;
+            }
+
             // Heat transfers
             float multiplier = Canvas.Delta * Consts.Game.Speed * Consts.Game.HeatTransfer;
             foreach (Pixel? neighbor in Neighbors)
@@ -249,6 +256,7 @@ namespace Pixxl.Materials
                     float transfer = Math.Min((dTemp / conductivity) * multiplier, dTemp / 2);
                     Temperature -= transfer;
                     neighbor.Temperature += transfer;
+                    neighbor.SkipHeat = true;
                 }
             }
         }
