@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
-    public class Wood : Fueling
+    public class Wood : Fuel
     {
         // Constructor
         public Wood(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
@@ -14,7 +14,7 @@ namespace Pixxl.Materials
             Conductivity = .05f;
             Density = .6f;
             State = 0;
-            Fuel = 4;
+            Lifetime = 4f;
             Strength = 100;
             Melting = new Transformation(999999, typeof(Wood));
             Solidifying = new Transformation(-999999, typeof(Wood));

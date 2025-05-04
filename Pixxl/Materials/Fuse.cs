@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
-    public class Fuse : Fueling
+    public class Fuse : Fuel
     {
         // Constructor
         float Time { get; set; }
@@ -15,7 +15,7 @@ namespace Pixxl.Materials
             Ashes = false;
             Time = 0f;
             Internal = true;
-            Fuel = .5f;
+            Lifetime = 5f;
             Conductivity = .05f;
             Density = .8f;
             State = 0;
@@ -42,7 +42,7 @@ namespace Pixxl.Materials
                     // Exposed for long enough to ignite
                     exposed = true;
                     Time += Canvas.Delta;
-                    if (Time >= Fuel) { Lit = true; }
+                    if (Time >= Lifetime) { Lit = true; }
                 }
                 
                 // Surrounding fire

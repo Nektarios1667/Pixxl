@@ -6,13 +6,13 @@ using Microsoft.CodeAnalysis;
 
 namespace Pixxl.Materials
 {
-    public class Coal : Fueling
+    public class Coal : Fuel
     {
         // Constructor
         public Coal(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Fuel = 10f;
+            Lifetime = 10f;
             Conductivity = .3f;
             Density = 1.8f;
             Strength = 50;

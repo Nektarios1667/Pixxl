@@ -43,9 +43,9 @@ namespace Pixxl.Materials
             // Spreading
             foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor != null && Canvas.Rand.Next(0, 5) == 0 && neighbor.GetType().BaseType == typeof(Fueling))
+                if (neighbor != null && Canvas.Rand.Next(0, 5) == 0 && neighbor.GetType().BaseType == typeof(Fuel))
                 {
-                    ((Fueling)neighbor).Lit = true;
+                    ((Fuel)neighbor).Lit = true;
                 }
             }
         }

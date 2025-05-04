@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 namespace Pixxl.Materials
 {
-    public class Flare : Fueling
+    public class Flare : Fuel
     {
         // Constructor
         public Flare(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Fuel = 25;
+            Lifetime = 25f;
             Ashes = false;
             Conductivity = .02f;
             Density = .88f;
@@ -27,7 +27,7 @@ namespace Pixxl.Materials
             base.Update();
 
             // Burned out
-            if (Burned >= Fuel)
+            if (Burned >= Lifetime)
             {
                 Canvas.Pixels[Index] = new FlareSmoke(Location, Canvas);
                 Canvas.Pixels[Index].Skip = true;

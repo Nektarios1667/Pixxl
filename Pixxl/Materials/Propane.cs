@@ -5,13 +5,13 @@ using Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
-    public class Propane : Fueling
+    public class Propane : Fuel
     {
         // Constructor
         public Propane(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Fuel = .2f;
+            Lifetime = .2f;
             Conductivity = .09f;
             Density = .00018f;
             State = 3;
@@ -28,7 +28,7 @@ namespace Pixxl.Materials
             foreach (Pixel? neighbor in Neighbors)
             {
                 // Exposed to burning item
-                if (neighbor != null && neighbor.GetType().BaseType.Name == "Fueling" && ((Fueling)neighbor).Lit)
+                if (neighbor != null && neighbor.GetType().BaseType.Name == "Fuel" && ((Fuel)neighbor).Lit)
                 {
                     Lit = true;
                 }

@@ -5,13 +5,13 @@ using Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
-    public class Oil : Fueling
+    public class Oil : Fuel
     {
         // Constructor
         public Oil(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Fuel = 15;
+            Lifetime = 15;
             Conductivity = .15f;
             Density = .85f;
             State = 3;

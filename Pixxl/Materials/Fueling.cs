@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace Pixxl.Materials
 {
-    public abstract class Fueling : Pixel
+    public abstract class Fuel : Pixel
     {
-        public float Fuel { get; set; }
+        public float Lifetime { get; set; }
         public float Burned { get; set; }
         public bool Lit { get; set; }
         public bool Superheated { get; set; }
@@ -16,14 +16,14 @@ namespace Pixxl.Materials
         public bool Ashes { get; set; }
         private readonly string[] nonSnuffable = { "Smoke", "Fire", "BlueFire" };
         // Constructor
-        public Fueling(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
+        public Fuel(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
             Ashes = true;
             Internal = false;
             Superheated = false;
             Lit = false;
-            Fuel = 10f;
+            Lifetime = 10f;
             Burned = 0f;
             Conductivity = .3f;
             Density = 1.5f;
@@ -38,7 +38,7 @@ namespace Pixxl.Materials
             base.Update();
 
             // Burned out
-            if (Burned >= Fuel) {
+            if (Burned >= Lifetime) {
                 Pixel creation = State <= 2 && Ashes && Canvas.Rand.Next(0, 4) == 0 ? new Ash(Location, Canvas) : Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas);
                 Canvas.Pixels[Index] = creation;
                 return;
