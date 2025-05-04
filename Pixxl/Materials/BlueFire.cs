@@ -43,9 +43,9 @@ namespace Pixxl.Materials
             // Spreading
             foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor != null && Canvas.Rand.Next(0, 5) == 0 && neighbor is IBurnable burnable)
+                if (neighbor != null && Canvas.Rand.Next(0, 5) == 0 && neighbor is IIgnitable ignitable)
                 {
-                    burnable.Ignite();
+                    ignitable.Ignite();
                 }
             }
         }

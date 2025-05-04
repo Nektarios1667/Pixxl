@@ -5,8 +5,13 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 
 namespace Pixxl.Materials
-{   
-    interface IBurnable
+{
+    interface IIgnitable
+    {
+        void Ignite();
+        void Snuff();
+    }
+    interface IBurnable : IIgnitable
     {
         float Lifetime { get; set; }
         float Burned { get; set; }
@@ -14,9 +19,7 @@ namespace Pixxl.Materials
         bool Superheated { get; set; }
         bool Internal { get; set; }
         bool Ashes { get; set; }
-        void Ignite();
-        void Snuff();
-        }
+    }
 
     public abstract class Fuel : Pixel, IBurnable
     {
