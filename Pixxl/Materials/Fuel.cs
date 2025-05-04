@@ -5,8 +5,20 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 
 namespace Pixxl.Materials
-{
-    public abstract class Fuel : Pixel
+{   
+    interface IBurnable
+    {
+        float Lifetime { get; set; }
+        float Burned { get; set; }
+        bool Lit { get; set; }
+        bool Superheated { get; set; }
+        bool Internal { get; set; }
+        bool Ashes { get; set; }
+        void Ignite();
+        void Snuff();
+        }
+
+    public abstract class Fuel : Pixel, IBurnable
     {
         public float Lifetime { get; set; }
         public float Burned { get; set; }
@@ -61,12 +73,22 @@ namespace Pixxl.Materials
                     }
                     else if (n == 0 && neighbor.State != 4 && !nonSnuffable.Contains(neighbor.Type) && !Internal) // Snuffed
                     {
-                        Lit = false;
+                        Snuff();
                         break;
                     }
                     n++;
                 }
             }
+        }
+
+        public void Ignite()
+        {
+            Lit = true;
+        }
+
+        public void Snuff()
+        {
+            Lit = false;
         }
     }
 }
