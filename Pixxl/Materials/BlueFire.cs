@@ -6,9 +6,8 @@ using Pixxl;
 
 namespace Pixxl.Materials
 {
-    public class BlueFire : Pixel
+    public class BlueFire : Fire
     {
-        float Lifespan { get; set; }
         // Constructor
         public BlueFire(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
@@ -23,27 +22,11 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(BlueFire));
             Solidifying = new Transformation(7200, typeof(Fire));
         }
-        public override void Update()
+        public override void Spread()
         {
-            // Base
-            base.Update();
-
-            // Life
-            Lifespan -= Canvas.Delta;
-            if (Lifespan <= 0)
-            {
-                Pixel created = new Air(Location, Canvas);
-                Canvas.Pixels[Index] = created;
-                return;
-            }
-
-            // Glow
-            if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.GetColor(TypeId); }
-
-            // Spreading
             foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor != null && Canvas.Rand.Next(0, 5) == 0 && neighbor is IIgnitable ignitable)
+                if (neighbor != null && Canvas.Rand.Next(0, 5) == 0 && (neighbor is IIgnitable ignitable))
                 {
                     ignitable.Ignite();
                 }

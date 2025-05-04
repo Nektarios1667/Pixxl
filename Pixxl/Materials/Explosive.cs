@@ -6,11 +6,19 @@ using Consts = Pixxl.Constants;
 
 namespace Pixxl.Materials
 {
-    public class Explosive : Pixel
+    interface IExplosive
+    {
+        public int Explosion { get; set; }
+        public int Range { get; set; }
+        public bool ExplodeCheck();
+        public void Explode();
+    }
+    public class Explosive : Pixel, IExplosive
     {
         // Constructor
         public int Explosion { get; set; }
         public int Range { get; set; }
+        private bool exploded = false;
         public Explosive(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
@@ -38,6 +46,9 @@ namespace Pixxl.Materials
         }
         public virtual void Explode()
         {
+            if (exploded || Skip) { return; }
+            exploded = true;
+
             Xna.Vector2 coords = Coords;
             // Iterate pixels
             for (int y = 0; y < Consts.Screen.Grid[1]; y++)  // Loop through rows
@@ -61,11 +72,19 @@ namespace Pixxl.Materials
                         float damage = (Explosion / Range) * (Range - dist);
                         if (damage >= current.Strength || (current.GetType().Name == "Air" && Canvas.Rand.Next(0, (int)dist / Range) == 0))
                         {
-                            Fire repl = new(current.Location, Canvas);
-                            repl.Temperature = damage * 2;
-                            repl.Lifespan -= Canvas.Rand.NextSingle();
-                            current.Skip = true;
-                            Canvas.Pixels[idx] = repl;
+                            if (current is IExplosive explosive)
+                            {
+                                explosive.Explode();
+                            }
+                            else
+                            {
+                                Fire repl = new(current.Location, Canvas);
+                                repl.Temperature = damage * 2;
+                                repl.Lifespan -= Canvas.Rand.NextSingle();
+                                Canvas.Pixels[idx] = repl;
+                                current.Skip = true;
+                                repl.Skip = true;
+                            }
                         }
                     }
                 }
@@ -75,6 +94,7 @@ namespace Pixxl.Materials
             Pixel self = new Air(Location, Canvas);
             self.Temperature = Temperature;
             Canvas.Pixels[Index] = self;
+            Skip = true;
         }
     }
 }

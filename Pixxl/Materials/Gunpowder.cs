@@ -12,7 +12,7 @@ namespace Pixxl.Materials
         {
             // Constants
             Explosion = 400;
-            Range = 2;
+            Range = 6;
             Conductivity = .14f;
             Density = 1.4f;
             State = 2;

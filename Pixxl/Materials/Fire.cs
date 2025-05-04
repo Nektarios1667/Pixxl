@@ -29,6 +29,17 @@ namespace Pixxl.Materials
             base.Update();
 
             // Life
+            TickLife();
+
+            // Glow
+            Glow();
+
+            // Spreading
+            Spread();
+        }
+
+        public virtual void TickLife()
+        {
             Lifespan -= Canvas.Delta;
             if (Lifespan <= 0)
             {
@@ -37,11 +48,15 @@ namespace Pixxl.Materials
                 Skip = true;
                 return;
             }
+        }
 
-            // Glow
+        public virtual void Glow()
+        {
             if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.GetColor(TypeId); }
+        }
 
-            // Spreading
+        public virtual void Spread()
+        {
             foreach (Pixel? neighbor in Neighbors)
             {
                 if (neighbor != null && Canvas.Rand.Next(0, 20) == 0 && (neighbor is IIgnitable ignitable))
