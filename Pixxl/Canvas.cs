@@ -28,6 +28,7 @@ namespace Pixxl
         public int ViewMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal, 3 = Monotexture
         public object? Focus { get; set; }
         public Popup SavesPopup { get; set; }
+        public string Tab { get; set; }
         public Canvas(Window window, GraphicsDevice device, SpriteBatch batch)
         {
             Window = window;
@@ -36,44 +37,7 @@ namespace Pixxl
             Pixels = new Pixel[Consts.Screen.Grid[0] * Consts.Screen.Grid[1]];
             Batch = batch;
             Device = device;
-            void select(string selection) => Window.Selection = selection;
-
-            // Create buttons
-            Widgets = [];
-
-            // Tools buttons
-            for (int t = 0; t < ToolReg.Names.Length; t++)
-            {
-                // Info
-                float x = Consts.Gui.ToolDim.X * (t % (Consts.Screen.Window[0] / Consts.Gui.ToolDim.X));
-                object?[]? args = ToolReg.Args[t] == "Canvas" ? [this] : ToolReg.Args[t] == "Window" ? [Window] : []; // Pass either canvas object or window object
-
-                // Creation
-                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ToolDim, Color.Black, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], ToolReg.Names[t], Window.Font, args: args, borderColor: new(45, 45, 45));
-                Widgets.Add(created);
-            }
-
-            // Materials buttons
-            int l = 0; int m = 0;
-            int infoboxY = Consts.Screen.Window[1] - Consts.Gui.MenuSize * Consts.Game.PixelSize - 44;
-            for (m = 0; m < MatReg.Names.Count; m++)
-            {
-                if (MatReg.Names[m][0] == '.') { continue; } // Skip hidden
-                // Button size, background, and foreground
-                int x = (int)(Consts.Gui.ButtonDim.X * (l % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)));
-                int y = (int)(Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(l / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1));
-                Color bg = MatReg.Colors[m];
-                int darkValues = 0; if (bg.R < 60) darkValues++; if (bg.G < 60) darkValues++; if (bg.B < 60) darkValues++; // 2/3 rgb values are dark
-                bool prominentColor = bg.R > 165 || bg.G > 165 || bg.B > 165;
-                Color fg = darkValues >= 2 && !prominentColor ? Color.White : Color.Black;
-
-                // Button
-                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]]);
-                int infoboxX = x + 300 <= Consts.Screen.Window[0] ? (int)x : Consts.Screen.Window[0] - 300;
-                Infobox infobox = new(Batch, new(infoboxX, infoboxY), new(300, 40), new((int)x, (int)y, (int)Consts.Gui.ButtonDim.X, (int)Consts.Gui.ButtonDim.Y), bg, fg, MatReg.Descriptions[m], Window.Font);
-                Widgets.Add(created); Widgets.Add(infobox);
-                l++;
-            }
+            Tab = "Powder";
 
             // Saves
             int saveX = Consts.Screen.Window[0] / 2 - 400;
@@ -87,7 +51,8 @@ namespace Pixxl
                 Button loadButton = new(Batch, new(saveX + 300, s * 50 + 150), new(80, 30), Color.Black, new(175, 225, 175), new(200, 225, 200), State.LoadCanvas, args: [this, s + 1], font: Window.Font, text: "Load");
                 SavesPopup.AddWidgets(clearButton, saveButton, loadButton, label);
             }
-            Widgets.Add(SavesPopup);
+            Widgets = [SavesPopup];
+            CreateInterface();
 
             // Fill pixels
             Pixels = Cleared(this);
@@ -125,6 +90,50 @@ namespace Pixxl
                 Logger.Log("Skipping drawing with uninitialized batch...");
             }
         }
+        public void CreateInterface()
+        {
+
+            void select(string selection) => Window.Selection = selection;
+
+            // Create buttons
+            Widgets = [Widgets[0]];
+
+            // Tools buttons
+            for (int t = 0; t < ToolReg.Names.Length; t++)
+            {
+                // Info
+                float x = Consts.Gui.ToolDim.X * (t % (Consts.Screen.Window[0] / Consts.Gui.ToolDim.X));
+                object? arg = ToolReg.Args[t][0] == "Canvas" ? this : ToolReg.Args[t][0] == "Window" ? Window : null;
+                object?[]? args = ToolReg.Args[t].Length > 1 ? [arg, .. ToolReg.Args[t][1..]] : [arg];
+
+                // Creation
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ToolDim, Color.Black, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], ToolReg.Names[t], Window.Font, args: args, borderColor: new(45, 45, 45));
+                Widgets.Add(created);
+            }
+
+            // Materials buttons
+            int l = 0; int m = 0;
+            int infoboxY = Consts.Screen.Window[1] - Consts.Gui.MenuSize * Consts.Game.PixelSize - 44;
+            for (m = 0; m < MatReg.Names.Count; m++)
+            {
+                if (MatReg.Names[m][0] == '.' && Tab != "Hidden") { continue; } // Skip hidden
+                if (!MatReg.Tags[m].Contains(Tab) && !(Tab == "Hidden" && MatReg.Names[m][0] == '.')) { continue; } // Filter out based on tab selection
+                // Button size, background, and foreground
+                int x = (int)(Consts.Gui.ButtonDim.X * (l % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)));
+                int y = (int)(Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(l / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1));
+                Color bg = MatReg.Colors[m];
+                int darkValues = 0; if (bg.R < 60) darkValues++; if (bg.G < 60) darkValues++; if (bg.B < 60) darkValues++; // 2/3 rgb values are dark
+                bool prominentColor = bg.R > 165 || bg.G > 165 || bg.B > 165;
+                Color fg = darkValues >= 2 && !prominentColor ? Color.White : Color.Black;
+
+                // Button
+                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]]);
+                int infoboxX = x + 300 <= Consts.Screen.Window[0] ? (int)x : Consts.Screen.Window[0] - 300;
+                Infobox infobox = new(Batch, new(infoboxX, infoboxY), new(300, 40), new((int)x, (int)y, (int)Consts.Gui.ButtonDim.X, (int)Consts.Gui.ButtonDim.Y), bg, fg, MatReg.Descriptions[m], Window.Font);
+                Widgets.Add(created); Widgets.Add(infobox);
+                l++;
+            }
+        }
         // Static
         public static Pixel[] Cleared(Canvas canvas)
         {
@@ -151,6 +160,7 @@ namespace Pixxl
         }
         public static void ChangeViewMode(Canvas canvas) { canvas.ViewMode = (canvas.ViewMode + 1) % 4; }
         public static void Saves(Canvas canvas) { canvas.SavesPopup.Visible = true; }
+        public static void SetTab(Canvas canvas, string tab) { canvas.Tab = tab; canvas.CreateInterface(); }
     }
 }
 

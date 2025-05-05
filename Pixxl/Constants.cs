@@ -13,8 +13,8 @@ namespace Pixxl.Constants
     }
     public static class Gui
     {
-        public static readonly Xna.Vector2 ButtonDim = new(80, 30);
-        public static readonly Xna.Vector2 ToolDim = new(100, 30);
+        public static readonly Xna.Vector2 ButtonDim = new(100, 30);
+        public static readonly Xna.Vector2 ToolDim = new(85, 30);
         public static readonly int MenuSize = (int)Math.Max(ButtonDim.Y * 3f, Screen.PixelSize) / Screen.PixelSize;
     }
     public static class Game

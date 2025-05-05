@@ -8,14 +8,12 @@ namespace Pixxl.Materials
     public class Fuse : Fuel
     {
         // Constructor
-        float Time { get; set; }
         public Fuse(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
             Ashes = false;
-            Time = 0f;
             Internal = true;
-            Lifetime = 5f;
+            Lifetime = .5f;
             Conductivity = .05f;
             Density = .8f;
             State = 0;
@@ -30,31 +28,43 @@ namespace Pixxl.Materials
         {
             base.Update();
 
-            // Fuse travel
-            int idx = Index;
-            bool exposed = false;
-            foreach (Pixel? neighbor in Neighbors)
+            // Burned out
+            if (Burned >= Lifetime)
             {
-                if (neighbor == null) { continue; }
-                // Exposed to fuse
-                if (neighbor.Type == "Fuse" && ((Fuse)neighbor).Lit)
+                Pixel creation = new Fire(Location, Canvas);
+                Canvas.Pixels[Index] = creation;
+
+                // Ignite next fuse
+                foreach (Pixel? neighbor in Neighbors)
                 {
-                    // Exposed for long enough to ignite
-                    exposed = true;
-                    Time += Canvas.Delta;
-                    if (Time >= Lifetime) { Lit = true; }
+                    if (neighbor != null && neighbor.Type == "Fuse" && neighbor is IIgnitable ignitable)
+                    {
+                        ignitable.Ignite();
+                    }
+
                 }
-                
-                // Surrounding fire
-                if (Lit && neighbor.Type == "Air")
-                {
-                    Canvas.Pixels[idx].Skip = true;
-                    Canvas.Pixels[idx] = new Fire(neighbor.Location, Canvas);
-                }
+
+                return;
             }
 
-            // Reset if not exposed
-            if (!exposed) { Time = 0; }
+            // Burn
+            if (Lit)
+            {
+                Burned += Canvas.Delta;
+                // Neighbors
+                foreach (Pixel? neighbor in Neighbors)
+                {
+                    if (neighbor == null) { continue; }
+                    if (neighbor.Type == "Air")
+                    {
+                        neighbor.Skip = true;
+                        Canvas.Pixels[neighbor.GetIndex()] = new Fire(neighbor.Location, Canvas);
+                    } else if (Canvas.Rand.Next(0, 20) == 0 && neighbor is IIgnitable ignitable && neighbor.Type != "Fuse")
+                    {
+                        ignitable.Ignite();
+                    }
+                }
+            }
         }
     }
 }

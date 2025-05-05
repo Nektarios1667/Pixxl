@@ -123,7 +123,7 @@ namespace Pixxl
         {
             // Start
             spriteBatch.Begin();
-            GraphicsDevice.Clear(Color.DarkGray);
+            GraphicsDevice.Clear(Color.Magenta);
 
             // Canvas
             canvas.Draw();

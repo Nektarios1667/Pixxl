@@ -86,9 +86,9 @@ namespace Pixxl.Materials
                             {
                                 Fire repl = new(current.Location, Canvas);
                                 repl.Temperature = (damage * 2);
+                                repl.Lifespan += (float)Canvas.Rand.NextDouble();
                                 Canvas.Pixels[idx] = repl;
                                 current.Skip = true;
-                                repl.Skip = true;
                             }
                         }
                     }
