@@ -61,7 +61,7 @@ namespace Pixxl
         public void UpdatePixels(float delta)
         {
             // Delta
-            Delta = delta;
+            Delta = delta * Consts.Game.Speed;
 
             // Pixels
             Pixel[] copy = (Pixel[])(Pixels.Clone());

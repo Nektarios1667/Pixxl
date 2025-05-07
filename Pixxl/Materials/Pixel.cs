@@ -244,7 +244,7 @@ namespace Pixxl.Materials
             }
 
             // Heat transfers
-            float multiplier = Canvas.Delta * Consts.Game.Speed * Consts.Game.HeatTransfer;
+            float multiplier = Canvas.Delta * Consts.Game.HeatTransfer;
             foreach (Pixel? neighbor in Neighbors)
             {
                 // Lose heat
