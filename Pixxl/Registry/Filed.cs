@@ -44,6 +44,7 @@ namespace Pixxl.Registry
             Ice            | 130, 199, 245 | 18 | Solid;Natural        | [Solid] Frozen water that melts when warmed up.
             Insulation     | 232, 201, 174 | 22 | Solid                | [Solid] Transfers heat at a very slow rate.
             Lava           | 186, 28, 0    | 20 | Natural              | [Liquid] Molten rock.
+            Lightning      | 252, 252, 83  | 3  | Energy               | [Energy] 300 million volts of electricity.
             LiquidOxygen   | 186, 189, 219 | 7  | Liquid               | [Liquid] Pure oxygen in liquid state.
             .MeltedPlastic | 171, 232, 132 | 6  | Liquid               | [Liquid] Melted plastic.
             .MeltedRubber  | 30, 30, 30    | 4  | Liquid               | [Liquid] Melted rubber.
