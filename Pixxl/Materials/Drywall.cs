@@ -5,12 +5,13 @@ using Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
-    public class Drywall : Pixel
+    public class Drywall : Fuel
     {
         // Constructor
         public Drywall(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Lifetime = 3;
             Conductivity = .1f;
             Density = .3f;
             State = 1;
