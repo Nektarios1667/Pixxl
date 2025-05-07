@@ -11,7 +11,8 @@ namespace Pixxl.Materials
         public MoltenCopper(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Conductivity = 6f;
+            Temperature = 2800;
+            Conductivity = 5f;
             Density = 6.1f;
             State = 3;
             Strength = 150;

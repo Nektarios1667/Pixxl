@@ -11,6 +11,7 @@ namespace Pixxl.Materials
         public SolidMercury(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Temperature = -175;
             Conductivity = 2.45f;
             Density = 14.2f;
             State = 3;

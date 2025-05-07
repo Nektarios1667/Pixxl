@@ -11,7 +11,8 @@ namespace Pixxl.Materials
         public MoltenSteel(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Conductivity = 4f;
+            Temperature = 4800;
+            Conductivity = 3.7f;
             Density = 7f;
             State = 3;
             Strength = 450;

@@ -11,7 +11,8 @@ namespace Pixxl.Materials
         public MoltenGold(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Conductivity = 129f;
+            Temperature = 3000;
+            Conductivity = 100f;
             Density = 17.3f;
             State = 3;
             Strength = 75;

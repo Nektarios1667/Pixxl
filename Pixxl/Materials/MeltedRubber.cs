@@ -11,6 +11,7 @@ namespace Pixxl.Materials
         public MeltedRubber(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Temperature = 650;
             Conductivity = .01f;
             Density = 2.5f;
             State = 3;

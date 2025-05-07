@@ -11,6 +11,7 @@ namespace Pixxl.Materials
         public MeltedPlastic(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
+            Temperature = 550;
             Conductivity = .05f;
             Density = .96f;
             State = 3;
