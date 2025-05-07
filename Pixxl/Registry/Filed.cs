@@ -45,6 +45,7 @@ namespace Pixxl.Registry
             Insulation     | 232, 201, 174 | 22 | Solid                | [Solid] Transfers heat at a very slow rate.
             Iron           | 115, 115, 128 | 4  | Solid;Metal          | [Solid] Strong, high-density iron.
             Lava           | 186, 28, 0    | 20 | Natural              | [Liquid] Molten rock.
+            LiquidOxygen   | 186, 189, 219 | 7  | Liquid               | [Liquid] Pure oxygen in liquid state.
             .MeltedPlastic | 171, 232, 132 | 6  | Liquid               | [Liquid] Melted plastic.
             .MeltedRubber  | 30, 30, 30    | 4  | Liquid               | [Liquid] Melted rubber.
             Mercury        | 170, 168, 165 | 4  | Liquid;Metal         | [Liquid] Conductive metal that is liquid at room temp.
@@ -54,6 +55,7 @@ namespace Pixxl.Registry
             Nuke           | 103, 122, 9   | 3  | Powder;Explosive     | [Powder] Creates a massive explosion when it hits the ground.
             Obsidian       | 19, 16, 26    | 6  | Solid                | [Solid] Brittle glass-like rock.
             Oil            | 5, 5, 5       | 4  | Liquid;Natural;Fuel  | [Liquid] Liquid fuel that burns for a time.
+            Oxygen         | 213, 215, 237 | 6  | Gas                  | [Gas] Pure oxygen that condenses and solidifes at lower temperatures.
             Plasma         | 187, 57, 227  | 8  | Energy;Gas           | [Energy/Gas] Plasmified air at extreme temperatures.
             Plastic        | 141, 204, 100 | 5  | Solid                | [Solid] Lightweight but durable plastic.
             Potassium      | 61, 66, 62    | 4  | Powder;Metal         | [Powder] Explodes when in contact with water.
@@ -64,6 +66,7 @@ namespace Pixxl.Registry
             Snow           | 202, 237, 234 | 21 | Powder               | [Powder] Crystalized ice from the sky.
             Sodium         | 224, 227, 152 | 11 | Powder;Metal         | [Powder] Burns when in contact with water.
             .SolidMercury  | 160, 158, 155 | 5  | Solid;Metal          | [Solid] Solidified conductive metal that is liquid at room temp.
+            SolidOxygen    | 157, 161, 201 | 8  | Solid                | [Solid] Pure oxygen in solid state.
             Steam          | 191, 191, 191 | 6  | Gas                  | [Gas] Water in an evaporated state.
             Steel          | 30, 34, 36    | 4  | Solid;Metal          | [Solid] Strengthed steel resistant to small explosions and acid.
             Torch          | 55, 0, 0      | 3  | Solid;Indestructable | [Solid] Indestructable material that burns forever.
