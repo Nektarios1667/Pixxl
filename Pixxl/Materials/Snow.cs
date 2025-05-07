@@ -5,20 +5,20 @@ using Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
-    public class Ash : Pixel
+    public class Snow : Pixel
     {
         // Constructor
         int tick = 0;
-        public Ash(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
+        public Snow(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Temperature = 200f;
-            Conductivity = .14f;
-            Density = 1.3f;
+            Temperature = -40f;
+            Conductivity = .04f;
+            Density = 0.3f;
             State = 2;
-            Strength = 30;
-            Melting = new Transformation(2000, typeof(Steam));
-            Solidifying = new Transformation(-999999, typeof(Ash));
+            Strength = 20;
+            Melting = new Transformation(32, typeof(Water));
+            Solidifying = new Transformation(-250, typeof(Ice));
         }
         public override void Update()
         {
@@ -33,7 +33,7 @@ namespace Pixxl.Materials
             HeatTransfer();
 
             // For the possible moves including diagonals
-            tick = (tick + 1) % 3;
+            tick = (tick + 1) % 4;
             if (tick == 0) { Movements(); }
 
             // Spreading in the air
@@ -48,7 +48,7 @@ namespace Pixxl.Materials
         }
         public virtual void Drift()
         {
-            if ((Previous != Location && Canvas.Rand.Next(0, 23) == 0)) { FluidSpread(); }
+            if ((Previous != Location && Canvas.Rand.Next(0, 20) == 0)) { FluidSpread(); }
         }
     }
 }

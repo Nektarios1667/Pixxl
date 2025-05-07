@@ -61,6 +61,7 @@ namespace Pixxl.Registry
             Rubber         | 20, 20, 20    | 5  | Solid                | [Solid] Insulator that can melt at higher temperatures.
             Sand           | 184, 144, 24  | 9  | Powder;Natural       | [Powder] Basic sand that turns into glass at high temperatures.
             Smoke          | 120, 100, 100 | 14 | Gas                  | [Gas] Released from fire.
+            Snow           | 202, 237, 234 | 21 | Powder               | [Powder] Crystalized ice from the sky.
             Sodium         | 224, 227, 152 | 11 | Powder;Metal         | [Powder] Burns when in contact with water.
             .SolidMercury  | 160, 158, 155 | 5  | Solid;Metal          | [Solid] Solidified conductive metal that is liquid at room temp.
             Steam          | 191, 191, 191 | 6  | Gas                  | [Gas] Water in an evaporated state.
