@@ -42,7 +42,7 @@ namespace Pixxl.Registry
             Gunpowder      | 46, 46, 46    | 18 | Powder;Explosive     | [Powder] Explodes when in contact with fire.
             Helium         | 168, 213, 227 | 12 | Gas                  | [Gas] Lighter-than-air unreactive gas.
             Ice            | 130, 199, 245 | 18 | Solid;Natural        | [Solid] Frozen water that melts when warmed up.
-            Insulation     | 245, 245, 245 | 18 | Solid                | [Solid] Transfers heat at a very slow rate.
+            Insulation     | 232, 201, 174 | 22 | Solid                | [Solid] Transfers heat at a very slow rate.
             Iron           | 115, 115, 128 | 4  | Solid;Metal          | [Solid] Strong, high-density iron.
             Lava           | 186, 28, 0    | 20 | Natural              | [Liquid] Molten rock.
             .MeltedPlastic | 171, 232, 132 | 6  | Liquid               | [Liquid] Melted plastic.
