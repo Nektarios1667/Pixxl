@@ -4,6 +4,12 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
+// TODO Add a bunch of materials for each category
+// Solid: brass
+// Powder: salt, 
+// Liquid: molten brass
+// Gas:
+// Energy: lighting?
 namespace Pixxl.Registry
 {
     public static class Materials

@@ -11,7 +11,6 @@ namespace Pixxl.Materials
         public Insulation(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Temperature = 
             Conductivity = .001f;
             Density = .8f;
             State = 1;
