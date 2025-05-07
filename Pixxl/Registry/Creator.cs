@@ -14,7 +14,7 @@ namespace Pixxl.MaterialCreator
     {
         public static void Main2(string[] args)
         {
-            string[] lines = File.ReadAllLines("Creations.txt");
+            string[] lines = File.ReadAllLines("C:\\Users\\nekta\\source\\repos\\Pixxl\\Pixxl\\Registry\\Creations.txt");
 
             int l = 0;
             foreach (string line in lines)
@@ -28,43 +28,6 @@ namespace Pixxl.MaterialCreator
 
                 // Write class file
                 File.WriteAllText($"C:\\Users\\nekta\\source\\repos\\Pixxl\\Pixxl\\Materials\\{parts[0]}.cs", classText);
-
-                // Registry
-                List<string> filedLines = File.ReadAllLines("C:\\Users\\nekta\\source\\repos\\Pixxl\\Pixxl\\Registry\\Filed.cs").ToList();
-                List<string> output = [];
-                int f = 0;
-                bool addRepl = false;
-                string replacement = "";
-                foreach (string filedLine in filedLines)
-                {
-                    addRepl = false;
-                    // Quotation lines
-                    if (filedLine.Contains('|') && f >= 13)
-                    {
-                        // Trim
-                        string name = filedLine.Trim();
-                        if (name[0] == '.') { name = name[1..]; }
-                        name = name.Split('|')[0].Trim();
-
-                        // Compare
-                        replacement = $"            {parts[0],-14} | {parts[1],-13} | {parts[2],-2} | {parts[3],-20} | {parts[4]}";
-                        if (f == 0 && parts[0].CompareTo(name) < 0) { output.Insert(0, replacement); }
-                        else if (f == output.Count - 1 && parts[0].CompareTo(name) > 0) { output.Add(replacement); }
-                        else if (parts[0].CompareTo(name) > 0 && parts[0].CompareTo(filedLines[f + 1].Trim().Trim('.').Split('|')[0].Trim()) < 0)
-                        {
-                            addRepl = true; 
-                        }
-                    }
-
-                    // Reconstruct
-                    output.Add(filedLine);
-                    if (addRepl) { output.Add(replacement); }
-                    f++;
-                }
-
-                // Write
-                File.WriteAllLines("C:\\Users\\nekta\\source\\repos\\Pixxl\\Pixxl\\Registry\\Filed.cs", output);
-                l++;
             }
         }
     }

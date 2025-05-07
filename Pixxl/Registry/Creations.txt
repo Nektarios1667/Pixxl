@@ -1,0 +1,1 @@
+﻿// name | conduc | density | state | strength | meltTemp | meltMat | freezeTemp | freezeMat | gravity?

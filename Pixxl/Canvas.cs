@@ -106,8 +106,14 @@ namespace Pixxl
                 object? arg = ToolReg.Args[t][0] == "Canvas" ? this : ToolReg.Args[t][0] == "Window" ? Window : null;
                 object?[]? args = ToolReg.Args[t].Length > 1 ? [arg, .. ToolReg.Args[t][1..]] : [arg];
 
+                // Colors
+                Color bg = ToolReg.Colors[t];
+                int darkValues = 0; if (bg.R < 80) darkValues++; if (bg.G < 80) darkValues++; if (bg.B < 80) darkValues++; // 2/3 rgb values are dark
+                bool prominentColor = bg.R > 165 || bg.G > 165 || bg.B > 165;
+                Color fg = darkValues >= 2 && !prominentColor ? Color.White : Color.Black;
+
                 // Creation
-                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize)), Consts.Gui.ToolDim, Color.Black, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], ToolReg.Names[t], Window.Font, args: args, borderColor: new(45, 45, 45));
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) - 4), Consts.Gui.ToolDim, fg, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], ToolReg.Names[t], Window.Font, args: args, border:2, borderColor: new(45, 45, 45));
                 Widgets.Add(created);
             }
 
@@ -120,14 +126,14 @@ namespace Pixxl
                 if (!MatReg.Tags[m].Contains(Tab) && !(Tab == "Hidden" && MatReg.Names[m][0] == '.')) { continue; } // Filter out based on tab selection
                 // Button size, background, and foreground
                 int x = (int)(Consts.Gui.ButtonDim.X * (l % (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)));
-                int y = (int)(Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(l / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1));
+                int y = (int)(Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) + Consts.Gui.ButtonDim.Y * (float)Math.Floor((double)(l / (Consts.Screen.Window[0] / Consts.Gui.ButtonDim.X)) + 1)) - 2;
                 Color bg = MatReg.Colors[m];
                 int darkValues = 0; if (bg.R < 60) darkValues++; if (bg.G < 60) darkValues++; if (bg.B < 60) darkValues++; // 2/3 rgb values are dark
                 bool prominentColor = bg.R > 165 || bg.G > 165 || bg.B > 165;
                 Color fg = darkValues >= 2 && !prominentColor ? Color.White : Color.Black;
 
                 // Button
-                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]]);
+                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]], border:3);
                 int infoboxX = x + 300 <= Consts.Screen.Window[0] ? (int)x : Consts.Screen.Window[0] - 300;
                 Infobox infobox = new(Batch, new(infoboxX, infoboxY), new(300, 40), new((int)x, (int)y, (int)Consts.Gui.ButtonDim.X, (int)Consts.Gui.ButtonDim.Y), bg, fg, MatReg.Descriptions[m], Window.Font);
                 Widgets.Add(created); Widgets.Add(infobox);

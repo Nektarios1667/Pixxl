@@ -125,11 +125,14 @@ namespace Pixxl
             spriteBatch.Begin();
             GraphicsDevice.Clear(Color.Magenta);
 
+            // Menu backgroumd
+            spriteBatch.FillRectangle(new(0, Consts.Screen.Window[1] - (Consts.Gui.MenuSize * Consts.Screen.PixelSize) - 6, Consts.Screen.Window[0], Consts.Gui.MenuSize * Consts.Screen.PixelSize + 6), Color.Gray);
+
             // Canvas
             canvas.Draw();
 
             // Outline
-            spriteBatch.DrawRectangle(new(0, 0, Consts.Screen.Window[0], Consts.Screen.Window[1] ), Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2);
+            spriteBatch.DrawRectangle(new(0, 0, Consts.Screen.Window[0], Consts.Screen.Window[1]), Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2);
 
             // Info
             if (canvas.Delta != 0)
