@@ -23,6 +23,7 @@ namespace Pixxl.Registry
             Coolant        | 31, 181, 111  | 8  | Liquid               | [Liquid] Heat-absoribing liquid that turns to gas easily.
             .CoolantVapor  | 56, 224, 146  | 14 | Gas                  | [Gas] Coolant in its vapor form.
             Copper         | 173, 86, 31   | 9  | Solid;Metal;Natural  | [Solid] Metal that transfers heat well.
+            Cryofire       | 101, 184, 214 | 20 | Energy;Fire          | [Energy] Supercold fire.
             Diamond        | 24, 149, 171  | 6  | Powder;Natural       | [Powder] Strong, heat-conductive material resistent to almost anything.
             Dirt           | 74, 40, 18    | 15 | Powder;Natural       | [Powder] Earthy dirt.
             Drywall        | 102, 82, 65   | 6  | Solid                | [Solid] Weak plaster used for home interiors.
