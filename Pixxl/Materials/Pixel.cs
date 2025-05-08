@@ -180,12 +180,12 @@ namespace Pixxl.Materials
         }
         public virtual bool CollideCheck(Xna.Vector2 loc, Xna.Vector2 dest)
         {
-            // Setup
-            Xna.Vector2 destCoord = Coord(dest);
-
             // Basic checks
             if (loc == dest) { return false; } // Not moving
             if (!Gravity) { return false; } // Not affected
+
+            // Setup
+            Xna.Vector2 destCoord = Coord(dest);
 
             // If in bounds then check the available pixel
             if (!IndexCheck(dest, 'l')) { return false; }
@@ -209,8 +209,8 @@ namespace Pixxl.Materials
         }
         public virtual void StateCheck()
         {
-            if (Temperature >= Melting.Temperature) { Transform(Melting); }
-            else if (Temperature <= Solidifying.Temperature) { Transform(Solidifying); }
+            if (!(Melting.Material.ToString() == Type) && Temperature >= Melting.Temperature) { Transform(Melting); }
+            else if (!(Solidifying.Material.ToString() == Type) && Temperature <= Solidifying.Temperature) { Transform(Solidifying); }
         }
         public virtual void Transform(Transformation transformation)
         {
