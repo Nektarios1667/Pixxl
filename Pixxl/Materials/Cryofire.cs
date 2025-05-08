@@ -12,11 +12,11 @@ namespace Pixxl.Materials
         public Cryofire(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
-            Conductivity = .5f;
+            Conductivity = 4f;
             Lifespan = .7f;
-            Temperature = -400f;
-            Melting = new Transformation(0, typeof(Fire));
-            Solidifying = new Transformation(-500, typeof(Ice));
+            Temperature = -1000f;
+            Melting = new Transformation(999999, typeof(Cryofire));
+            Solidifying = new Transformation(-999999, typeof(Cryofire));
         }
         public override void Spread() {}
     }

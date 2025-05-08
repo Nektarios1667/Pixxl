@@ -43,7 +43,7 @@ namespace Pixxl.Materials
             Lifespan -= Canvas.Delta;
             if (Lifespan <= 0)
             {
-                UpdatePositions('i');
+                UpdatePositions();
                 Canvas.Pixels[Index] = new Air(Location, Canvas);
                 Canvas.Pixels[Index].Temperature = Math.Max(Temperature / 5, Constants.Game.RoomTemp);
                 Skip = true;

@@ -87,7 +87,6 @@ namespace Pixxl.Materials
             if (Skip) { Skip = false; return; }
 
             // Reset
-            UpdatePositions('s', 'c', 'i');
             GetNeighbors();
 
             // Heat transfer
@@ -101,7 +100,6 @@ namespace Pixxl.Materials
                 if ((Location == Previous && Canvas.Rand.Next(0, Math.Min((int)Density * 3, 8)) == 0)) { FluidSpread(); }
                 else if (Canvas.Rand.Next(0, Math.Clamp((int)Density * 20, 10, 40)) == 0) { FluidSpread(); }
             }
-            UpdatePositions('s', 'c', 'i');
 
             // Check changes for melting, evaporating, plasmifying, deplasmifying, condensing, solidifying
             StateCheck();
@@ -118,6 +116,7 @@ namespace Pixxl.Materials
             {
                 // Move array pixels
                 Location = Swap(Location, next);
+                UpdatePositions();
                 return true;
             }
             return false;
@@ -143,7 +142,7 @@ namespace Pixxl.Materials
         }
         public virtual void Draw()
         {
-            UpdatePositions('s', 'c', 'i');
+            UpdatePositions();
             // Calculate red and green values based on the temperature
             Color color = Color;
             // Default is textures
@@ -168,11 +167,11 @@ namespace Pixxl.Materials
             Canvas.Batch.FillRectangle(Rect, color);
         }
         // Methods
-        public void UpdatePositions(params char[] positions)
+        public void UpdatePositions()
         {
-            if (positions.Contains('s')) { Snapped = Snap(Location); }
-            if (positions.Contains('c')) { Coords = Coord(Location); }
-            if (positions.Contains('i')) { Index = Flat(Coord(Location)); }
+            Snapped = Snap(Location);
+            Coords = ConvertToCoord(Snapped, 's');
+            Index = Flat(Coords);
         }
         public Xna.Vector2 Predict(Xna.Vector2 vec, float velocity)
         {
@@ -217,7 +216,7 @@ namespace Pixxl.Materials
             Pixel? converted = (Pixel?)Activator.CreateInstance(transformation.Material, [Location, Canvas]);
             if (converted != null)
             {
-                UpdatePositions('i');
+                UpdatePositions();
                 converted.Temperature = Temperature;
                 Canvas.Pixels[Index] = converted;
                 Skip = true;
@@ -232,6 +231,7 @@ namespace Pixxl.Materials
             if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next))
             {
                 Location = Swap(Location, next);
+                UpdatePositions();
             }
         }
         public virtual void HeatTransfer()

@@ -29,8 +29,15 @@ namespace Pixxl.Materials
             // Skip
             if (Skip) { Skip = false; return; }
 
+            // Life
+            if (life >= .1 || Canvas.Rand.Next(0, 25) == 0)
+            {
+                Canvas.Pixels[Index] = Canvas.Rand.Next(0, 4) == 0 ? new Plasma(Location, Canvas) : new Air(Location, Canvas);
+                return;
+            }
+
             // Reset
-            UpdatePositions('s', 'c', 'i');
+            UpdatePositions();
             GetNeighbors();
 
             // Heat transfer
@@ -58,10 +65,6 @@ namespace Pixxl.Materials
                     Canvas.Pixels[Index] = new Explosive(Location, Canvas);
                     return;
                 }
-            }
-            if (life >= .1)
-            {
-                Canvas.Pixels[Index] = Canvas.Rand.Next(0, 4) == 0 ? new Plasma(Location, Canvas) : new Air(Location, Canvas);
             }
             life += Canvas.Delta;
         }

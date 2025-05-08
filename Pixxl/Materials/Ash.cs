@@ -26,7 +26,7 @@ namespace Pixxl.Materials
             if (Skip) { Skip = false; return; }
 
             // Reset
-            UpdatePositions('s', 'c', 'i');
+            UpdatePositions();
             GetNeighbors();
 
             // Heat transfer
@@ -38,7 +38,7 @@ namespace Pixxl.Materials
 
             // Spreading in the air
             Drift();
-            UpdatePositions('s', 'c', 'i');
+            UpdatePositions();
 
             // Check changes for melting, evaporating, plasmifying, deplasmifying, condensing, solidifying
             StateCheck();
