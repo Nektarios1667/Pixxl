@@ -31,6 +31,7 @@ namespace Pixxl.Materials
             if (Life > 4)
             {
                 Canvas.Pixels[Index] = new Air(Location, Canvas);
+                Canvas.Pixels[Index].Skip = true;
                 return;
             }
         }

@@ -46,7 +46,7 @@ namespace Pixxl
             for (int s = 0; s < 10; s++)
             {
                 TextBox label = new(Batch, new(saveX + 20, s * 50 + 155), Color.Black, $"Slot {s + 1}", Window.Font);
-                Button clearButton = new(Batch, new(saveX + 100, s * 50 + 150), new(80, 30), Color.Black, new(175, 175, 225), new(200, 200, 225), State.SavePixels, args: [Cleared(this), s + 1], font: Window.Font, text: "Clear");
+                Button clearButton = new(Batch, new(saveX + 100, s * 50 + 150), new(80, 30), Color.Black, new(175, 175, 225), new(200, 200, 225), State.ClearPixels, args: [this, s + 1], font: Window.Font, text: "Clear");
                 Button saveButton = new(Batch, new(saveX + 200, s * 50 + 150), new(80, 30), Color.Black, new(225, 175, 175), new(225, 200, 200), State.SaveCanvas, args: [this, s + 1], font: Window.Font, text: "Save");
                 Button loadButton = new(Batch, new(saveX + 300, s * 50 + 150), new(80, 30), Color.Black, new(175, 225, 175), new(200, 225, 200), State.LoadCanvas, args: [this, s + 1], font: Window.Font, text: "Load");
                 SavesPopup.AddWidgets(clearButton, saveButton, loadButton, label);
@@ -139,6 +139,15 @@ namespace Pixxl
                 Widgets.Add(created); Widgets.Add(infobox);
                 l++;
             }
+        }
+        public bool ChancePerSecond(float timesPerSecond)
+        {
+            double chancePerFrame = timesPerSecond * Delta;
+            if (Rand.NextDouble() < chancePerFrame)
+            {
+                return true;
+            }
+            return false;
         }
         // Static
         public static Pixel[] Cleared(Canvas canvas)

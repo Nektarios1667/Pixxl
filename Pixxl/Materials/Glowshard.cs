@@ -8,7 +8,7 @@ namespace Pixxl.Materials
     public class Glowshard : Pixel
     {
         // Constructor
-        private int Cycle { get; set; }
+        private float Cycle { get; set; }
         private bool Rising { get; set; }
         public Glowshard(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
         {
@@ -29,18 +29,18 @@ namespace Pixxl.Materials
             // Bouncing color
             if (Rising)
             {
-                if (Cycle < 255) { Cycle++; }
+                if (Cycle < 255) { Cycle += Canvas.Delta * 60; }
                 else { Rising = false; }
             } else
             {
-                if (Cycle > 0) { Cycle--; }
+                if (Cycle > 0) { Cycle -= Canvas.Delta * 60; }
                 else { Rising = true; }
             }
         }
         public override void Draw()
         {
             // Calculate red and green values based on the temperature
-            Color color = new(Color.R - Cycle, Color.G, Color.B);
+            Color color = new(Color.R - (int)Cycle, Color.G, Color.B);
             // Default is textures
             int thermax = Constants.Visual.ThermalMax;
             float percent = Temperature / thermax;

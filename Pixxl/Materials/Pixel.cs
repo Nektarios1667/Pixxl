@@ -97,9 +97,10 @@ namespace Pixxl.Materials
 
             // Fluid spreading
             if (State >= 3) {
-                if ((Location == Previous && Canvas.Rand.Next(0, Math.Min((int)Density * 3, 8)) == 0)) { FluidSpread(); }
+                if (Location == Previous && Canvas.ChancePerSecond(10f / Math.Clamp(Density, 1, 10))) { FluidSpread(); }
                 else if (Canvas.Rand.Next(0, Math.Clamp((int)Density * 20, 10, 40)) == 0) { FluidSpread(); }
             }
+            UpdatePositions();
 
             // Check changes for melting, evaporating, plasmifying, deplasmifying, condensing, solidifying
             StateCheck();
@@ -116,7 +117,6 @@ namespace Pixxl.Materials
             {
                 // Move array pixels
                 Location = Swap(Location, next);
-                UpdatePositions();
                 return true;
             }
             return false;

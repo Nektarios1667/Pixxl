@@ -24,7 +24,7 @@ namespace Pixxl.Materials
 
             // Burning
             Pixel? down = Neighbors[4];
-            if (down != null && down.Strength < 500 && Canvas.Rand.Next(0, down.Strength) == 0)
+            if (down != null && down.Type != "Air" && down.Strength < 500 && Canvas.ChancePerSecond(50f / down.Strength))
             {
                 down.Skip = true;
                 Canvas.Pixels[down.GetIndex()] = new Air(down.Location, Canvas);

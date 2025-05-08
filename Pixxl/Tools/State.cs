@@ -22,6 +22,10 @@ namespace Pixxl.Tools
             Logger.Log("State initialized");
         }
         public static void SaveCanvas(Canvas canvas, int saveNumber) { SavePixels(canvas.Pixels, saveNumber); }
+        public static void ClearPixels(Canvas canvas, int saveNumber)
+        {
+            State.SavePixels(Canvas.Cleared(canvas), saveNumber);
+        }
         public static void SavePixels(Pixel[] pixels, int saveNumber)
         {
             // Logging

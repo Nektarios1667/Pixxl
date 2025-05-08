@@ -27,7 +27,7 @@ namespace Pixxl.Materials
             // Storming
             foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor != null && neighbor.Type == "Storm" && Canvas.Rand.Next(0, 40) == 0) {
+                if (neighbor != null && neighbor.Type == "Storm" && Canvas.ChancePerSecond(.05f)) {
                     Canvas.Pixels[Index] = new Storm(Location, Canvas);
                     return;
                 }

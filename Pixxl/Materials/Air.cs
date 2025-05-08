@@ -2,6 +2,7 @@
 using Xna = Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace Pixxl.Materials
 {

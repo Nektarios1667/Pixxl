@@ -53,14 +53,14 @@ namespace Pixxl.Materials
 
         public virtual void Glow()
         {
-            if (Canvas.Rand.Next(0, 3) == 0) { Color = ColorSchemes.GetColor(TypeId); }
+            if (Canvas.ChancePerSecond(20)) { Color = ColorSchemes.GetColor(TypeId); }
         }
 
         public virtual void Spread()
         {
             foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor != null && Canvas.Rand.Next(0, 20) == 0 && (neighbor is IIgnitable ignitable))
+                if (neighbor != null && Canvas.ChancePerSecond(2) && (neighbor is IIgnitable ignitable))
                 {
                     ignitable.Ignite();
                 }

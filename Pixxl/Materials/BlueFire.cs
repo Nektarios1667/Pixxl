@@ -26,7 +26,7 @@ namespace Pixxl.Materials
         {
             foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor != null && Canvas.Rand.Next(0, 5) == 0 && (neighbor is IIgnitable ignitable))
+                if (neighbor != null && Canvas.ChancePerSecond(3) && (neighbor is IIgnitable ignitable))
                 {
                     ignitable.Ignite();
                 }

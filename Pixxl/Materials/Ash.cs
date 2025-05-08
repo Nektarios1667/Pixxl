@@ -48,7 +48,7 @@ namespace Pixxl.Materials
         }
         public virtual void Drift()
         {
-            if ((Previous != Location && Canvas.Rand.Next(0, 23) == 0)) { FluidSpread(); }
+            if (Previous != Location && Canvas.ChancePerSecond(3)) { FluidSpread(); }
         }
     }
 }
