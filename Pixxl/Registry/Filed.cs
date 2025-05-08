@@ -18,6 +18,7 @@ namespace Pixxl.Registry
             BlueTorch      | 0, 83, 115    | 3  | Solid;Indestructable | [Solid] Indestructable torch that burns superhot.
             Ceramic        | 115, 44, 14   | 9  | Solid                | [Solid] Good insulator made of clay.
             Chiller        | 33, 30, 130   | 5  | Solid;Indestructable | [Solid] Indestructable material that cools the area.
+            Cloud          | 213, 232, 232 | 8  | Gas;Natural          | [Gas] Puffy clouds made of water vapor.
             Coal           | 13, 13, 13    | 10 | Powder;Fuel;Natural  | [Powder] Solid fuel that burns for a few seconds.
             Concrete       | 160, 160, 160 | 9  | Solid                | [Solid] Stronger material with little destruction from explosives and acid.
             Coolant        | 31, 181, 111  | 8  | Liquid               | [Liquid] Heat-absoribing liquid that turns to gas easily.
@@ -37,7 +38,7 @@ namespace Pixxl.Registry
             Glowshard      | 255, 0, 255   | 0  | Powder               | [Powder] Colorful shards stonger than diamond, and prettier too.
             Gold           | 189, 183, 8   | 14 | Powder;Natural;Metal | [Powder] Transfers heat well but not very strong.
             Grass          | 0, 175, 0     | 8  | Powder;Natural       | [Rigid Powder] Grows slowly over time.
-            Gravel         | 97, 97, 97    | 18 | Powder;Natural       | [Powder] Crushed of stone.
+            Gravel         | 97, 97, 97    | 18 | Powder;Natural       | [Powder] Crushed stone.
             Grenade        | 3, 36, 4      | 8  | Powder;Explosive     | [Powder] Creates a weak explosion in a larger area after a short delay.
             Gunpowder      | 46, 46, 46    | 18 | Powder;Explosive     | [Powder] Explodes when in contact with fire.
             Helium         | 168, 213, 227 | 12 | Gas                  | [Gas] Lighter-than-air unreactive gas.
@@ -69,6 +70,7 @@ namespace Pixxl.Registry
             SolidOxygen    | 157, 161, 201 | 8  | Solid                | [Solid] Pure oxygen in solid state.
             Steam          | 191, 191, 191 | 6  | Gas                  | [Gas] Water in an evaporated state.
             Steel          | 30, 34, 36    | 4  | Solid;Metal          | [Solid] Strengthed steel resistant to small explosions and acid.
+            Storm          | 66, 74, 74    | 10 | Gas;Natural          | [Gas] Thundering clouds.
             Torch          | 55, 0, 0      | 3  | Solid;Indestructable | [Solid] Indestructable material that burns forever.
             Void           | 45, 6, 48     | 5  | Solid;Indestructable | [Solid] Destroys anything that comes in contact with it.
             Water          | 0, 77, 207    | 9  | Liquid;Natural       | [Liquid] Flowing water.
