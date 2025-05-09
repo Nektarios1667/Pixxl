@@ -28,6 +28,8 @@ namespace Pixxl.Registry
             Flare          | 105, 26, 41   | 5  | Powder               | [Powdered] Flare that burns and releases red smoke for a long time.
             .FlareSmoke    | 171, 34, 60   | 15 | Gas                  | [Gas] Red smoke released by a flare.
             Fuse           | 138, 107, 90  | 10 | Solid;Fuel           | [Solid] Fast burning material used for controlled timing.
+            Gasoline       | 130, 89, 39   | 8  | Liquid;Fuel          | [Liquid] Flammable liquid made of ethanol.
+            .GasolineVapor | 196, 149, 90  | 6  | Gas;Fuel             | [Gas] Flammable vapors of gasoline.
             Glass          | 190, 222, 232 | 9  | Solid                | [Solid] Weak glass.
             Glowshard      | 255, 0, 255   | 0  | Powder               | [Powder] Colorful shards stonger than diamond, and prettier too.
             Gold           | 189, 183, 8   | 14 | Powder;Natural;Metal | [Powder] Transfers heat well but not very strong.
