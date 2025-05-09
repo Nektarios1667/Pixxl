@@ -48,6 +48,8 @@ namespace Pixxl.Materials
         }
         public virtual void Explode()
         {
+            int roomTemp = Consts.Game.RoomTemp;
+
             if (exploded || Skip) { return; }
             exploded = true;
 
@@ -85,7 +87,7 @@ namespace Pixxl.Materials
                             else
                             {
                                 Fire repl = new(current.Location, Canvas);
-                                repl.Temperature = (damage * 2);
+                                repl.Temperature = Math.Max(damage * 2, roomTemp);
                                 repl.Lifespan += (float)Canvas.Rand.NextDouble();
                                 Canvas.Pixels[idx] = repl;
                                 current.Skip = true;
