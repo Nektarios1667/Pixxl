@@ -8,7 +8,7 @@ namespace Pixxl.Registry
     {
         public static readonly string[] Names = {
             "Reset",
-            "Temp Clear",
+            "Replace",
             "Saves",
             "View Mode",
             "Erase",
@@ -44,7 +44,7 @@ namespace Pixxl.Registry
         }; 
         public static readonly Delegate[] Functions = {
             Reset.All,             // Reset
-            Reset.Temperature,     // Reset Temp 
+            Window.ToggleReplace,  // Reset Temp 
             Canvas.Saves,          // Saves
             Canvas.ChangeViewMode, // View Mode
             Window.EraseMode,      // Erase
@@ -62,7 +62,7 @@ namespace Pixxl.Registry
         };
         public static readonly string[][] Args = {
             ["Canvas"],              // Reset
-            ["Canvas"],              // Reset Temp
+            ["Window"],              // Reset Temp
             ["Canvas"],              // Saves
             ["Canvas"],              // View Mode
             ["Window"],              // Erase

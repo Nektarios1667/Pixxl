@@ -26,10 +26,13 @@ namespace Pixxl
         public int Running = 2; // 0 = paused; 1 = one frame; 2 = running
         public float Delta = 0;
         public string[] ColorModes = ["Regular", "Colored Thermal", "Grayscale Thermal", "Monotexture"];
+        public int CursorSize = 1;
+        public bool Replace = false;
 
         private Keys[] previous = [];
         public Keys[] keys = [];
         public MouseState mouse;
+        public MouseState previousMouse;
         private string cursor;
 
         public Window()
@@ -65,6 +68,8 @@ namespace Pixxl
             // Load canvas at the end
             canvas = new(this, graphics.GraphicsDevice, spriteBatch);
             Logger.Log("Loaded content");
+
+            previousMouse = new();
         }
 
         protected override void Update(GameTime gameTime)
@@ -86,16 +91,33 @@ namespace Pixxl
                 if (mouse.LeftButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
                 {
                     cursor = Selection;
-                    if (canvas.Pixels[Pixel.Flat(coord)].GetType().Name == "Air" || Selection == "Air")
+                    foreach (Pixel pixel in canvas.Pixels)
                     {
-                        canvas.Pixels[Pixel.Flat(coord)] = Canvas.New(canvas, Selection, location);
+                        if ((pixel.Type == "Air" || (Replace && pixel.Type != cursor)) && Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
+                        {
+                            canvas.Pixels[pixel.Index] = Canvas.New(canvas, Selection, pixel.Location);
+                        }
+                    }
+                }
+                else if (mouse.RightButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
+                {
+                    cursor = "Erase";
+                    foreach (Pixel pixel in canvas.Pixels)
+                    {
+                        if ((pixel.Type != "Air" || Replace) && Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
+                        {
+                            canvas.Pixels[pixel.Index] = new Air(pixel.Location, canvas);
+                        }
                     }
                 }
                 else if (mouse.MiddleButton == ButtonState.Pressed && Inside(coord, Consts.Screen.Grid))
                 {
-                    cursor = "Erase";
-                    canvas.Pixels[Pixel.Flat(coord)] = new Air(location, canvas);
-                } else { cursor = "Draw"; }
+                    string picked = canvas.Pixels[Pixel.Flat(coord)].Type;
+                    Selection = picked != "Air" ? picked : Selection;
+                    cursor = Selection;
+                }
+                else { cursor = "Draw"; }
+
             } else { cursor = "Normal"; }
 
             // Hotkeys
@@ -104,16 +126,25 @@ namespace Pixxl
                 if (KeyPress(Keys.V)) { Canvas.ChangeViewMode(canvas); }
                 if (KeyPress(Keys.E)) { EraseMode(this); }
                 if (KeyPress(Keys.P)) { TogglePlay(this); }
-                if (KeyPress(Keys.R)) { RunFrame(this); }
+                if (KeyPress(Keys.F)) { RunFrame(this); }
                 if (KeyPress(Keys.D)) { CycleSpeed(this); }
+                if (KeyPress(Keys.R)) { Replace = !Replace; }
             }
 
             previous = keys.ToArray();
+
+            // Change cursor size
+            int scrollDelta = mouse.ScrollWheelValue - previousMouse.ScrollWheelValue;
+            if (scrollDelta > 0) { CursorSize = Math.Min(CursorSize + 1, 5); }
+            if (scrollDelta < 0) { CursorSize = Math.Max(CursorSize - 1, 1); }
 
             // Canvas update
             if (Running >= 1 && canvas.Focus == this) { canvas.UpdatePixels(Delta); }
             if (Running == 1) { Running = 0; } // If one frame then pause afterwards
             canvas.UpdateGui(Delta);
+
+            // Final
+            previousMouse = mouse;
 
             // Base
             base.Update(gameTime);
@@ -122,7 +153,7 @@ namespace Pixxl
         protected override void Draw(GameTime gameTime)
         {
             // Start
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred);
             GraphicsDevice.Clear(Color.Magenta);
 
             // Menu backgroumd
@@ -137,13 +168,23 @@ namespace Pixxl
             // Info
             if (canvas.Delta != 0)
             {
-                string info = $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 && canvas.Focus == this ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}";
+                string info = $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 && canvas.Focus == this ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}\nReplace: {Replace}\nSize: {CursorSize}";
                 spriteBatch.DrawString(Font, info, new Vector2(20, 20), canvas.ViewMode != 2 ? Color.Black: Color.White);
             }
 
             // Feed
             string[] feed = Logger.logged.ToArray();
             spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), new Vector2(Consts.Screen.Window[0] - 220, 5), Color.Black);
+
+            // Square
+            foreach (Pixel pixel in canvas.Pixels)
+            {
+                Color ghost = cursor == "Air" || cursor == "Erase" ? new Color(105, 0, 0, 100) : (Replace ? new Color(35, 0, 0, 100) : new Color(75, 75, 75, 100));
+                if (Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
+                {
+                    spriteBatch.FillRectangle(new(pixel.Snapped.X, pixel.Snapped.Y, Consts.Game.PixelSize, Consts.Game.PixelSize), ghost);
+                }
+            }
 
             // Cursor
             switch (cursor)
@@ -201,6 +242,7 @@ namespace Pixxl
         // Other static methods
         public static void EraseMode(Window window) { window.Selection = "Air"; }
         public static void TogglePlay(Window window) { window.Running = window.Running <= 1 ? 2 : 0; }
+        public static void ToggleReplace(Window window) { window.Replace = !window.Replace; }
         public static void RunFrame(Window window) { window.Running = 1; }
         public static void CycleSpeed(Window window)
         {
