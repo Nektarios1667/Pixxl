@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Runtime;
 using MonoGame.Extended;
 using Pixxl.Gui;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Pixxl
 {
@@ -179,7 +180,7 @@ namespace Pixxl
             // Square
             foreach (Pixel pixel in canvas.Pixels)
             {
-                Color ghost = cursor == "Air" || cursor == "Erase" ? new Color(105, 0, 0, 100) : (Replace ? new Color(35, 0, 0, 100) : new Color(75, 75, 75, 100));
+                Color ghost = Selection == "Air" || cursor == "Erase" ? new Color(105, 0, 0, 100) : (Replace ? new Color(35, 0, 0, 100) : new Color(75, 75, 75, 100));
                 if (Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
                 {
                     spriteBatch.FillRectangle(new(pixel.Snapped.X, pixel.Snapped.Y, Consts.Game.PixelSize, Consts.Game.PixelSize), ghost);
@@ -187,17 +188,22 @@ namespace Pixxl
             }
 
             // Cursor
-            switch (cursor)
+            if (cursor == "Erase" || Selection == "Air")
             {
-                case "Erase" or "Air":
-                    DrawX(spriteBatch, location, [8, 8], Color.Red, 2); break;
-                case "Normal":
-                    DrawX(spriteBatch, location, [8, 8], Color.Black, 2); break;
-                case "Draw":
-                    DrawX(spriteBatch, location, [8, 8], Color.Black, 3);
-                    DrawX(spriteBatch, location, [8, 8], Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2); break;
-                default:
-                    DrawPlus(spriteBatch, location, [12, 12], Color.Green, 3); break;
+                DrawX(spriteBatch, location, [8, 8], Color.Red, 2);
+            }
+            else if (cursor == "Normal")
+            {
+                DrawX(spriteBatch, location, [8, 8], Color.Black, 2);
+            }
+            else if (cursor == "Draw")
+            {
+                DrawX(spriteBatch, location, [8, 8], Color.Black, 3);
+                DrawX(spriteBatch, location, [8, 8], Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2);
+            }
+            else
+            {
+                DrawPlus(spriteBatch, location, [12, 12], Color.Green, 3);
             }
 
             // Drawing
