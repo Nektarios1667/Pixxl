@@ -1,15 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Xml.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
+﻿using Microsoft.Xna.Framework;
 using Xna = Microsoft.Xna.Framework;
-using Pixxl.Materials;
-using MonoGame.Extended;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Pixxl.Gui
 {

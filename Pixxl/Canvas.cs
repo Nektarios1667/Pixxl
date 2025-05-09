@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Pixxl.Materials;
-using Xna = Microsoft.Xna.Framework;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pixxl.Gui;
-using Microsoft.Xna.Framework.Input;
-using MatReg = Pixxl.Registry.Materials;
-using ToolReg = Pixxl.Registry.Tools;
+using Pixxl.Materials;
 using Pixxl.Tools;
 using Consts = Pixxl.Constants;
-using System.Linq;
+using MatReg = Pixxl.Registry.Materials;
+using ToolReg = Pixxl.Registry.Tools;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl
 {
@@ -71,13 +70,15 @@ namespace Pixxl
         {
             // Widgets
             Focus = Window;
-            for (int i = 0; i < Widgets.Count; i++) {
+            for (int i = 0; i < Widgets.Count; i++)
+            {
                 if (Widgets[i].GetType().Name == "Popup" && ((Popup)Widgets[i]).Visible) { Focus = Widgets[i]; }
                 Widgets[i].Update(Window);
             }
         }
         // Drawing
-        public void Draw() {
+        public void Draw()
+        {
             if (Batch != null)
             {
                 // Pixels
@@ -85,7 +86,8 @@ namespace Pixxl
 
                 // Widgets
                 for (int i = 0; i < Widgets.Count; i++) { Widgets[i].Draw(); }
-            } else
+            }
+            else
             {
                 Logger.Log("Skipping drawing with uninitialized batch...");
             }
@@ -113,7 +115,7 @@ namespace Pixxl
                 Color fg = darkValues >= 2 && !prominentColor ? Color.White : Color.Black;
 
                 // Creation
-                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) - 4), Consts.Gui.ToolDim, fg, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], ToolReg.Names[t], Window.Font, args: args, border:2, borderColor: new(45, 45, 45));
+                Button created = new(Batch, new(x, Consts.Screen.Window[1] - (Consts.Screen.PixelSize * Consts.Gui.MenuSize) - 4), Consts.Gui.ToolDim, fg, ToolReg.Colors[t], Functions.Lighten(ToolReg.Colors[t], .2f), ToolReg.Functions[t], ToolReg.Names[t], Window.Font, args: args, border: 2, borderColor: new(45, 45, 45));
                 Widgets.Add(created);
             }
 
@@ -133,7 +135,7 @@ namespace Pixxl
                 Color fg = darkValues >= 2 && !prominentColor ? Color.White : Color.Black;
 
                 // Button
-                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]], border:3);
+                Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]], border: 3);
                 int infoboxX = x + 300 <= Consts.Screen.Window[0] ? (int)x : Consts.Screen.Window[0] - 300;
                 Infobox infobox = new(Batch, new(infoboxX, infoboxY), new(300, 40), new((int)x, (int)y, (int)Consts.Gui.ButtonDim.X, (int)Consts.Gui.ButtonDim.Y), bg, fg, MatReg.Descriptions[m], Window.Font);
                 Widgets.Add(created); Widgets.Add(infobox);

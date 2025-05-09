@@ -1,7 +1,4 @@
-﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
+﻿using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -26,7 +23,8 @@ namespace Pixxl.Materials
             // Touching water
             foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor != null && neighbor.Type == "Water") {
+                if (neighbor != null && neighbor.Type == "Water")
+                {
                     neighbor.Skip = true;
                     Canvas.Pixels[neighbor.GetIndex()] = new Fire(neighbor.Location, Canvas);
                     return true;

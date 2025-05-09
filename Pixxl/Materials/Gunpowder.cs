@@ -1,7 +1,4 @@
-﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
+﻿using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -37,6 +34,6 @@ namespace Pixxl.Materials
             Explode();
         }
 
-        public void Snuff() {}
+        public void Snuff() { }
     }
 }

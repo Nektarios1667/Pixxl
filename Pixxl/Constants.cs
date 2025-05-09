@@ -5,8 +5,8 @@ namespace Pixxl.Constants
 {
     public static class Screen
     {
-        public static readonly int[] Window = [1600, 900];
         public const int PixelSize = Game.PixelSize;
+        public static readonly int[] Window = [1600, 900];
         public static readonly int[] Grid = [Window[0] / PixelSize, (Window[1] / PixelSize) - Gui.MenuSize];
         public static readonly int[] Drawing = [Window[0], Window[1] - Gui.MenuSize * PixelSize];
 

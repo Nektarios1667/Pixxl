@@ -1,7 +1,7 @@
 ﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -25,13 +25,14 @@ namespace Pixxl.Materials
         public override void Update()
         {
             base.Update();
-            
+
             // Bouncing color
             if (Rising)
             {
                 if (Cycle < 255) { Cycle += Canvas.Delta * 60; }
                 else { Rising = false; }
-            } else
+            }
+            else
             {
                 if (Cycle > 0) { Cycle -= Canvas.Delta * 60; }
                 else { Rising = true; }

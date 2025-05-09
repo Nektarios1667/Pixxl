@@ -1,8 +1,6 @@
 ﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
 using System.Linq;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -53,7 +51,8 @@ namespace Pixxl.Materials
             base.Update();
 
             // Burned out
-            if (Burned >= Lifetime) {
+            if (Burned >= Lifetime)
+            {
                 Pixel creation = State <= 2 && Ashes && Canvas.Rand.Next(0, 4) == 0 ? new Ash(Location, Canvas) : Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas);
                 Canvas.Pixels[Index] = creation;
                 return;
@@ -68,7 +67,8 @@ namespace Pixxl.Materials
                 foreach (Pixel? neighbor in Neighbors)
                 {
                     if (neighbor == null) { n++; continue; }
-                    if (neighbor.Type == "Air") {
+                    if (neighbor.Type == "Air")
+                    {
                         neighbor.Skip = true;
                         Canvas.Pixels[neighbor.GetIndex()] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
                             : Superheated ? new BlueFire(neighbor.Location, Canvas)

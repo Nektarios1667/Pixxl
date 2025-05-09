@@ -1,9 +1,6 @@
 ﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
 using Consts = Pixxl.Constants;
-using System.Text;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -37,7 +34,7 @@ namespace Pixxl.Materials
         public override void Update()
         {
             base.Update();
-            
+
             if (ExplodeCheck()) { Explode(); }
         }
         public virtual bool ExplodeCheck()
@@ -65,16 +62,17 @@ namespace Pixxl.Materials
             // Iterate pixels
             for (int y = minY; y <= maxY; y++) // Rows
             {
-                for (int x = minX; x <= maxX; x++) { // Columns
+                for (int x = minX; x <= maxX; x++)
+                { // Columns
                     // Pixel data
                     Pixel current = Canvas.Pixels[Flat(x, y)];
                     int idx = current.GetIndex();
                     int dX = (int)(coords.X - current.GetCoords().X);
                     int dY = (int)(coords.Y - current.GetCoords().Y);
-                    float distSq = dX*dX + dY*dY;
+                    float distSq = dX * dX + dY * dY;
 
                     // Damage
-                    if (distSq <= rangeSq)  
+                    if (distSq <= rangeSq)
                     {
                         // damage = x * (1 - d/r)
                         float damage = Explosion * (1f - (distSq / rangeSq));

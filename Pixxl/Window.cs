@@ -3,14 +3,10 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Xna = Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using Pixxl.Materials;
 using Consts = Pixxl.Constants;
-using System.Collections.Generic;
-using System.Runtime;
-using MonoGame.Extended;
-using Pixxl.Gui;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl
 {
@@ -119,7 +115,8 @@ namespace Pixxl
                 }
                 else { cursor = "Draw"; }
 
-            } else { cursor = "Normal"; }
+            }
+            else { cursor = "Normal"; }
 
             // Hotkeys
             if (canvas.Focus == this)
@@ -170,7 +167,7 @@ namespace Pixxl
             if (canvas.Delta != 0)
             {
                 string info = $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 && canvas.Focus == this ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}\nReplace: {Replace}\nSize: {CursorSize}";
-                spriteBatch.DrawString(Font, info, new Vector2(20, 20), canvas.ViewMode != 2 ? Color.Black: Color.White);
+                spriteBatch.DrawString(Font, info, new Vector2(20, 20), canvas.ViewMode != 2 ? Color.Black : Color.White);
             }
 
             // Feed

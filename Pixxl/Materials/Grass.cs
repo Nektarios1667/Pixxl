@@ -1,9 +1,4 @@
-﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
-using System.Runtime.CompilerServices;
-using Consts = Pixxl.Constants;
+﻿using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -29,7 +24,8 @@ namespace Pixxl.Materials
             // Growing
             if (End) { return; }
             Pixel? above = Neighbors[0];
-            if (above != null && Canvas.ChancePerSecond(.33f) && above.Type == "Air") {
+            if (above != null && Canvas.ChancePerSecond(.33f) && above.Type == "Air")
+            {
                 Grass created = new Grass(above.Location, Canvas);
                 if (Canvas.Rand.Next(0, 3) == 0) { created.End = true; }
                 Canvas.Pixels[above.GetIndex()] = created;

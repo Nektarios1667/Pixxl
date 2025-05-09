@@ -1,17 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
-using Xna = Microsoft.Xna.Framework;
-using Pixxl.Materials;
 using MonoGame.Extended;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Collections;
-using System.Collections.Generic;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Gui
 {
@@ -89,7 +83,7 @@ namespace Pixxl.Gui
             ["OemCloseBrackets"] = '}',
             ["OemTilde"] = '~',
         };
-        private string[] controlKeys = [ "Back", "Left", "Right" ];
+        private string[] controlKeys = ["Back", "Left", "Right"];
         public Input(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Color foreground, Xna.Color color, Xna.Color highlight, SpriteFont font, int border = 3, Color borderColor = default)
         {
             Batch = batch;
@@ -174,7 +168,8 @@ namespace Pixxl.Gui
             if (Font != null)
             {
                 Batch.DrawString(Font, Text, new(Location.X + Border, Location.Y + Border), Foreground);
-            } else if (Text != "")
+            }
+            else if (Text != "")
             {
                 Logger.Log($"Skipping drawing text '{Text}' because of uninitialized font");
             }

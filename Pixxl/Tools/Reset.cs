@@ -1,5 +1,4 @@
-﻿using System;
-using Pixxl.Materials;
+﻿using Pixxl.Materials;
 
 namespace Pixxl.Tools
 {

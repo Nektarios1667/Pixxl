@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.IO;
 
 namespace Pixxl.MaterialCreator
 {
@@ -16,7 +8,6 @@ namespace Pixxl.MaterialCreator
         {
             string[] lines = File.ReadAllLines("C:\\Users\\nekta\\source\\repos\\Pixxl\\Pixxl\\Registry\\Creations.txt");
 
-            int l = 0;
             foreach (string line in lines)
             {
                 // Commented

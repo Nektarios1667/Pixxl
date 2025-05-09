@@ -1,8 +1,4 @@
-﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
-using Pixxl;
+﻿using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -18,6 +14,6 @@ namespace Pixxl.Materials
             Melting = new Transformation(999999, typeof(Cryofire));
             Solidifying = new Transformation(-999999, typeof(Cryofire));
         }
-        public override void Spread() {}
+        public override void Spread() { }
     }
 }

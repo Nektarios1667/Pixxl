@@ -1,9 +1,4 @@
-﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
-using System.Net;
-using static System.Net.Mime.MediaTypeNames;
+﻿using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -60,7 +55,8 @@ namespace Pixxl.Materials
                         Canvas.Pixels[Index] = new Explosive(Location, Canvas);
                         return;
                     }
-                } else
+                }
+                else
                 {
                     Canvas.Pixels[Index] = new Explosive(Location, Canvas);
                     return;

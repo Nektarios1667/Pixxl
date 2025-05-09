@@ -1,8 +1,5 @@
 ﻿using System;
 using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
-using Pixxl;
 
 namespace Pixxl.Materials
 {

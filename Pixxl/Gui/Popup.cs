@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Xml.Linq;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
-using Xna = Microsoft.Xna.Framework;
-using Pixxl.Materials;
 using MonoGame.Extended;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using Microsoft.CodeAnalysis;
-using System.Collections.Generic;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Gui
 {
@@ -77,7 +70,8 @@ namespace Pixxl.Gui
                 if (PointRectCollide(Location, BarDimensions, mouseState.Position) || Dragging)
                 {
                     // Dragging
-                    if (Previous.LeftButton == ButtonState.Pressed && LastBarPosition.X != -1) {
+                    if (Previous.LeftButton == ButtonState.Pressed && LastBarPosition.X != -1)
+                    {
                         Xna.Vector2 delta = mouseState.Position.ToVector2() - LastBarPosition;
                         foreach (Widget widget in Widgets) { widget.Location += delta; }
                         Location += delta;
@@ -85,7 +79,8 @@ namespace Pixxl.Gui
                     }
                     LastBarPosition = mouseState.Position.ToVector2();
                 }
-            } else { Dragging = false; }
+            }
+            else { Dragging = false; }
 
             // Widgets update
             foreach (Widget widget in Widgets) { widget.Update(window); }

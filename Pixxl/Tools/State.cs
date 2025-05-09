@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Threading;
-using System.Xml.Linq;
-using Pixxl.Gui;
 using Pixxl.Materials;
 using Xna = Microsoft.Xna.Framework;
 
@@ -90,8 +86,9 @@ namespace Pixxl.Tools
             {
                 grid = new(int.Parse(lines[0].Split("x")[0]), int.Parse(lines[0].Split("x")[1]));
                 pixelSize = int.Parse(lines[1]);
-            } catch(IndexOutOfRangeException) { Logger.Log("File header data corrupted or in wrong format"); return; }
-            catch(FormatException) { Logger.Log("File header data corrupted or in wrong format"); return; }
+            }
+            catch (IndexOutOfRangeException) { Logger.Log("File header data corrupted or in wrong format"); return; }
+            catch (FormatException) { Logger.Log("File header data corrupted or in wrong format"); return; }
 
             // Loading
             string line;
@@ -107,7 +104,8 @@ namespace Pixxl.Tools
                     Pixel? created = Canvas.New(canvas, Registry.Materials.Names[int.Parse(data[0])], new(pixelSize * (l % grid.X), (float)Math.Floor(l / grid.X) * pixelSize), temp: float.Parse(data[1]));
                     if (created == null) { Logger.Log($"Error creating pixel #{l}"); continue; }
                     canvas.Pixels[l] = created;
-                } catch (Exception e) { Logger.Log($"Error loading pixel #{l}: {e}"); }
+                }
+                catch (Exception e) { Logger.Log($"Error loading pixel #{l}: {e}"); }
             }
             Logger.Log($"Loaded from slot {saveNumber}");
         }

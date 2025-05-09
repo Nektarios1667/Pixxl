@@ -1,15 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Xml.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
 using Xna = Microsoft.Xna.Framework;
-using Pixxl.Materials;
-using MonoGame.Extended;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Pixxl.Gui
 {
@@ -28,7 +19,7 @@ namespace Pixxl.Gui
             Font = font;
             Color = color;
         }
-        public override void Update(Window _) {}
+        public override void Update(Window _) { }
         public override void Draw()
         {
             // Not drawing

@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.CodeAnalysis.Operations;
-using Pixxl.Gui;
 
 namespace Pixxl
 {

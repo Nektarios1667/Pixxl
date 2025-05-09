@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Linq;
-using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
-using Xna = Microsoft.Xna.Framework;
-using Pixxl.Materials;
 using MonoGame.Extended;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Gui
 {
@@ -72,7 +66,8 @@ namespace Pixxl.Gui
                     Function?.DynamicInvoke(Args);
                 }
                 else { State = 1; }
-            } else { State = 0; }
+            }
+            else { State = 0; }
             Last = pressed;
         }
         public override void Draw()
@@ -89,7 +84,8 @@ namespace Pixxl.Gui
             if (Font != null)
             {
                 Batch.DrawString(Font, Text, new(Location.X + Border + offset.X, Location.Y + Border + offset.Y), Foreground);
-            } else if (Text != "")
+            }
+            else if (Text != "")
             {
                 Logger.Log($"Skipping drawing text '{Text}' because of uninitialized font");
             }

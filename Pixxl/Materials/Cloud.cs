@@ -1,9 +1,5 @@
-﻿using System;
+﻿using Consts = Pixxl.Constants;
 using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
-using Consts = Pixxl.Constants;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Pixxl.Materials
 {
@@ -27,7 +23,8 @@ namespace Pixxl.Materials
             // Storming
             foreach (Pixel? neighbor in Neighbors)
             {
-                if (neighbor != null && neighbor.Type == "Storm" && Canvas.ChancePerSecond(.05f)) {
+                if (neighbor != null && neighbor.Type == "Storm" && Canvas.ChancePerSecond(.05f))
+                {
                     Canvas.Pixels[Index] = new Storm(Location, Canvas);
                     return;
                 }

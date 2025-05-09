@@ -1,7 +1,4 @@
-﻿using System;
-using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using Microsoft.Xna.Framework;
+﻿using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -59,7 +56,8 @@ namespace Pixxl.Materials
                     {
                         neighbor.Skip = true;
                         Canvas.Pixels[neighbor.GetIndex()] = new Fire(neighbor.Location, Canvas);
-                    } else if (Canvas.ChancePerSecond(3) && neighbor is IIgnitable ignitable && neighbor.Type != "Fuse")
+                    }
+                    else if (Canvas.ChancePerSecond(3) && neighbor is IIgnitable ignitable && neighbor.Type != "Fuse")
                     {
                         ignitable.Ignite();
                     }

@@ -1,9 +1,8 @@
-﻿using Xna = Microsoft.Xna.Framework;
-using MonoGame.Extended;
+﻿using System;
 using Microsoft.Xna.Framework;
-using System;
+using MonoGame.Extended;
 using Consts = Pixxl.Constants;
-using System.Linq;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Materials
 {
@@ -96,7 +95,8 @@ namespace Pixxl.Materials
             Movements();
 
             // Fluid spreading
-            if (State >= 3) {
+            if (State >= 3)
+            {
                 if (Location == Previous && Canvas.ChancePerSecond(10f / Math.Clamp(Density, 1, 10))) { FluidSpread(); }
                 else if (Canvas.Rand.Next(0, Math.Clamp((int)Density * 20, 10, 40)) == 0) { FluidSpread(); }
             }
@@ -159,7 +159,8 @@ namespace Pixxl.Materials
                 float temp = Math.Clamp(Temperature, 0, thermax);
                 int saturation = (int)(percent * 255);
                 color = new(saturation, saturation, saturation);
-            } else if (Canvas.ViewMode == 3)
+            }
+            else if (Canvas.ViewMode == 3)
             {
                 color = Registry.Materials.Colors[TypeId];
             }
@@ -271,7 +272,7 @@ namespace Pixxl.Materials
             }
         }
         public int GetIndex() { return Flat(Coord(Location)); }
-        public Xna.Vector2 GetCoords() {  return Coord(Location); }
+        public Xna.Vector2 GetCoords() { return Coord(Location); }
         public Xna.Vector2 GetSnapped() { return Snap(Location); }
         public Pixel? Find(Xna.Vector2 vec, char mode)
         {
@@ -279,7 +280,8 @@ namespace Pixxl.Materials
             if (CoordCheck(converted))
             {
                 return Canvas.Pixels[Flat(converted)];
-            } else
+            }
+            else
             {
                 return null;
             }
@@ -347,7 +349,7 @@ namespace Pixxl.Materials
         }
         public static int Flat(int x, int y) { return Consts.Screen.Grid[0] * y + x; }
         public static int Flat(Xna.Vector2 loc) { return (int)(Consts.Screen.Grid[0] * loc.Y + loc.X); }
-        public static int Flat(float x, float y) { return Consts.Screen.Grid[0] * (int)y + (int)x;}
+        public static int Flat(float x, float y) { return Consts.Screen.Grid[0] * (int)y + (int)x; }
     }
 }
 

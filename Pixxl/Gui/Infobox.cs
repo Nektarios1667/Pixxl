@@ -1,17 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Xml.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
-using Xna = Microsoft.Xna.Framework;
-using Pixxl.Materials;
 using MonoGame.Extended;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using Microsoft.CodeAnalysis;
-using System.Collections.Generic;
+using Xna = Microsoft.Xna.Framework;
 
 namespace Pixxl.Gui
 {
@@ -27,9 +18,11 @@ namespace Pixxl.Gui
         public int Border { get; private set; }
         public Color BorderColor { get; private set; }
         private string _text { get; set; }
-        public string Text {
+        public string Text
+        {
             get { return _text; }
-            set {
+            set
+            {
                 _text = value;
                 Softwrapped = SoftwrapWords(value, Font, Inside);
                 Inside = new(Dimensions.X - Border * 2, Dimensions.Y - Border * 2);
@@ -64,7 +57,8 @@ namespace Pixxl.Gui
         {
             // Hovering
             MouseState mouseState = window.mouse;
-            if (PointRectCollide(Activation, mouseState.Position)) {
+            if (PointRectCollide(Activation, mouseState.Position))
+            {
                 if (Time >= Delay) { Visible = true; }
                 else { Time += window.Delta; }
             }
@@ -109,7 +103,8 @@ namespace Pixxl.Gui
             while (end < text.Length)
             {
                 // Wrap
-                if (font.MeasureString(text[start..end]).X + 2 > dimensions.X) {
+                if (font.MeasureString(text[start..end]).X + 2 > dimensions.X)
+                {
                     int cutoff = text[start..end].LastIndexOf(' ') + start;
                     if (cutoff <= start) { cutoff = end; }
                     wrapped += $"{text[start..cutoff]}\n";

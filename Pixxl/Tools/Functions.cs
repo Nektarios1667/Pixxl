@@ -12,6 +12,6 @@ namespace Pixxl.Tools
             b += (int)((255 - b) * percentage);
             return new(r, g, b);
         }
-        public static void NoFunc(params object[] _) {}
+        public static void NoFunc(params object[] _) { }
     }
 }

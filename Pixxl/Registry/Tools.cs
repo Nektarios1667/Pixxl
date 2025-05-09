@@ -41,7 +41,7 @@ namespace Pixxl.Registry
             Color.ForestGreen,    // Natural
             Color.Crimson,        // Explosives
             Color.DarkSlateGray   // Hidden
-        }; 
+        };
         public static readonly Delegate[] Functions = {
             Reset.All,             // Reset
             Window.ToggleReplace,  // Reset Temp 
