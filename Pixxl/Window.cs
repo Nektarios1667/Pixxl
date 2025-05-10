@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -31,6 +33,13 @@ namespace Pixxl
         public MouseState mouse;
         public MouseState previousMouse;
         private string cursor;
+
+        private static readonly Xna.Vector2 infoVec = new(20, 20);
+        private static readonly Xna.Vector2 feedVec = new(Consts.Screen.Window[0] - 220, 5);
+        private static readonly Xna.Rectangle outlineRect = new(0, 0, Consts.Screen.Window[0], Consts.Screen.Window[1]);
+        public static readonly Color eraseGhostColor = new(105, 0, 0, 100);
+        public static readonly Color replaceGhostColor = new(35, 0, 0, 100);
+        public static readonly Color ghostColor = new(75, 75, 75, 100);
 
         public Window()
         {
@@ -92,6 +101,7 @@ namespace Pixxl
                     {
                         if ((pixel.Type == "Air" || (Replace && pixel.Type != cursor)) && Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
                         {
+                            if (pixel.Type == "Air") { AirPool.Return((Air)pixel); }
                             canvas.Pixels[pixel.Index] = Canvas.New(canvas, Selection, pixel.Location);
                         }
                     }
@@ -103,7 +113,7 @@ namespace Pixxl
                     {
                         if ((pixel.Type != "Air" || Replace) && Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
                         {
-                            canvas.Pixels[pixel.Index] = new Air(pixel.Location, canvas);
+                            canvas.Pixels[pixel.Index] = AirPool.Get(pixel.Location, canvas);
                         }
                     }
                 }
@@ -161,23 +171,23 @@ namespace Pixxl
             canvas.Draw();
 
             // Outline
-            spriteBatch.DrawRectangle(new(0, 0, Consts.Screen.Window[0], Consts.Screen.Window[1]), Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2);
+            spriteBatch.DrawRectangle(outlineRect, Registry.Materials.Colors[Registry.Materials.Id(Selection)], 2);
 
             // Info
             if (canvas.Delta != 0)
             {
                 string info = $"Delta: {Math.Round(Delta * 1000, 1)}\nFPS: {(int)(1 / Delta)}\nSpeed: {(Running >= 1 && canvas.Focus == this ? Consts.Game.Speed : 0)}x\nView Mode: {ColorModes[canvas.ViewMode]}\nReplace: {Replace}\nSize: {CursorSize}";
-                spriteBatch.DrawString(Font, info, new Vector2(20, 20), canvas.ViewMode != 2 ? Color.Black : Color.White);
+                spriteBatch.DrawString(Font, info, infoVec, canvas.ViewMode != 2 ? Color.Black : Color.White);
             }
 
             // Feed
             string[] feed = Logger.logged.ToArray();
-            spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), new Vector2(Consts.Screen.Window[0] - 220, 5), Color.Black);
+            spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), feedVec, Color.Black);
 
             // Square
             foreach (Pixel pixel in canvas.Pixels)
             {
-                Color ghost = Selection == "Air" || cursor == "Erase" ? new Color(105, 0, 0, 100) : (Replace ? new Color(35, 0, 0, 100) : new Color(75, 75, 75, 100));
+                Color ghost = Selection == "Air" || cursor == "Erase" ? eraseGhostColor : (Replace ? replaceGhostColor : ghostColor);
                 if (Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
                 {
                     spriteBatch.FillRectangle(new(pixel.Snapped.X, pixel.Snapped.Y, Consts.Game.PixelSize, Consts.Game.PixelSize), ghost);

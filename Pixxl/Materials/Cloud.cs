@@ -10,10 +10,10 @@ namespace Pixxl.Materials
         {
             // Constants
             Conductivity = .32f;
-            Density = .0012f;
+            Density = .0015f;
             State = 3;
             Strength = 80;
-            Melting = new Transformation(350, typeof(Steam));
+            Melting = new Transformation(350, typeof(Air));
             Solidifying = new Transformation(32, typeof(Snow));
         }
         public override void Update()
@@ -40,7 +40,7 @@ namespace Pixxl.Materials
             Pixel? target = Find(next, 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type))
             {
-                Location = Swap(Location, next);
+                Location = Swap(next);
                 UpdatePositions();
             }
         }

@@ -158,7 +158,7 @@ namespace Pixxl
             Pixel[] pixels = new Pixel[grid[0] * grid[1]];
             for (int i = 0; i < Consts.Screen.Grid[0] * grid[1]; i++)
             {
-                pixels[i] = new Air(new Xna.Vector2((i % grid[0]) * Consts.Screen.PixelSize, i / Consts.Screen.Grid[0] * Consts.Screen.PixelSize), canvas);
+                pixels[i] = AirPool.Get(new Xna.Vector2((i % grid[0]) * Consts.Screen.PixelSize, i / Consts.Screen.Grid[0] * Consts.Screen.PixelSize), canvas);
             }
             return pixels;
         }

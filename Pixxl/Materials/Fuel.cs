@@ -70,6 +70,7 @@ namespace Pixxl.Materials
                     if (neighbor.Type == "Air")
                     {
                         neighbor.Skip = true;
+                        AirPool.Return((Air)neighbor);
                         Canvas.Pixels[neighbor.GetIndex()] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
                             : Superheated ? new BlueFire(neighbor.Location, Canvas)
                             : new Fire(neighbor.Location, Canvas);

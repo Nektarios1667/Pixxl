@@ -27,6 +27,7 @@ namespace Pixxl.Materials
         public Xna.Vector2 Coords { get; set; }
         public RectangleF Rect => new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
 
+
         // Constants
         private readonly int[] surrounding = Consts.Game.Diagonals ? [
             -Consts.Screen.Grid[0],      // Up
@@ -54,7 +55,7 @@ namespace Pixxl.Materials
         public Xna.Vector2 Previous { get; set; }
 
         // Constructor
-        public Pixel(Xna.Vector2 location, Canvas canvas, float? temp = null)
+        public Pixel(Xna.Vector2 location, Canvas canvas)
         {
             // Constants
             Conductivity = 1f;
@@ -73,7 +74,7 @@ namespace Pixxl.Materials
             Coords = ConvertToCoord(Snapped, 's');
             Index = Flat(Coords);
             Canvas = canvas;
-            Temperature = temp ?? Consts.Game.RoomTemp;
+            Temperature = Consts.Game.RoomTemp;
             Type = GetType().Name;
             TypeId = Registry.Materials.Id(Type);
             Color = ColorSchemes.GetColor(TypeId);
@@ -108,6 +109,16 @@ namespace Pixxl.Materials
             // Final
             Previous = Location;
         }
+        public void Reset(Xna.Vector2 location)
+        {
+            Previous = location;
+            Location = location;
+            Snapped = Snap(Location);
+            Coords = ConvertToCoord(Snapped, 's');
+            Index = Flat(Coords);
+            Temperature = Constants.Game.RoomTemp;
+            Color = ColorSchemes.GetColor(TypeId);
+        }
         public virtual bool Move(int offsetX = 0)
         {
             // Movement
@@ -116,7 +127,7 @@ namespace Pixxl.Materials
             if (CollideCheck(Location, next))
             {
                 // Move array pixels
-                Location = Swap(Location, next);
+                Location = Swap(next);
                 return true;
             }
             return false;
@@ -231,7 +242,7 @@ namespace Pixxl.Materials
             Pixel? target = Find(next, 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next))
             {
-                Location = Swap(Location, next);
+                Location = Swap( next);
                 UpdatePositions();
             }
         }
@@ -291,22 +302,21 @@ namespace Pixxl.Materials
             if (idx >= 0 && idx < Canvas.Pixels.Length) { return Canvas.Pixels[idx]; }
             else { return null; }
         }
-        public Xna.Vector2 Swap(Xna.Vector2 first, Xna.Vector2 second)
+        public Xna.Vector2 Swap(Xna.Vector2 second)
         {
             // Info
-            Xna.Vector2 firstCoord = Coord(first);
-            Xna.Vector2 secondCoord = Coord(second);
-            Pixel? firstPixel = Find(firstCoord, 'c');
-            Pixel? secondPixel = Find(secondCoord, 'c');
+            int secondIndex = Flat(Coord(second));
+            Pixel? secondPixel = Canvas.Pixels[secondIndex];
+
 
             // If null values return current position (don't move)
-            if (firstPixel == null || secondPixel == null) { return first; }
+            if (secondPixel == null) { return Location; }
 
             // Swap objects
-            Canvas.Pixels[Flat(firstCoord)] = secondPixel; // Move second to first
-            Canvas.Pixels[Flat(secondCoord)] = firstPixel; // Move first to second
+            Canvas.Pixels[GetIndex()] = secondPixel; // Move second to first
+            Canvas.Pixels[secondIndex] = this; // Move first to second
 
-            secondPixel.Location = first;
+            secondPixel.Location = Location;
             return second;
         }
         // Static methods
@@ -348,8 +358,9 @@ namespace Pixxl.Materials
             return Coord(vec) * Consts.Screen.PixelSize;
         }
         public static int Flat(int x, int y) { return Consts.Screen.Grid[0] * y + x; }
-        public static int Flat(Xna.Vector2 loc) { return (int)(Consts.Screen.Grid[0] * loc.Y + loc.X); }
+        public static int Flat(Xna.Vector2 coords) { return (int)(Consts.Screen.Grid[0] * coords.Y + coords.X); }
         public static int Flat(float x, float y) { return Consts.Screen.Grid[0] * (int)y + (int)x; }
+
     }
 }
 

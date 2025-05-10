@@ -24,7 +24,7 @@ namespace Pixxl.Materials
             if (down != null && down.Type != "Air" && down.Strength < 500 && Canvas.ChancePerSecond(50f / down.Strength))
             {
                 down.Skip = true;
-                Canvas.Pixels[down.GetIndex()] = new Air(down.Location, Canvas);
+                Canvas.Pixels[down.GetIndex()] = AirPool.Get(down.Location, Canvas);
             }
         }
     }

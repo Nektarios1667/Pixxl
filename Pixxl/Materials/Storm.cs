@@ -25,6 +25,7 @@ namespace Pixxl.Materials
             if (below != null && below.Type == "Air" && Canvas.Rand.Next(0, 4000) == 0)
             {
                 below.Skip = true;
+                AirPool.Return((Air)below);
                 Canvas.Pixels[below.Index] = new Lightning(below.Location, Canvas);
             }
         }
@@ -38,7 +39,7 @@ namespace Pixxl.Materials
             Pixel? target = Find(next, 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type))
             {
-                Location = Swap(Location, next);
+                Location = Swap(next);
                 UpdatePositions();
             }
         }

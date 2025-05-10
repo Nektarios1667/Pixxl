@@ -28,6 +28,7 @@ namespace Pixxl.Materials
             if (down != null && down.Type == "Air" && cycle == 0)
             {
                 down.Skip = true;
+                AirPool.Return((Air)down);
                 Canvas.Pixels[down.GetIndex()] = new Water(down.Location, Canvas);
             }
             cycle = (cycle + 1) % 2;

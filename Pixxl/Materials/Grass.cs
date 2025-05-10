@@ -26,6 +26,7 @@ namespace Pixxl.Materials
             Pixel? above = Neighbors[0];
             if (above != null && Canvas.ChancePerSecond(.33f) && above.Type == "Air")
             {
+                AirPool.Return((Air)above);
                 Grass created = new Grass(above.Location, Canvas);
                 if (Canvas.Rand.Next(0, 3) == 0) { created.End = true; }
                 Canvas.Pixels[above.GetIndex()] = created;

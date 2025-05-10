@@ -28,6 +28,7 @@ namespace Pixxl.Materials
                 Pixel? above = Neighbors[0];
                 if (above != null && above.Type == "Air")
                 {
+                    AirPool.Return((Air)above);
                     Canvas.Pixels[above.GetIndex()] = new GasolineVapor(above.Location, Canvas);
                 }
             }

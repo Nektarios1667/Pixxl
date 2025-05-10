@@ -96,7 +96,7 @@ namespace Pixxl.Materials
             }
 
             // Remove self
-            Pixel self = new Air(Location, Canvas);
+            Pixel self = AirPool.Get(Location, Canvas);
             self.Temperature = Explosion * 2;
             self.Skip = true;
             Canvas.Pixels[Index] = self;

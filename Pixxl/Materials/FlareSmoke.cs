@@ -26,7 +26,7 @@ namespace Pixxl.Materials
             Life += Canvas.Delta;
             if (Life > 4)
             {
-                Canvas.Pixels[Index] = new Air(Location, Canvas);
+                Canvas.Pixels[Index] = AirPool.Get(Location, Canvas);
                 Canvas.Pixels[Index].Skip = true;
                 return;
             }

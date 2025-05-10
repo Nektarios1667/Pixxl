@@ -27,7 +27,7 @@ namespace Pixxl.Materials
             // Life
             if (life >= .1 || Canvas.Rand.Next(0, 25) == 0)
             {
-                Canvas.Pixels[Index] = Canvas.Rand.Next(0, 4) == 0 ? new Plasma(Location, Canvas) : new Air(Location, Canvas);
+                Canvas.Pixels[Index] = Canvas.Rand.Next(0, 4) == 0 ? new Plasma(Location, Canvas) : AirPool.Get(Location, Canvas);
                 return;
             }
 
