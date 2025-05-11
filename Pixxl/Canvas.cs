@@ -37,10 +37,11 @@ namespace Pixxl
             Batch = batch;
             Device = device;
             Tab = "Powder";
+            Widgets = [];
 
             // Saves
             int saveX = Consts.Screen.Window[0] / 2 - 400;
-            SavesPopup = new(Batch, new(saveX, 100), new(400, 550), Color.LightCyan, "Saves", Window.Font);
+            SavesPopup = new(Batch, new(saveX, 100), new(400, 550), Color.LightCyan, "Saves", Window.Font, layer:1);
             SavesPopup.Visible = false;
             for (int s = 0; s < 10; s++)
             {
@@ -50,7 +51,7 @@ namespace Pixxl
                 Button loadButton = new(Batch, new(saveX + 300, s * 50 + 150), new(80, 30), Color.Black, new(175, 225, 175), new(200, 225, 200), State.LoadCanvas, args: [this, s + 1], font: Window.Font, text: "Load");
                 SavesPopup.AddWidgets(clearButton, saveButton, loadButton, label);
             }
-            Widgets = [SavesPopup];
+            Widgets.Add(SavesPopup);
             CreateInterface();
 
             // Fill pixels
@@ -85,7 +86,9 @@ namespace Pixxl
                 for (int i = 0; i < Pixels.Length; i++) { Pixels[i].Draw(); }
 
                 // Widgets
-                for (int i = 0; i < Widgets.Count; i++) { Widgets[i].Draw(); }
+                List<Widget> sorted = new(Widgets);
+                sorted.Sort((a, b) => a.Layer.CompareTo(b.Layer));
+                for (int i = 0; i < sorted.Count; i++) { sorted[i].Draw(); }
             }
             else
             {
@@ -97,7 +100,7 @@ namespace Pixxl
 
             void select(string selection) => Window.Selection = selection;
 
-            // Create buttons
+            // Reset
             Widgets = [Widgets[0]];
 
             // Tools buttons
@@ -138,18 +141,14 @@ namespace Pixxl
                 Button created = new(Batch, new(x, y), Consts.Gui.ButtonDim, fg, bg, Functions.Lighten(MatReg.Colors[m], .2f), select, MatReg.Names[m], Window.Font, args: [MatReg.Names[m]], border: 3);
                 int infoboxX = x + 300 <= Consts.Screen.Window[0] ? (int)x : Consts.Screen.Window[0] - 300;
                 Infobox infobox = new(Batch, new(infoboxX, infoboxY), new(300, 40), new((int)x, (int)y, (int)Consts.Gui.ButtonDim.X, (int)Consts.Gui.ButtonDim.Y), bg, fg, MatReg.Descriptions[m], Window.Font);
-                Widgets.Add(created); Widgets.Add(infobox);
+                Widgets.Add(created);
+                Widgets.Add(infobox);
                 l++;
             }
         }
         public bool ChancePerSecond(float timesPerSecond)
         {
-            double chancePerFrame = timesPerSecond * Delta;
-            if (Rand.NextDouble() < chancePerFrame)
-            {
-                return true;
-            }
-            return false;
+            return Rand.NextDouble() < timesPerSecond * Delta;
         }
         // Static
         public static Pixel[] Cleared(Canvas canvas)
@@ -164,10 +163,10 @@ namespace Pixxl
         }
         public static Pixel? New(Canvas canvas, string type, Xna.Vector2 loc, float? temp = null, float vel = 0)
         {
-            Type? typeObj = Type.GetType($"Pixxl.Materials.{(type[0] == '.' ? type[1..] : type)}");
+            Type? typeObj = Type.GetType($"Pixxl.Materials.{type.Trim('.')}");
             if (typeObj != null)
             {
-                Pixel? created = (Pixel)Activator.CreateInstance(typeObj, loc, canvas);
+                Pixel? created = (Pixel?)Activator.CreateInstance(typeObj, loc, canvas);
                 if (created == null) { return null; }
 
                 if (temp != null) { created.Temperature = (float)temp; }

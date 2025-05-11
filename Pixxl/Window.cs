@@ -161,7 +161,7 @@ namespace Pixxl
         protected override void Draw(GameTime gameTime)
         {
             // Start
-            spriteBatch.Begin(SpriteSortMode.Deferred);
+            spriteBatch.Begin();
             GraphicsDevice.Clear(Color.Magenta);
 
             // Menu backgroumd

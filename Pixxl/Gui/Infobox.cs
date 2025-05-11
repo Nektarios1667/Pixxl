@@ -36,7 +36,7 @@ namespace Pixxl.Gui
         public float Delay { get; set; }
         private float Time { get; set; }
         // Centering
-        public Infobox(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Xna.Rectangle activation, Color color, Color foreground, string text, SpriteFont font, float delay = 1, int border = 2, Color? borderColor = null)
+        public Infobox(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Xna.Rectangle activation, Color color, Color foreground, string text, SpriteFont font, float delay = 1, int border = 2, Color? borderColor = null, int layer = 0)
         {
             Batch = batch;
             Location = location;
@@ -52,6 +52,7 @@ namespace Pixxl.Gui
             Inside = new(Dimensions.X - Border * 2 - 4, Dimensions.Y - Border * 2 - 4);
             Softwrapped = SoftwrapWords(text, font, Inside);
             Delay = delay;
+            Layer = layer;
         }
         public override void Update(Window window)
         {

@@ -116,8 +116,7 @@ namespace Pixxl.Materials
             Snapped = Snap(Location);
             Coords = ConvertToCoord(Snapped, 's');
             Index = Flat(Coords);
-            Temperature = Constants.Game.RoomTemp;
-            Color = ColorSchemes.GetColor(TypeId);
+            Temperature = Consts.Game.RoomTemp;
         }
         public virtual bool Move(int offsetX = 0)
         {

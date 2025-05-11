@@ -28,7 +28,7 @@ namespace Pixxl.Gui
         public bool Last { get; private set; }
         // Centering
         private Xna.Vector2 offset { get; set; }
-        public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Color foreground, Xna.Color color, Xna.Color highlight, Delegate? function, string text = "", SpriteFont? font = null, object?[]? args = null, int border = 3, Color borderColor = default)
+        public Button(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Color foreground, Xna.Color color, Xna.Color highlight, Delegate? function, string text = "", SpriteFont? font = null, object?[]? args = null, int border = 3, Color borderColor = default, int layer = 0)
         {
             Batch = batch;
             Location = location;
@@ -44,6 +44,7 @@ namespace Pixxl.Gui
             Args = args;
             State = 0;
             Last = false;
+            Layer = layer;
 
             Xna.Vector2 textDim = Font != null ? Font.MeasureString(Text) : new(0, 0);
             Xna.Vector2 inside = new(Dimensions.X - Border * 2, Dimensions.Y - Border * 2);

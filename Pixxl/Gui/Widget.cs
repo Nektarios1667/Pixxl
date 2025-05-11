@@ -7,7 +7,8 @@ namespace Pixxl.Gui
     {
         public Xna.Vector2 Location { get; set; }
         public bool Visible { get; set; }
-        public Widget() { Visible = true; }
+        public int Layer { get; protected set; }
+        public Widget(int layer = 0) { Visible = true; Layer = layer; }
         public abstract void Update(Window window);
         public abstract void Draw();
 

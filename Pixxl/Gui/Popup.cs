@@ -35,7 +35,7 @@ namespace Pixxl.Gui
         public SpriteFont TitleFont { get; set; }
         public Color TitleColor { get; set; }
         // Centering
-        public Popup(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Color color, string title, SpriteFont titleFont, Color? titleColor = null, Color? barColor = null, int barSize = 25, int border = 3, Color? borderColor = null)
+        public Popup(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Color color, string title, SpriteFont titleFont, Color? titleColor = null, Color? barColor = null, int barSize = 25, int border = 3, Color? borderColor = null, int layer = 0)
         {
             Batch = batch;
             Location = location;
@@ -55,7 +55,7 @@ namespace Pixxl.Gui
             Widgets = [closeButton, titleBox];
             TitleFont = titleFont;
             Title = title;
-
+            Layer = layer;
         }
         public override void Update(Window window)
         {

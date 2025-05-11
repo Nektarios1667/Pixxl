@@ -84,7 +84,7 @@ namespace Pixxl.Gui
             ["OemTilde"] = '~',
         };
         private string[] controlKeys = ["Back", "Left", "Right"];
-        public Input(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Color foreground, Xna.Color color, Xna.Color highlight, SpriteFont font, int border = 3, Color borderColor = default)
+        public Input(SpriteBatch batch, Xna.Vector2 location, Xna.Vector2 dimensions, Color foreground, Xna.Color color, Xna.Color highlight, SpriteFont font, int border = 3, Color borderColor = default, int layer = 0)
         {
             Batch = batch;
             Location = location;
@@ -103,6 +103,7 @@ namespace Pixxl.Gui
             Selected = false;
             Cursor = 0;
             Previous = [];
+            Layer = layer;
         }
         public override void Update(Window window)
         {

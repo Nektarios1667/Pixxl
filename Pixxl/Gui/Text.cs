@@ -11,13 +11,14 @@ namespace Pixxl.Gui
         public Xna.Color Color { get; private set; }
         public SpriteFont? Font { get; private set; }
         // Centering
-        public TextBox(SpriteBatch batch, Xna.Vector2 location, Color color, string text, SpriteFont font)
+        public TextBox(SpriteBatch batch, Xna.Vector2 location, Color color, string text, SpriteFont font, int layer = 0)
         {
             Batch = batch;
             Location = location;
             Text = text;
             Font = font;
             Color = color;
+            Layer = layer;
         }
         public override void Update(Window _) { }
         public override void Draw()
