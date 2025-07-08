@@ -13,8 +13,8 @@ namespace Pixxl.Materials
             Density = .3f;
             State = 1;
             Strength = 80;
-            Melting = new Transformation(999999, typeof(Drywall));
-            Solidifying = new Transformation(-999999, typeof(Drywall));
+            Melting = new Transformation(Int32.MaxValue, typeof(Drywall));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Drywall));
             Gravity = false;
         }
     }

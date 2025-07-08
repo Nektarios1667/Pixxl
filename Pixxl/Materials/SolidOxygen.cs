@@ -14,7 +14,7 @@ namespace Pixxl.Materials
             State = 0;
             Strength = 60;
             Melting = new Transformation(-218, typeof(LiquidOxygen));
-            Solidifying = new Transformation(-999999, typeof(SolidOxygen));
+            Solidifying = new Transformation(Int32.MinValue, typeof(SolidOxygen));
             Gravity = false;
         }
     }

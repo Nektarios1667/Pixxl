@@ -14,7 +14,7 @@ namespace Pixxl.Materials
             State = 0;
             Strength = 30;
             Melting = new Transformation(32, typeof(Water));
-            Solidifying = new Transformation(-999999, typeof(Ice));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Ice));
             Gravity = false;
         }
     }

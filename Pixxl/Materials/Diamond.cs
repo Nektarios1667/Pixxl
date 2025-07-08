@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             State = 2;
             Strength = 1000;
             Melting = new Transformation(8500, typeof(Plasma));
-            Solidifying = new Transformation(-999999, typeof(Diamond));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Diamond));
         }
     }
 }

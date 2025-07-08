@@ -14,7 +14,7 @@ namespace Pixxl.Materials
             State = 3;
             Strength = 340;
             Melting = new Transformation(-30, typeof(Mercury));
-            Solidifying = new Transformation(-999999, typeof(SolidMercury));
+            Solidifying = new Transformation(Int32.MinValue, typeof(SolidMercury));
         }
     }
 }

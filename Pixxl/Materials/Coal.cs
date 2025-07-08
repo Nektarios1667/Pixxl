@@ -12,8 +12,8 @@ namespace Pixxl.Materials
             Conductivity = .3f;
             Density = 1.8f;
             Strength = 50;
-            Melting = new Transformation(999999, typeof(Coal));
-            Solidifying = new Transformation(-999999, typeof(Coal));
+            Melting = new Transformation(Int32.MaxValue, typeof(Coal));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Coal));
         }
     }
 }

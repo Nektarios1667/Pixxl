@@ -14,8 +14,8 @@ namespace Pixxl.Materials
             Density = .88f;
             State = 2;
             Strength = 70;
-            Melting = new Transformation(999999, typeof(Flare));
-            Solidifying = new Transformation(-999999, typeof(Flare));
+            Melting = new Transformation(Int32.MaxValue, typeof(Flare));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Flare));
         }
 
         public override void Update()
@@ -39,18 +39,21 @@ namespace Pixxl.Materials
             // Above
             if (above != null && above.Type == "Air")
             {
+                above.Skip = true;
                 AirPool.Return((Air)above);
                 Canvas.Pixels[above.GetIndex()] = new FlareSmoke(above.Location, Canvas);
             }
             // Above left
             if (aboveLeft != null && aboveLeft.Type == "Air" && Canvas.ChancePerSecond(5))
             {
+                aboveLeft.Skip = true;
                 AirPool.Return((Air)aboveLeft);
                 Canvas.Pixels[aboveLeft.GetIndex()] = new FlareSmoke(aboveLeft.Location, Canvas);
             }
             // Above left
             if (aboveRight != null && aboveRight.Type == "Air" && Canvas.ChancePerSecond(5))
             {
+                aboveRight.Skip = true;
                 AirPool.Return((Air)aboveRight);
                 Canvas.Pixels[aboveRight.GetIndex()] = new FlareSmoke(aboveRight.Location, Canvas);
             }

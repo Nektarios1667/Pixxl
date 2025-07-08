@@ -11,8 +11,8 @@ namespace Pixxl.Materials
             Conductivity = 4f;
             Lifespan = .7f;
             Temperature = -1000f;
-            Melting = new Transformation(999999, typeof(Cryofire));
-            Solidifying = new Transformation(-999999, typeof(Cryofire));
+            Melting = new Transformation(Int32.MaxValue, typeof(Cryofire));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Cryofire));
         }
         public override void Spread() { }
     }

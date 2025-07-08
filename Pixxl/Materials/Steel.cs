@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             State = 0;
             Strength = 700;
             Melting = new Transformation(3800, typeof(MoltenSteel));
-            Solidifying = new Transformation(-999999, typeof(Steel));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Steel));
             Gravity = false;
         }
     }

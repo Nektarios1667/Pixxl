@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             State = 2;
             Strength = 50;
             Melting = new Transformation(3100, typeof(Glass));
-            Solidifying = new Transformation(-999999, typeof(Sand));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Sand));
         }
     }
 }

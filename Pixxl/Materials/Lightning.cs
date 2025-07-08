@@ -11,11 +11,11 @@ namespace Pixxl.Materials
             // Constants
             Temperature = 9000f;
             Conductivity = 8f;
-            Density = 999999f;
+            Density = Int32.MaxValuef;
             State = 4;
-            Strength = 999999;
-            Melting = new Transformation(999999, typeof(Lightning));
-            Solidifying = new Transformation(-999999, typeof(Lightning));
+            Strength = Int32.MaxValue;
+            Melting = new Transformation(Int32.MaxValue, typeof(Lightning));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Lightning));
             life = 0;
         }
 

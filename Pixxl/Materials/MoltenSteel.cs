@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             Density = 7f;
             State = 3;
             Strength = 450;
-            Melting = new Transformation(999999, typeof(MoltenSteel));
+            Melting = new Transformation(Int32.MaxValue, typeof(MoltenSteel));
             Solidifying = new Transformation(3200, typeof(Steel));
         }
     }

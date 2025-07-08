@@ -37,7 +37,7 @@ namespace Pixxl.Materials
 
             int side = Canvas.Rand.Next(0, 2) == 0 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
             Xna.Vector2 next = new(Location.X + side, Location.Y);
-            Pixel? target = Find(next, 'l');
+            Pixel? target = Find(next.ToPoint(), 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type))
             {
                 Location = Swap(next);

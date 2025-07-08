@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             Density = .96f;
             State = 3;
             Strength = 100;
-            Melting = new Transformation(999999, typeof(MeltedPlastic));
+            Melting = new Transformation(Int32.MaxValue, typeof(MeltedPlastic));
             Solidifying = new Transformation(250, typeof(Plastic));
         }
     }

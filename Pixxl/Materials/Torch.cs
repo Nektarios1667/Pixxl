@@ -12,8 +12,8 @@ namespace Pixxl.Materials
             Density = 2.8f;
             State = 0;
             Strength = 600;
-            Melting = new Transformation(999999, typeof(Torch));
-            Solidifying = new Transformation(-999999, typeof(Torch));
+            Melting = new Transformation(Int32.MaxValue, typeof(Torch));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Torch));
             Gravity = false;
         }
 

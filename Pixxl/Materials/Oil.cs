@@ -14,7 +14,7 @@ namespace Pixxl.Materials
             State = 3;
             Strength = 400;
             Melting = new Transformation(9200, typeof(Plasma));
-            Solidifying = new Transformation(-999999, typeof(Oil));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Oil));
         }
     }
 }

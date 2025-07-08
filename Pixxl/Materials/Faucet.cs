@@ -13,8 +13,8 @@ namespace Pixxl.Materials
             Density = 2.8f;
             State = 0;
             Strength = 600;
-            Melting = new Transformation(999999, typeof(Faucet));
-            Solidifying = new Transformation(-999999, typeof(Faucet));
+            Melting = new Transformation(Int32.MaxValue, typeof(Faucet));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Faucet));
             Gravity = false;
             cycle = 0;
         }

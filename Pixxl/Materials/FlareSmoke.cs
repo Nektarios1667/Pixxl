@@ -27,7 +27,6 @@ namespace Pixxl.Materials
             if (Life > 4)
             {
                 Canvas.Pixels[Index] = AirPool.Get(Location, Canvas);
-                Canvas.Pixels[Index].Skip = true;
                 return;
             }
         }

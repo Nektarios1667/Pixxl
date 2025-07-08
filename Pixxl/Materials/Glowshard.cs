@@ -17,8 +17,8 @@ namespace Pixxl.Materials
             Density = 36f;
             State = 2;
             Strength = 12000;
-            Melting = new Transformation(999999, typeof(Glowshard));
-            Solidifying = new Transformation(-999999, typeof(Glowshard));
+            Melting = new Transformation(Int32.MaxValue, typeof(Glowshard));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Glowshard));
             Cycle = Canvas.Rand.Next(0, 256);
             Rising = true;
         }
@@ -62,7 +62,7 @@ namespace Pixxl.Materials
                 color = Registry.Materials.Colors[TypeId];
             }
 
-            Canvas.Batch.FillRectangle(Rect, color);
+            Canvas.Batch.Draw(Window.OnePixel, Rect, color);
         }
     }
 }

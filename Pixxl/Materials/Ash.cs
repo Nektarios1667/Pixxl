@@ -15,7 +15,7 @@ namespace Pixxl.Materials
             State = 2;
             Strength = 30;
             Melting = new Transformation(2000, typeof(Steam));
-            Solidifying = new Transformation(-999999, typeof(Ash));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Ash));
         }
         public override void Update()
         {

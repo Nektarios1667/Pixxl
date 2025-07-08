@@ -12,8 +12,8 @@ namespace Pixxl.Materials
             Density = .918f;
             State = 0;
             Strength = 80;
-            Melting = new Transformation(999999, typeof(Glass));
-            Solidifying = new Transformation(-999999, typeof(Glass));
+            Melting = new Transformation(Int32.MaxValue, typeof(Glass));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Glass));
             Gravity = false;
         }
     }

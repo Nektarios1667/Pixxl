@@ -14,8 +14,8 @@ namespace Pixxl.Materials
             Density = .6f;
             State = 1;
             Strength = 20;
-            Melting = new Transformation(999999, typeof(Grass));
-            Solidifying = new Transformation(-999999, typeof(Grass));
+            Melting = new Transformation(Int32.MaxValue, typeof(Grass));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Grass));
         }
         public override void Update()
         {

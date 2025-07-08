@@ -15,7 +15,7 @@ namespace Pixxl.Materials
             Gravity = true;
             State = 4;
             Strength = 1000;
-            Melting = new Transformation(999999, typeof(BlueFire));
+            Melting = new Transformation(Int32.MaxValue, typeof(BlueFire));
             Solidifying = new Transformation(7200, typeof(Fire));
         }
         public override void Spread()

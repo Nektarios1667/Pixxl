@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             State = 0;
             Strength = 200;
             Melting = new Transformation(2500, typeof(MoltenCopper));
-            Solidifying = new Transformation(-999999, typeof(Copper));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Copper));
             Gravity = false;
         }
     }

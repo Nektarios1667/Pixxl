@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             Density = 2.5f;
             State = 3;
             Strength = 120;
-            Melting = new Transformation(999999, typeof(MeltedRubber));
+            Melting = new Transformation(Int32.MaxValue, typeof(MeltedRubber));
             Solidifying = new Transformation(340, typeof(Rubber));
         }
     }

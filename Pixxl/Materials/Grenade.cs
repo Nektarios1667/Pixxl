@@ -15,8 +15,8 @@ namespace Pixxl.Materials
             Density = 1.2f;
             State = 2;
             Strength = 50;
-            Melting = new Transformation(999999, typeof(Explosive));
-            Solidifying = new Transformation(-999999, typeof(Explosive));
+            Melting = new Transformation(Int32.MaxValue, typeof(Explosive));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Explosive));
             Fuse = 5f;
         }
         public override void Update()

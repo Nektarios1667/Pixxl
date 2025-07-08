@@ -13,8 +13,8 @@ namespace Pixxl.Materials
             State = 0;
             Lifetime = 4f;
             Strength = 100;
-            Melting = new Transformation(999999, typeof(Wood));
-            Solidifying = new Transformation(-999999, typeof(Wood));
+            Melting = new Transformation(Int32.MaxValue, typeof(Wood));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Wood));
             Gravity = false;
             Internal = true;
         }

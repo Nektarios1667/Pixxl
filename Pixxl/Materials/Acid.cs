@@ -11,9 +11,9 @@ namespace Pixxl.Materials
             Conductivity = .02f;
             Density = 1.2f;
             State = 3;
-            Strength = 999999;
+            Strength = Int32.MaxValue;
             Melting = new Transformation(8200, typeof(Plasma));
-            Solidifying = new Transformation(-999999, typeof(Acid));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Acid));
         }
         public override void Update()
         {

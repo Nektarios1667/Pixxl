@@ -12,8 +12,8 @@ namespace Pixxl.Materials
             Density = 4f;
             State = 0;
             Strength = 150;
-            Melting = new Transformation(999999, typeof(Ceramic));
-            Solidifying = new Transformation(-999999, typeof(Ceramic));
+            Melting = new Transformation(Int32.MaxValue, typeof(Ceramic));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Ceramic));
             Gravity = false;
         }
     }

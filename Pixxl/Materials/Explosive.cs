@@ -27,8 +27,8 @@ namespace Pixxl.Materials
             Density = 1.2f;
             State = 2;
             Strength = 50;
-            Melting = new Transformation(999999, typeof(Explosive));
-            Solidifying = new Transformation(-999999, typeof(Explosive));
+            Melting = new Transformation(Int32.MaxValue, typeof(Explosive));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Explosive));
         }
 
         public override void Update()
@@ -39,8 +39,7 @@ namespace Pixxl.Materials
         }
         public virtual bool ExplodeCheck()
         {
-            Xna.Vector2 coords = Coords;
-            if (coords.Y == Consts.Screen.Grid[1] - 1 || Canvas.Pixels[Flat(coords.X, coords.Y + 1)].GetType().Name != "Air") { return true; }
+            if (Coords.Y == Consts.Screen.Grid[1] - 1 || Canvas.Pixels[Flat(Coords.X, Coords.Y + 1)].GetType().Name != "Air") { return true; }
             return false;
         }
         public virtual void Explode()
@@ -50,14 +49,13 @@ namespace Pixxl.Materials
             if (exploded || Skip) { return; }
             exploded = true;
 
-            Xna.Vector2 coords = Coords;
             rangeSq = Range * Range;
 
             // Get scan range
-            int minX = Math.Max(0, (int)(coords.X - Range));
-            int maxX = Math.Min(Consts.Screen.Grid[0] - 1, (int)(coords.X + Range));
-            int minY = Math.Max(0, (int)(coords.Y - Range));
-            int maxY = Math.Min(Consts.Screen.Grid[1] - 1, (int)(coords.Y + Range));
+            int minX = Math.Max(0, (int)(Coords.X - Range));
+            int maxX = Math.Min(Consts.Screen.Grid[0] - 1, (int)(Coords.X + Range));
+            int minY = Math.Max(0, (int)(Coords.Y - Range));
+            int maxY = Math.Min(Consts.Screen.Grid[1] - 1, (int)(Coords.Y + Range));
 
             // Iterate pixels
             for (int y = minY; y <= maxY; y++) // Rows
@@ -67,8 +65,8 @@ namespace Pixxl.Materials
                     // Pixel data
                     Pixel current = Canvas.Pixels[Flat(x, y)];
                     int idx = current.GetIndex();
-                    int dX = (int)(coords.X - current.GetCoords().X);
-                    int dY = (int)(coords.Y - current.GetCoords().Y);
+                    int dX = (int)(Coords.X - current.GetCoords().X);
+                    int dY = (int)(Coords.Y - current.GetCoords().Y);
                     float distSq = dX * dX + dY * dY;
 
                     // Damage

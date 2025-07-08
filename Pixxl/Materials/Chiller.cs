@@ -13,9 +13,9 @@ namespace Pixxl.Materials
             Density = 10f;
             State = 0;
             Gravity = false;
-            Strength = 999999;
-            Melting = new Transformation(999999, typeof(Chiller));
-            Solidifying = new Transformation(-999999, typeof(Chiller));
+            Strength = Int32.MaxValue;
+            Melting = new Transformation(Int32.MaxValue, typeof(Chiller));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Chiller));
         }
         public override void Update()
         {

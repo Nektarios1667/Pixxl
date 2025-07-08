@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             State = 0;
             Strength = 125;
             Melting = new Transformation(380, typeof(MeltedRubber));
-            Solidifying = new Transformation(-999999, typeof(Rubber));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Rubber));
             Gravity = false;
         }
     }

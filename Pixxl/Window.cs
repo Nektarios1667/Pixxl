@@ -8,23 +8,25 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using Pixxl.Materials;
 using Consts = Pixxl.Constants;
-using Xna = Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace Pixxl
 {
     public class Window : Game
     {
+        public static Texture2D OnePixel { get; private set; } = null!; // Initialized in LoadContent
+
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         public Canvas canvas;
-        public Xna.Vector2 coord;
+        public Point coord;
         public SpriteFont Font;
         public SpriteFont SmallFont;
         public string Selection;
-        public Xna.Vector2 location = new(0, 0);
+        public Point location = new(0, 0);
         public int Running = 2; // 0 = paused; 1 = one frame; 2 = running
         public float Delta = 0;
-        public string[] ColorModes = ["Regular", "Colored Thermal", "Grayscale Thermal", "Monotexture"];
+        public string[] ColorModes = ["Regular", "Colored Thermal", "Grayscale Thermal", "Skipped"];
         public int CursorSize = 1;
         public bool Replace = false;
 
@@ -34,9 +36,9 @@ namespace Pixxl
         public MouseState previousMouse;
         private string cursor;
 
-        private static readonly Xna.Vector2 infoVec = new(20, 20);
-        private static readonly Xna.Vector2 feedVec = new(Consts.Screen.Window[0] - 220, 5);
-        private static readonly Xna.Rectangle outlineRect = new(0, 0, Consts.Screen.Window[0], Consts.Screen.Window[1]);
+        private static readonly Vector2 infoVec = new(20, 20);
+        private static readonly Vector2 feedVec = new(Consts.Screen.Window[0] - 220, 5);
+        private static readonly Rectangle outlineRect = new(0, 0, Consts.Screen.Window[0], Consts.Screen.Window[1]);
         public static readonly Color eraseGhostColor = new(105, 0, 0, 100);
         public static readonly Color replaceGhostColor = new(35, 0, 0, 100);
         public static readonly Color ghostColor = new(75, 75, 75, 100);
@@ -46,7 +48,8 @@ namespace Pixxl
             graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = Consts.Screen.Window[0],
-                PreferredBackBufferHeight = Consts.Screen.Window[1]
+                PreferredBackBufferHeight = Consts.Screen.Window[1],
+                SynchronizeWithVerticalRetrace = false,
             };
             IsMouseVisible = false;
             IsFixedTimeStep = false;
@@ -75,6 +78,10 @@ namespace Pixxl
             canvas = new(this, graphics.GraphicsDevice, spriteBatch);
             Logger.Log("Loaded content");
 
+            // Load pixel texture
+            OnePixel = new Texture2D(GraphicsDevice, 1, 1);
+            OnePixel.SetData([Color.White]);
+
             previousMouse = new();
         }
 
@@ -83,9 +90,9 @@ namespace Pixxl
             // States
             keys = Keyboard.GetState().GetPressedKeys();
             mouse = Mouse.GetState();
-            location = mouse.Position.ToVector2();
-            coord = new((int)Math.Floor((float)location.X / Consts.Screen.PixelSize), (int)Math.Floor((float)location.Y / Consts.Screen.PixelSize));
-            Delta = (float)gameTime.ElapsedGameTime.Milliseconds / 1000f;
+            location = mouse.Position;
+            coord = location / Constants.Screen.PixelSizePoint;
+            Delta = gameTime.ElapsedGameTime.Milliseconds / 1000f;
 
             // Exit
             if (keys.Contains(Keys.Escape))
@@ -102,7 +109,7 @@ namespace Pixxl
                         if ((pixel.Type == "Air" || (Replace && pixel.Type != cursor)) && Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
                         {
                             if (pixel.Type == "Air") { AirPool.Return((Air)pixel); }
-                            canvas.Pixels[pixel.Index] = Canvas.New(canvas, Selection, pixel.Location);
+                            canvas.Pixels[pixel.Index] = Canvas.New(canvas, Selection, pixel.Location)!;
                         }
                     }
                 }
@@ -228,12 +235,11 @@ namespace Pixxl
             return keys.Contains(key) && !previous.Contains(key);
         }
         // Static methods
-        public static bool Inside(Xna.Vector2 point, int[] dimensions)
+        public static bool Inside(Point point, int[] dimensions)
         {
             return point.X >= 0 && point.X < dimensions[0] && point.Y >= 0 && point.Y < dimensions[1];
         }
-        public static bool Inside(Xna.Point point, int[] dimensions) { return Inside(point.ToVector2(), dimensions); }
-        public static void DrawX(SpriteBatch batch, Xna.Vector2 location, int[] dimensions, Color color, int thickness = 2)
+        public static void DrawX(SpriteBatch batch, Point location, int[] dimensions, Color color, int thickness = 2)
         {
             //  "\" line
             batch.DrawLine(new(location.X - dimensions[0] / 2, location.Y - dimensions[1] / 2), new(location.X + dimensions[0] / 2, location.Y + dimensions[1] / 2),
@@ -242,7 +248,7 @@ namespace Pixxl
             batch.DrawLine(new(location.X + dimensions[0] / 2, location.Y - dimensions[1] / 2), new(location.X - dimensions[0] / 2, location.Y + dimensions[1] / 2),
                            color, thickness);
         }
-        public static void DrawPlus(SpriteBatch batch, Xna.Vector2 location, int[] dimensions, Color color, int thickness = 1)
+        public static void DrawPlus(SpriteBatch batch, Point location, int[] dimensions, Color color, int thickness = 1)
         {
             //  "-" line
             batch.DrawLine(new(location.X - dimensions[0] / 2, location.Y), new(location.X + dimensions[0] / 2, location.Y),

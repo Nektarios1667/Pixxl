@@ -42,8 +42,8 @@ namespace Pixxl.Materials
             Density = 1.5f;
             State = 2;
             Strength = 50;
-            Melting = new Transformation(999999, typeof(Coal));
-            Solidifying = new Transformation(-999999, typeof(Coal));
+            Melting = new Transformation(Int32.MaxValue, typeof(Coal));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Coal));
         }
 
         public override void Update()

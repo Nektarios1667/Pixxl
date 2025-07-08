@@ -14,8 +14,8 @@ namespace Pixxl.Materials
             Density = .9f;
             State = 2;
             Strength = 150;
-            Melting = new Transformation(999999, typeof(Sodium));
-            Solidifying = new Transformation(-999999, typeof(Sodium));
+            Melting = new Transformation(Int32.MaxValue, typeof(Sodium));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Sodium));
         }
 
         public override void Update()

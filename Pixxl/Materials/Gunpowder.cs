@@ -15,7 +15,7 @@ namespace Pixxl.Materials
             State = 2;
             Strength = 40;
             Melting = new Transformation(3100, typeof(Air));
-            Solidifying = new Transformation(-999999, typeof(Gunpowder));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Gunpowder));
         }
         public override bool ExplodeCheck()
         {

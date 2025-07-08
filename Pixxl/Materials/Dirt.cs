@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             State = 2;
             Strength = 50;
             Melting = new Transformation(3200, typeof(Lava));
-            Solidifying = new Transformation(-999999, typeof(Dirt));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Dirt));
         }
     }
 }

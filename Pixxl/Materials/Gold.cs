@@ -13,7 +13,7 @@ namespace Pixxl.Materials
             State = 2;
             Strength = 100;
             Melting = new Transformation(1950, typeof(MoltenGold));
-            Solidifying = new Transformation(-999999, typeof(Gold));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Gold));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Consts = Pixxl.Constants;
 using Xna = Microsoft.Xna.Framework;
@@ -21,11 +22,11 @@ namespace Pixxl.Materials
 
         // Properties
         public float Temperature { get; set; }
-        public Xna.Vector2 Location { get; set; }
+        public Vector2 Location { get; set; }
         public int Index { get; set; }
-        public Xna.Vector2 Snapped { get; set; }
-        public Xna.Vector2 Coords { get; set; }
-        public RectangleF Rect => new(Snapped.X, Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
+        public Point Snapped { get; set; }
+        public Point Coords { get; set; }
+        public Rectangle Rect => new((int)Snapped.X, (int)Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
 
 
         // Constants
@@ -62,8 +63,8 @@ namespace Pixxl.Materials
             Density = 1f;
             State = 2; // 0 = Solid, 1 = Rigid Powder, 2 = Powder, 3 = Fluid, 4 = Energy
             Strength = 100;
-            Melting = new Transformation(999999, typeof(Pixel));
-            Solidifying = new Transformation(-999999, typeof(Pixel));
+            Melting = new Transformation(Int32.MaxValue, typeof(Pixel));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Pixel));
             Gravity = true;
 
             // Properties
@@ -109,7 +110,7 @@ namespace Pixxl.Materials
             // Final
             Previous = Location;
         }
-        public void Reset(Xna.Vector2 location)
+        public void Reset(Vector2 location)
         {
             Previous = location;
             Location = location;
@@ -121,7 +122,7 @@ namespace Pixxl.Materials
         public virtual bool Move(int offsetX = 0)
         {
             // Movement
-            Xna.Vector2 next = Predict(new(Location.X + offsetX, Location.Y), Consts.Game.Gravity);
+            Vector2 next = Predict(new(Location.X + offsetX, Location.Y), Consts.Game.Gravity);
             // Checks
             if (CollideCheck(Location, next))
             {
@@ -143,7 +144,7 @@ namespace Pixxl.Materials
 
             // Move right
             // Check if other pixel will move down into down right since adjacent has higher priority
-            Pixel? right = Find(new(Location.X + Consts.Game.PixelSize, Location.Y), 'l');
+            Pixel? right = Find(new((int)Location.X + Consts.Game.PixelSize, (int)Location.Y), 'l');
             Xna.Vector2 rightMove = right != null ? new(right.Location.X, right.Location.Y + Consts.Game.PixelSize) : new(0, 0);
             bool priority = (right == null || !right.Gravity || Coord(rightMove) == Coord(right.Location) || !right.CollideCheck(right.Location, rightMove));
             if (priority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
@@ -160,27 +161,25 @@ namespace Pixxl.Materials
             float percent = Temperature / thermax;
             if (Canvas.ViewMode == 1)
             {
-                float temp = Math.Clamp(Temperature, 0, thermax);
                 float r = percent * 255; float g = 255 - r; float b = Temperature > thermax * 2 ? (Temperature / thermax) * 25 : 0;
                 color = new((int)r, (int)g, (int)b);
             }
             else if (Canvas.ViewMode == 2)
             {
-                float temp = Math.Clamp(Temperature, 0, thermax);
                 int saturation = (int)(percent * 255);
                 color = new(saturation, saturation, saturation);
             }
             else if (Canvas.ViewMode == 3)
             {
-                color = Registry.Materials.Colors[TypeId];
+                color = Skip ? new(255, 0, 0) : new(84, 26, 145);
             }
+            Canvas.Batch.Draw(Window.OnePixel, Rect, color);
 
-            Canvas.Batch.FillRectangle(Rect, color);
         }
         // Methods
         public void UpdatePositions()
         {
-            Snapped = Snap(Location);
+            Snapped = Snap(Location.ToPoint());
             Coords = ConvertToCoord(Snapped, 's');
             Index = Flat(Coords);
         }
@@ -188,19 +187,19 @@ namespace Pixxl.Materials
         {
             return new(vec.X, vec.Y + Math.Min(velocity * Canvas.Delta * Consts.Game.Speed, Consts.Screen.PixelSize));
         }
-        public virtual bool CollideCheck(Xna.Vector2 loc, Xna.Vector2 dest)
+        public virtual bool CollideCheck(Vector2 loc, Vector2 dest)
         {
             // Basic checks
             if (loc == dest) { return false; } // Not moving
             if (!Gravity) { return false; } // Not affected
 
             // Setup
-            Xna.Vector2 destCoord = Coord(dest);
+            Point destCoord = Coord(dest.ToPoint());
 
             // If in bounds then check the available pixel
-            if (!IndexCheck(dest, 'l')) { return false; }
+            if (!IndexCheck(dest.ToPoint(), 'l')) { return false; }
             Pixel target = Canvas.Pixels[Flat(destCoord)];
-            Xna.Vector2 delta = dest - loc;
+            Vector2 delta = dest - loc;
 
             // Later checks
             if (target == this) { return true; } // If self dont check density
@@ -237,11 +236,11 @@ namespace Pixxl.Materials
         public virtual void FluidSpread()
         {
             int side = Canvas.Rand.Next(0, 2) == 0 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
-            Xna.Vector2 next = new(Location.X + side, Location.Y);
-            Pixel? target = Find(next, 'l');
+            Vector2 next = new(Location.X + side, Location.Y);
+            Pixel? target = Find(next.ToPoint(), 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next))
             {
-                Location = Swap( next);
+                Location = Swap(next);
                 UpdatePositions();
             }
         }
@@ -281,12 +280,12 @@ namespace Pixxl.Materials
                 Neighbors[n] = neighbor == null || Math.Abs(Coords.X - neighbor.GetCoords().X) > 1 ? null : neighbor;
             }
         }
-        public int GetIndex() { return Flat(Coord(Location)); }
-        public Xna.Vector2 GetCoords() { return Coord(Location); }
-        public Xna.Vector2 GetSnapped() { return Snap(Location); }
-        public Pixel? Find(Xna.Vector2 vec, char mode)
+        public int GetIndex() { return Flat(Coord(Location.ToPoint())); }
+        public Point GetCoords() { return Coord(Location.ToPoint()); }
+        public Point GetSnapped() { return Snap(Location.ToPoint()); }
+        public Pixel? Find(Point point, char mode)
         {
-            Xna.Vector2 converted = ConvertToCoord(vec, mode);
+            Point converted = ConvertToCoord(point, mode);
             if (CoordCheck(converted))
             {
                 return Canvas.Pixels[Flat(converted)];
@@ -301,10 +300,10 @@ namespace Pixxl.Materials
             if (idx >= 0 && idx < Canvas.Pixels.Length) { return Canvas.Pixels[idx]; }
             else { return null; }
         }
-        public Xna.Vector2 Swap(Xna.Vector2 second)
+        public Vector2 Swap(Vector2 second)
         {
             // Info
-            int secondIndex = Flat(Coord(second));
+            int secondIndex = Flat(Coord(second.ToPoint()));
             Pixel? secondPixel = Canvas.Pixels[secondIndex];
 
 
@@ -319,46 +318,43 @@ namespace Pixxl.Materials
             return second;
         }
         // Static methods
-        public static bool IndexCheck(Xna.Vector2 loc, char mode)
+        public static bool IndexCheck(Point pos, char mode)
         {
-            if (mode == 'c') { return CoordCheck(loc); }
-            Xna.Vector2 coord = ConvertToCoord(loc, mode);
+            if (mode == 'c') { return CoordCheck(pos); }
+            Point coord = ConvertToCoord(pos, mode);
             int[] grid = Consts.Screen.Grid;
             if (coord.X < 0 || coord.X >= grid[0]) { return false; }
             if (coord.Y < 0 || coord.Y >= grid[1]) { return false; }
             return true;
         }
-        public static bool CoordCheck(Xna.Vector2 coord)
+        public static bool CoordCheck(Point coord)
         {
             int[] grid = Consts.Screen.Grid;
             if (coord.X < 0 || coord.X >= grid[0]) { return false; }
             if (coord.Y < 0 || coord.Y >= grid[1]) { return false; }
             return true;
         }
-        public static Xna.Vector2 ConvertToCoord(Xna.Vector2 loc, char mode)
+        public static Point ConvertToCoord(Point pos, char mode)
         {
             // Setup
-            Xna.Vector2 converted;
+            Point converted;
 
             // Converting to coords based on mode
-            if (mode == 'c') { converted = loc; } // Coordinate
-            else if (mode == 'l') { converted = Coord(loc); } // Location
-            else if (mode == 's') { converted = loc / Consts.Screen.PixelSize; } // Snapped location
+            if (mode == 'c') { converted = pos; } // Coordinate
+            else if (mode == 'l') converted = Coord(pos); // Location
+            else if (mode == 's') converted = pos / Consts.Screen.PixelSizePoint; // Snapped location
             else { throw new ArgumentException("Mode should be 'l', 's', or 'c'"); }
 
             return converted;
         }
-        public static Xna.Vector2 Coord(Xna.Vector2 vec)
-        {
-            return Xna.Vector2.Floor(vec / Consts.Screen.PixelSize);
-        }
-        public static Xna.Vector2 Snap(Xna.Vector2 vec)
-        {
-            return Coord(vec) * Consts.Screen.PixelSize;
-        }
-        public static int Flat(int x, int y) { return Consts.Screen.Grid[0] * y + x; }
-        public static int Flat(Xna.Vector2 coords) { return (int)(Consts.Screen.Grid[0] * coords.Y + coords.X); }
-        public static int Flat(float x, float y) { return Consts.Screen.Grid[0] * (int)y + (int)x; }
+        public static Point Coord(Point pos) => pos / Consts.Screen.PixelSizePoint;
+        public static Point Coord(Vector2 vec) => new((int)(vec.X / Consts.Screen.PixelSize), (int)(vec.Y / Consts.Screen.PixelSize));
+        public static Point Snap(Point vec) => Coord(vec) * Consts.Screen.PixelSizePoint;
+        public static Point Snap(Vector2 vec) => new Point((int)(vec.X / Consts.Screen.PixelSize), (int)(vec.Y / Consts.Screen.PixelSize)) * Consts.Screen.PixelSizePoint;
+        public static int Flat(int x, int y) => Consts.Screen.Grid[0] * y + x;
+        public static int Flat(Point coords) => (Consts.Screen.Grid[0] * coords.Y + coords.X);
+        public static int Flat(Vector2 coords) => Consts.Screen.Grid[0] * (int)coords.Y + (int)coords.X;
+        public static int Flat(float x, float y) => Consts.Screen.Grid[0] * (int)y + (int)x;
 
     }
 }

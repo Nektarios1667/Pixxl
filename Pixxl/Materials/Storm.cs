@@ -13,8 +13,8 @@ namespace Pixxl.Materials
             Density = .0016f;
             State = 3;
             Strength = 90;
-            Melting = new Transformation(999999, typeof(Storm));
-            Solidifying = new Transformation(-999999, typeof(Storm));
+            Melting = new Transformation(Int32.MaxValue, typeof(Storm));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Storm));
         }
         public override void Update()
         {
@@ -36,7 +36,7 @@ namespace Pixxl.Materials
 
             int side = Canvas.Rand.Next(0, 2) == 0 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
             Xna.Vector2 next = new(Location.X + side, Location.Y);
-            Pixel? target = Find(next, 'l');
+            Pixel? target = Find(next.ToPoint(), 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type))
             {
                 Location = Swap(next);

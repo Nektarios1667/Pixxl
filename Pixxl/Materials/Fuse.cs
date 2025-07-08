@@ -16,7 +16,7 @@ namespace Pixxl.Materials
             State = 0;
             Strength = 50;
             Melting = new Transformation(1000, typeof(BlueFire));
-            Solidifying = new Transformation(-999999, typeof(Fuse));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Fuse));
             Gravity = false;
         }
 

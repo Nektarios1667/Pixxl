@@ -16,7 +16,7 @@ namespace Pixxl.Materials
             State = 3;
             Strength = 130;
             Melting = new Transformation(90, typeof(GasolineVapor));
-            Solidifying = new Transformation(-999999, typeof(Gasoline));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Gasoline));
         }
         public override void Update()
         {

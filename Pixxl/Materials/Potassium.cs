@@ -14,8 +14,8 @@ namespace Pixxl.Materials
             Density = .862f;
             State = 2;
             Strength = 125;
-            Melting = new Transformation(999999, typeof(Potassium));
-            Solidifying = new Transformation(-999999, typeof(Potassium));
+            Melting = new Transformation(Int32.MaxValue, typeof(Potassium));
+            Solidifying = new Transformation(Int32.MinValue, typeof(Potassium));
         }
 
         public override bool ExplodeCheck()
