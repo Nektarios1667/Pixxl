@@ -6,7 +6,7 @@ namespace Pixxl.Materials
     public class Storm : Pixel
     {
         // Constructor
-        public Storm(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
+        public Storm(Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
             Conductivity = .4f;
@@ -24,9 +24,8 @@ namespace Pixxl.Materials
             Pixel? below = Neighbors[4];
             if (below != null && below.Type == "Air" && Canvas.Rand.Next(0, 4000) == 0)
             {
-                below.Skip = true;
                 AirPool.Return((Air)below);
-                Canvas.Pixels[below.Index] = new Lightning(below.Location, Canvas);
+                SetPixel(Canvas, Index, new Lightning(below.Location, Canvas));
             }
         }
         public override bool Movements() { return false; }
@@ -39,7 +38,7 @@ namespace Pixxl.Materials
             Pixel? target = Find(next.ToPoint(), 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type))
             {
-                Location = Swap(next);
+                SwapTo(next);
                 UpdatePositions();
             }
         }

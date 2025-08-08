@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -51,7 +52,6 @@ namespace Pixxl.Materials
         public Pixel?[] Neighbors { get; set; }
         public int TypeId { get; }
         public string Type { get; }
-        public bool Skip { get; set; }
         public bool SkipHeat { get; set; }
         public Xna.Vector2 Previous { get; set; }
 
@@ -85,7 +85,7 @@ namespace Pixxl.Materials
         public virtual void Update()
         {
             // Skip
-            if (Skip) { Skip = false; return; }
+            //if (Skip) { Skip = false; return; }
 
             // Reset
             GetNeighbors();
@@ -127,7 +127,7 @@ namespace Pixxl.Materials
             if (CollideCheck(Location, next))
             {
                 // Move array pixels
-                Location = Swap(next);
+                SwapTo(next);
                 return true;
             }
             return false;
@@ -171,7 +171,7 @@ namespace Pixxl.Materials
             }
             else if (Canvas.ViewMode == 3)
             {
-                color = Skip ? new(255, 0, 0) : new(84, 26, 145);
+                color = new(255, 255, 0);
             }
             Canvas.Batch.Draw(Window.OnePixel, Rect, color);
 
@@ -228,8 +228,8 @@ namespace Pixxl.Materials
             {
                 UpdatePositions();
                 converted.Temperature = Temperature;
-                Canvas.Pixels[Index] = converted;
-                Skip = true;
+                SetPixel(Canvas, Index, converted);
+                
                 return;
             }
         }
@@ -240,7 +240,7 @@ namespace Pixxl.Materials
             Pixel? target = Find(next.ToPoint(), 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next))
             {
-                Location = Swap(next);
+                SwapTo(next);
                 UpdatePositions();
             }
         }
@@ -300,24 +300,31 @@ namespace Pixxl.Materials
             if (idx >= 0 && idx < Canvas.Pixels.Length) { return Canvas.Pixels[idx]; }
             else { return null; }
         }
-        public Vector2 Swap(Vector2 second)
+
+        // Static methods
+        public static void SetPixel(Canvas canvas, int idx, Pixel pixel)
+        {
+            canvas.NextPixels[idx] = pixel;
+        }
+        public static void SetPixel(Canvas canvas, Point coord, Pixel pixel) => SetPixel(canvas, Flat(coord), pixel);
+        public static void SetPixel(Canvas canvas, Vector2 pos, Pixel pixel) => SetPixel(canvas, ConvertToCoord(pos.ToPoint(), 'l'), pixel);
+
+        public void SwapTo(Vector2 second)
         {
             // Info
             int secondIndex = Flat(Coord(second.ToPoint()));
             Pixel? secondPixel = Canvas.Pixels[secondIndex];
 
-
             // If null values return current position (don't move)
-            if (secondPixel == null) { return Location; }
+            if (secondPixel == null) return;
 
             // Swap objects
-            Canvas.Pixels[GetIndex()] = secondPixel; // Move second to first
-            Canvas.Pixels[secondIndex] = this; // Move first to second
+            SetPixel(Canvas, GetIndex(), secondPixel);
+            SetPixel(Canvas, secondIndex, this);
 
             secondPixel.Location = Location;
-            return second;
+            Location = second;
         }
-        // Static methods
         public static bool IndexCheck(Point pos, char mode)
         {
             if (mode == 'c') { return CoordCheck(pos); }

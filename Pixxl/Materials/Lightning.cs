@@ -11,7 +11,7 @@ namespace Pixxl.Materials
             // Constants
             Temperature = 9000f;
             Conductivity = 8f;
-            Density = Int32.MaxValuef;
+            Density = Int32.MaxValue;
             State = 4;
             Strength = Int32.MaxValue;
             Melting = new Transformation(Int32.MaxValue, typeof(Lightning));
@@ -21,13 +21,10 @@ namespace Pixxl.Materials
 
         public override void Update()
         {
-            // Skip
-            if (Skip) { Skip = false; return; }
-
             // Life
             if (life >= .1 || Canvas.Rand.Next(0, 25) == 0)
             {
-                Canvas.Pixels[Index] = Canvas.Rand.Next(0, 4) == 0 ? new Plasma(Location, Canvas) : AirPool.Get(Location, Canvas);
+                SetPixel(Canvas, Index, Canvas.Rand.Next(0, 4) == 0 ? new Plasma(Location, Canvas) : AirPool.Get(Location, Canvas));
                 return;
             }
 
@@ -44,21 +41,21 @@ namespace Pixxl.Materials
                 Pixel? next = Neighbors[4 + Canvas.Rand.Next(-1, 2)];
                 if (next != null)
                 {
-                    next.Skip = true;
                     if (next.State >= 3)
                     {
-                        Canvas.Pixels[next.GetIndex()] = new Lightning(next.Location, Canvas);
-                        Canvas.Pixels[next.GetIndex()].Update();
+                        Pixel created = new Lightning(next.Location, Canvas);
+                        SetPixel(Canvas, next.GetIndex(), created);
+                        created.Update();
                     }
                     else
                     {
-                        Canvas.Pixels[Index] = new Explosive(Location, Canvas);
+                        SetPixel(Canvas, Index, new Explosive(Location, Canvas));
                         return;
                     }
                 }
                 else
                 {
-                    Canvas.Pixels[Index] = new Explosive(Location, Canvas);
+                    SetPixel(Canvas, Index, new Explosive(Location, Canvas));
                     return;
                 }
             }

@@ -41,9 +41,9 @@ namespace Pixxl.Materials
             if (Lifespan <= 0)
             {
                 UpdatePositions();
-                Canvas.Pixels[Index] = AirPool.Get(Location, Canvas);
-                Canvas.Pixels[Index].Temperature = Math.Max(Temperature / 5, Constants.Game.RoomTemp);
-                Skip = true;
+                Pixel repl = AirPool.Get(Location, Canvas);
+                repl.Temperature = Math.Max(Temperature / 5, Constants.Game.RoomTemp);
+                SetPixel(Canvas, Index, repl);
                 return;
             }
         }

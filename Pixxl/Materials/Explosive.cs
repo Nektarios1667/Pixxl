@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Transactions;
 using Consts = Pixxl.Constants;
 using Xna = Microsoft.Xna.Framework;
 
@@ -18,7 +19,7 @@ namespace Pixxl.Materials
         public int Range { get; set; }
         private bool exploded = false;
         private int rangeSq;
-        public Explosive(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
+        public Explosive(Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
             Explosion = 600;
@@ -46,7 +47,7 @@ namespace Pixxl.Materials
         {
             int roomTemp = Consts.Game.RoomTemp;
 
-            if (exploded || Skip) { return; }
+            if (exploded) { return; }
             exploded = true;
 
             rangeSq = Range * Range;
@@ -85,8 +86,7 @@ namespace Pixxl.Materials
                                 Fire repl = new(current.Location, Canvas);
                                 repl.Temperature = Math.Max(damage * 2, roomTemp);
                                 repl.Lifespan += (float)Canvas.Rand.NextDouble();
-                                Canvas.Pixels[idx] = repl;
-                                current.Skip = true;
+                                Canvas.NextPixels[idx] = repl;
                             }
                         }
                     }
@@ -96,9 +96,7 @@ namespace Pixxl.Materials
             // Remove self
             Pixel self = AirPool.Get(Location, Canvas);
             self.Temperature = Explosion * 2;
-            self.Skip = true;
-            Canvas.Pixels[Index] = self;
-            Skip = true;
+            SetPixel(Canvas, Index, self);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Pixxl.Materials
             {
                 if (neighbor != null && neighbor.Type == "Storm" && Canvas.ChancePerSecond(.05f))
                 {
-                    Canvas.Pixels[Index] = new Storm(Location, Canvas);
+                    SetPixel(Canvas, Index, new Storm(neighbor.Location, Canvas));
                     return;
                 }
             }
@@ -40,7 +40,7 @@ namespace Pixxl.Materials
             Pixel? target = Find(next.ToPoint(), 'l');
             if (target != null && (target.Type == "Air" || target.Type == Type))
             {
-                Location = Swap(next);
+                SwapTo(next);
                 UpdatePositions();
             }
         }

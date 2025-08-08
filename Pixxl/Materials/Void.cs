@@ -26,8 +26,7 @@ namespace Pixxl.Materials
             {
                 if (neighbor != null && neighbor.Type != "Air" && neighbor.Type != "Void")
                 {
-                    neighbor.Skip = true;
-                    Canvas.Pixels[neighbor.GetIndex()] = AirPool.Get(neighbor.Location, Canvas);
+                    SetPixel(Canvas, Index, AirPool.Get(neighbor.Location, Canvas));
                 }
             }
         }

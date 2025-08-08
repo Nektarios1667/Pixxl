@@ -23,8 +23,8 @@ namespace Pixxl.Materials
             base.Update();
 
             // Burning
-            if (Reacting) { Burned += Canvas.Delta; }
-            if (Burned >= 4) { Skip = true; Canvas.Pixels[Index] = new Fire(Location, Canvas); }
+            if (Reacting) Burned += Canvas.Delta;
+            if (Burned >= 4) SetPixel(Canvas, Index, new Fire(Location, Canvas));
 
             // Water reaction
             bool touchingWater = false;
@@ -33,9 +33,8 @@ namespace Pixxl.Materials
                 if (neighbor == null) { continue; } // null neighbor
                 if (!Reacting && neighbor.Type == "Water") { Reacting = true; touchingWater = true; }
                 else if (Reacting && neighbor.Type == "Air") {
-                    neighbor.Skip = true;
                     AirPool.Return((Air)neighbor);
-                    Canvas.Pixels[neighbor.GetIndex()] = new Fire(neighbor.Location, Canvas); }
+                    SetPixel(Canvas, Index, new Fire(neighbor.Location, Canvas)); }
             }
 
             // Not touching water anymore

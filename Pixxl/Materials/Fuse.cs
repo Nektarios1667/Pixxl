@@ -29,7 +29,7 @@ namespace Pixxl.Materials
             if (Burned >= Lifetime)
             {
                 Pixel creation = new Fire(Location, Canvas);
-                Canvas.Pixels[Index] = creation;
+                SetPixel(Canvas, Index, creation);
 
                 // Ignite next fuse
                 foreach (Pixel? neighbor in Neighbors)
@@ -54,9 +54,8 @@ namespace Pixxl.Materials
                     if (neighbor == null) { continue; }
                     if (neighbor.Type == "Air")
                     {
-                        neighbor.Skip = true;
                         AirPool.Return((Air)neighbor);
-                        Canvas.Pixels[neighbor.GetIndex()] = new Fire(neighbor.Location, Canvas);
+                        SetPixel(Canvas, neighbor.GetIndex(), new Fire(neighbor.Location, Canvas));
                     }
                     else if (Canvas.ChancePerSecond(3) && neighbor is IIgnitable ignitable && neighbor.Type != "Fuse")
                     {

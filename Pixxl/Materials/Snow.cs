@@ -19,9 +19,6 @@ namespace Pixxl.Materials
         }
         public override void Update()
         {
-            // Skip
-            if (Skip) { Skip = false; return; }
-
             // Reset
             UpdatePositions();
             GetNeighbors();

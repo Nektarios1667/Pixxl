@@ -54,34 +54,31 @@ namespace Pixxl.Materials
             if (Burned >= Lifetime)
             {
                 Pixel creation = State <= 2 && Ashes && Canvas.Rand.Next(0, 4) == 0 ? new Ash(Location, Canvas) : Superheated ? new BlueFire(Location, Canvas) : new Fire(Location, Canvas);
-                Canvas.Pixels[Index] = creation;
+                SetPixel(Canvas, Index, creation);
                 return;
             }
 
             // Burn
-            if (Lit)
+            if (!Lit) return;
+            Burned += Canvas.Delta;
+            // Neighbors
+            int n = 0;
+            foreach (Pixel? neighbor in Neighbors)
             {
-                Burned += Canvas.Delta;
-                // Neighbors
-                int n = 0;
-                foreach (Pixel? neighbor in Neighbors)
+                if (neighbor == null) { n++; continue; }
+                if (neighbor.Type == "Air")
                 {
-                    if (neighbor == null) { n++; continue; }
-                    if (neighbor.Type == "Air")
-                    {
-                        neighbor.Skip = true;
-                        AirPool.Return((Air)neighbor);
-                        Canvas.Pixels[neighbor.GetIndex()] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
-                            : Superheated ? new BlueFire(neighbor.Location, Canvas)
-                            : new Fire(neighbor.Location, Canvas);
-                    }
-                    else if (n == 0 && neighbor.State != 4 && !nonSnuffable.Contains(neighbor.Type) && !Internal) // Snuffed
-                    {
-                        Snuff();
-                        break;
-                    }
-                    n++;
+                    AirPool.Return((Air)neighbor);
+                    Canvas.NextPixels[neighbor.GetIndex()] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
+                        : Superheated ? new BlueFire(neighbor.Location, Canvas)
+                        : new Fire(neighbor.Location, Canvas);
                 }
+                else if (n == 0 && neighbor.State != 4 && !nonSnuffable.Contains(neighbor.Type) && !Internal) // Snuffed
+                {
+                    Snuff();
+                    break;
+                }
+                n++;
             }
         }
 

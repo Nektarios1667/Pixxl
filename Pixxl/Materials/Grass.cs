@@ -29,7 +29,7 @@ namespace Pixxl.Materials
                 AirPool.Return((Air)above);
                 Grass created = new Grass(above.Location, Canvas);
                 if (Canvas.Rand.Next(0, 3) == 0) { created.End = true; }
-                Canvas.Pixels[above.GetIndex()] = created;
+                SetPixel(Canvas, above.GetIndex(), created);
             }
         }
     }

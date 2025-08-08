@@ -14,6 +14,7 @@ namespace Pixxl.Tools
         {
             Logger.Log("Cleared canvas");
             canvas.Pixels = Canvas.Cleared(canvas);
+            canvas.NextPixels = canvas.Pixels;
         }
     }
 }

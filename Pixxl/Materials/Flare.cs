@@ -25,8 +25,7 @@ namespace Pixxl.Materials
             // Burned out
             if (Burned >= Lifetime)
             {
-                Canvas.Pixels[Index] = new FlareSmoke(Location, Canvas);
-                Canvas.Pixels[Index].Skip = true;
+                SetPixel(Canvas, Index, new FlareSmoke(Location, Canvas));
                 return;
             }
 
@@ -39,23 +38,20 @@ namespace Pixxl.Materials
             // Above
             if (above != null && above.Type == "Air")
             {
-                above.Skip = true;
                 AirPool.Return((Air)above);
-                Canvas.Pixels[above.GetIndex()] = new FlareSmoke(above.Location, Canvas);
+                SetPixel(Canvas, above.GetIndex(), new FlareSmoke(above.Location, Canvas));
             }
             // Above left
             if (aboveLeft != null && aboveLeft.Type == "Air" && Canvas.ChancePerSecond(5))
             {
-                aboveLeft.Skip = true;
                 AirPool.Return((Air)aboveLeft);
-                Canvas.Pixels[aboveLeft.GetIndex()] = new FlareSmoke(aboveLeft.Location, Canvas);
+                SetPixel(Canvas, aboveLeft.GetIndex(), new FlareSmoke(aboveLeft.Location, Canvas));
             }
             // Above left
             if (aboveRight != null && aboveRight.Type == "Air" && Canvas.ChancePerSecond(5))
             {
-                aboveRight.Skip = true;
                 AirPool.Return((Air)aboveRight);
-                Canvas.Pixels[aboveRight.GetIndex()] = new FlareSmoke(aboveRight.Location, Canvas);
+                SetPixel(Canvas, aboveRight.GetIndex(), new FlareSmoke(aboveRight.Location, Canvas));
             }
         }
     }

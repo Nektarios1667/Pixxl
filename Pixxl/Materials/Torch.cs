@@ -25,9 +25,8 @@ namespace Pixxl.Materials
             Pixel? above = Neighbors[0];
             if (above != null && above.Type == "Air")
             {
-                above.Skip = true;
                 AirPool.Return((Air)above);
-                Canvas.Pixels[above.GetIndex()] = new Fire(above.Location, Canvas);
+                SetPixel(Canvas, Index, new Fire(above.Location, Canvas));
             }
         }
     }

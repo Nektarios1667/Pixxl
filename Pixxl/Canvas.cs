@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
 using Pixxl.Gui;
 using Pixxl.Materials;
 using Pixxl.Tools;
@@ -16,18 +18,20 @@ namespace Pixxl
     public class Canvas
     {
         public Pixel[] Pixels { get; set; }
+        public Pixel[] NextPixels { get; set; }
         public Window Window { get; set; }
         public List<Widget> Widgets { get; set; }
         public int[] Size { get; set; }
         public SpriteBatch Batch { get; set; }
         public GraphicsDevice Device { get; set; }
-        public Xna.Vector2 SizeVector = new(Consts.Screen.PixelSize, Consts.Screen.PixelSize);
+        public Vector2 SizeVector = new(Consts.Screen.PixelSize, Consts.Screen.PixelSize);
         public float Delta { get; private set; }
         public Random Rand = new();
         public int ViewMode = 0; // 0 = Textures, 1 = Colored thermal, 2 = B&W thermal, 3 = Monotexture
         public object? Focus { get; set; }
         public Popup SavesPopup { get; set; }
         public string Tab { get; set; }
+        private Cycle UpdateOrderFlip = new(0, 0, 2);
         public Canvas(Window window, GraphicsDevice device, SpriteBatch batch)
         {
             Window = window;
@@ -56,6 +60,7 @@ namespace Pixxl
 
             // Fill pixels
             Pixels = Cleared(this);
+            NextPixels = Pixels;
         }
         // Updating
         public void UpdatePixels(float delta)
@@ -64,8 +69,14 @@ namespace Pixxl
             Delta = delta * Consts.Game.Speed;
 
             // Pixels
-            Pixel[] copy = (Pixel[])(Pixels.Clone());
-            for (int i = 0; i < copy.Length; i++) { copy[i].Update(); }
+            // TODO Reduce update bias
+            for (int i = 0; i < Pixels.Length; i++) { Pixels[i].Update(); }
+
+            // Switch buffer
+            var temp = Pixels;
+            Pixels = NextPixels;
+            NextPixels = temp;
+            UpdateOrderFlip++;
         }
         public void UpdateGui(float delta)
         {
