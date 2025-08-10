@@ -70,12 +70,13 @@ namespace Pixxl
 
             // Pixels
             // TODO Reduce update bias
-            for (int i = 0; i < Pixels.Length; i++) { Pixels[i].Update(); }
+            for (int i = 0; i < Pixels.Length; i++) {
+                Pixels[i].Update();
+                Array.Clear(Pixels[i].Neighbors);
+            }
 
             // Switch buffer
-            var temp = Pixels;
-            Pixels = NextPixels;
-            NextPixels = temp;
+            (Pixels, NextPixels) = (NextPixels, Pixels);
             UpdateOrderFlip++;
         }
         public void UpdateGui(float delta)
@@ -166,13 +167,13 @@ namespace Pixxl
         {
             int[] grid = Consts.Screen.Grid;
             Pixel[] pixels = new Pixel[grid[0] * grid[1]];
-            for (int i = 0; i < Consts.Screen.Grid[0] * grid[1]; i++)
+            for (int i = 0; i < grid[0] * grid[1]; i++)
             {
-                pixels[i] = AirPool.Get(new Xna.Vector2((i % grid[0]) * Consts.Screen.PixelSize, i / Consts.Screen.Grid[0] * Consts.Screen.PixelSize), canvas);
+                pixels[i] = new Air(new((i % grid[0]) * Consts.Screen.PixelSize, i / Consts.Screen.Grid[0] * Consts.Screen.PixelSize), canvas);
             }
             return pixels;
         }
-        public static Pixel? New(Canvas canvas, string type, Xna.Vector2 loc, float? temp = null, float vel = 0)
+        public static Pixel? New(Canvas canvas, string type, Vector2 loc, float? temp = null, float vel = 0)
         {
             Type? typeObj = Type.GetType($"Pixxl.Materials.{type.Trim('.')}");
             if (typeObj != null)

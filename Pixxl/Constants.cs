@@ -24,7 +24,6 @@ public static class Game
     public const float HeatTransfer = 1f;
     public const float Gravity = 9.81f * Screen.PixelSize;
     public static float Speed = 1f;
-    public const bool Diagonals = true;
 }
 public static class Visual
 {

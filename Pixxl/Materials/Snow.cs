@@ -39,6 +39,7 @@ namespace Pixxl.Materials
 
             // Final
             Previous = Location;
+            Array.Clear(Neighbors);
         }
         public virtual void Drift()
         {

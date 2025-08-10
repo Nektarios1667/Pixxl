@@ -5,7 +5,7 @@ namespace Pixxl.Materials
     public class Torch : Pixel
     {
         // Constructor
-        public Torch(Xna.Vector2 location, Canvas canvas) : base(location, canvas)
+        public Torch(Vector2 location, Canvas canvas) : base(location, canvas)
         {
             // Constants
             Conductivity = .05f;
@@ -26,7 +26,7 @@ namespace Pixxl.Materials
             if (above != null && above.Type == "Air")
             {
                 AirPool.Return((Air)above);
-                SetPixel(Canvas, Index, new Fire(above.Location, Canvas));
+                SetPixel(Canvas, above.GetIndex(), new Fire(above.Location, Canvas));
             }
         }
     }

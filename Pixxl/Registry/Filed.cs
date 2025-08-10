@@ -24,7 +24,7 @@ namespace Pixxl.Registry
             Drywall        | 102, 82, 65   | 6  | Solid                | [Solid] Weak plaster used for home interiors.
             Explosive      | 139, 0, 0     | 5  | Powder;Explosive     | [Powder] Small explosive that explodes when it hits something.
             Faucet         | 0, 0, 155     | 3  | Solid;Indestructable | [Solid] Indestructable material that water comes out of.
-            Fire           | 189, 46, 21   | 30 | Energy;Fire          | [Energy] A hot flame.
+            Fire           | 189, 46, 21   | 40 | Energy;Fire          | [Energy] A hot flame.
             Flare          | 105, 26, 41   | 5  | Powder               | [Powdered] Flare that burns and releases red smoke for a long time.
             .FlareSmoke    | 171, 34, 60   | 15 | Gas                  | [Gas] Red smoke released by a flare.
             Fuse           | 138, 107, 90  | 10 | Solid;Fuel           | [Solid] Fast burning material used for controlled timing.

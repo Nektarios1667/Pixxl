@@ -69,9 +69,11 @@ namespace Pixxl.Materials
                 if (neighbor.Type == "Air")
                 {
                     AirPool.Return((Air)neighbor);
-                    Canvas.NextPixels[neighbor.GetIndex()] = Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
+                    SetPixel(Canvas, neighbor.GetIndex(),
+                        Ashes && Canvas.Rand.Next(0, 40) == 0 ? new Smoke(neighbor.Location, Canvas)
                         : Superheated ? new BlueFire(neighbor.Location, Canvas)
-                        : new Fire(neighbor.Location, Canvas);
+                        : new Fire(neighbor.Location, Canvas)
+                    );
                 }
                 else if (n == 0 && neighbor.State != 4 && !nonSnuffable.Contains(neighbor.Type) && !Internal) // Snuffed
                 {

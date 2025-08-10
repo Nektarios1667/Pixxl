@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -28,10 +29,10 @@ namespace Pixxl.Materials
         public Point Snapped { get; set; }
         public Point Coords { get; set; }
         public Rectangle Rect => new((int)Snapped.X, (int)Snapped.Y, Consts.Screen.PixelSize, Consts.Screen.PixelSize);
-
+        public bool Dead { get; set; } = false;
 
         // Constants
-        private readonly int[] surrounding = Consts.Game.Diagonals ? [
+        private readonly int[] surrounding = [
             -Consts.Screen.Grid[0],      // Up
             -Consts.Screen.Grid[0] + 1,  // Top-right
             1,                           // Right
@@ -40,11 +41,6 @@ namespace Pixxl.Materials
             Consts.Screen.Grid[0] - 1,   // Bottom-left
             -1,                          // Left
             -Consts.Screen.Grid[0] - 1   // Top-left
-        ] : [
-            -Consts.Screen.Grid[0],  // Up
-            1,                       // Right
-            Consts.Screen.Grid[0],   // Down
-            -1,                      // Left
         ];
 
         // Other
@@ -53,10 +49,9 @@ namespace Pixxl.Materials
         public int TypeId { get; }
         public string Type { get; }
         public bool SkipHeat { get; set; }
-        public Xna.Vector2 Previous { get; set; }
-
+        public Vector2 Previous { get; set; }
         // Constructor
-        public Pixel(Xna.Vector2 location, Canvas canvas)
+        public Pixel(Vector2 location, Canvas canvas)
         {
             // Constants
             Conductivity = 1f;
@@ -84,9 +79,6 @@ namespace Pixxl.Materials
         // Update and draw
         public virtual void Update()
         {
-            // Skip
-            //if (Skip) { Skip = false; return; }
-
             // Reset
             GetNeighbors();
 
@@ -113,6 +105,7 @@ namespace Pixxl.Materials
         public void Reset(Vector2 location)
         {
             Previous = location;
+            Array.Clear(Neighbors);
             Location = location;
             Snapped = Snap(Location);
             Coords = ConvertToCoord(Snapped, 's');
@@ -145,7 +138,7 @@ namespace Pixxl.Materials
             // Move right
             // Check if other pixel will move down into down right since adjacent has higher priority
             Pixel? right = Find(new((int)Location.X + Consts.Game.PixelSize, (int)Location.Y), 'l');
-            Xna.Vector2 rightMove = right != null ? new(right.Location.X, right.Location.Y + Consts.Game.PixelSize) : new(0, 0);
+            Vector2 rightMove = right != null ? new(right.Location.X, right.Location.Y + Consts.Game.PixelSize) : new(0, 0);
             bool priority = (right == null || !right.Gravity || Coord(rightMove) == Coord(right.Location) || !right.CollideCheck(right.Location, rightMove));
             if (priority && Move(Consts.Screen.PixelSize)) { return true; } // down-right
 
@@ -238,10 +231,10 @@ namespace Pixxl.Materials
             int side = Canvas.Rand.Next(0, 2) == 0 ? -Consts.Screen.PixelSize : Consts.Screen.PixelSize;
             Vector2 next = new(Location.X + side, Location.Y);
             Pixel? target = Find(next.ToPoint(), 'l');
-            if (target != null && (target.Type == "Air" || target.Type == Type) && CollideCheck(Location, next))
+            if (target != null && CollideCheck(Location, next))
             {
-                SwapTo(next);
                 UpdatePositions();
+                SwapTo(next);
             }
         }
         public virtual void HeatTransfer()
@@ -274,10 +267,17 @@ namespace Pixxl.Materials
         {
             for (int n = 0; n < surrounding.Length; n++)
             {
+                // Check if neighbor already calculated it
+                if (Neighbors[n] != null) continue;
+
                 // Neighbor
                 Pixel? neighbor = Find(Index + surrounding[n]);
+                if (neighbor == null) continue;
+
                 // If the neighbor's X is too far it means that the neighbor carried over to the previous or next line so make it null instead
-                Neighbors[n] = neighbor == null || Math.Abs(Coords.X - neighbor.GetCoords().X) > 1 ? null : neighbor;
+                Neighbors[n] = Math.Abs(Coords.X - neighbor.GetCoords().X) > 1 ? null : neighbor;
+                int reverseN = (n + 4) % 8;
+                neighbor.Neighbors[reverseN] = this;
             }
         }
         public int GetIndex() { return Flat(Coord(Location.ToPoint())); }

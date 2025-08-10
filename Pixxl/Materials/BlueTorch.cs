@@ -26,7 +26,7 @@ namespace Pixxl.Materials
             if (above != null && above.Type == "Air")
             {
                 AirPool.Return((Air)above);
-                SetPixel(Canvas, above.GetIndex(), new BlueFire(above.Location, Canvas));
+                SetPixel(Canvas, above.Index, new BlueFire(above.Location, Canvas));
             }
         }
     }

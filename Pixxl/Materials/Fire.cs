@@ -26,7 +26,7 @@ namespace Pixxl.Materials
             base.Update();
 
             // Life
-            TickLife();
+            if (TickLife()) return;
 
             // Glow
             Glow();
@@ -35,7 +35,7 @@ namespace Pixxl.Materials
             Spread();
         }
 
-        public virtual void TickLife()
+        public virtual bool TickLife()
         {
             Lifespan -= Canvas.Delta;
             if (Lifespan <= 0)
@@ -44,8 +44,9 @@ namespace Pixxl.Materials
                 Pixel repl = AirPool.Get(Location, Canvas);
                 repl.Temperature = Math.Max(Temperature / 5, Constants.Game.RoomTemp);
                 SetPixel(Canvas, Index, repl);
-                return;
+                return true;
             }
+            return false;
         }
 
         public virtual void Glow()
