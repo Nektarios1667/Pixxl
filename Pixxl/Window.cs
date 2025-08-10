@@ -192,12 +192,15 @@ namespace Pixxl
             spriteBatch.DrawString(SmallFont, string.Join("\n", feed.TakeLast(Consts.Visual.FeedLength)), feedVec, Color.Black);
 
             // Square
-            foreach (Pixel pixel in canvas.Pixels)
+            if (canvas.Focus == this)
             {
-                Color ghost = Selection == "Air" || cursor == "Erase" ? eraseGhostColor : (Replace ? replaceGhostColor : ghostColor);
-                if (Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
+                foreach (Pixel pixel in canvas.Pixels)
                 {
-                    spriteBatch.FillRectangle(new(pixel.Snapped.X, pixel.Snapped.Y, Consts.Game.PixelSize, Consts.Game.PixelSize), ghost);
+                    Color ghost = Selection == "Air" || cursor == "Erase" ? eraseGhostColor : (Replace ? replaceGhostColor : ghostColor);
+                    if (Math.Abs(pixel.Coords.X - coord.X) < CursorSize && Math.Abs(pixel.Coords.Y - coord.Y) < CursorSize)
+                    {
+                        spriteBatch.FillRectangle(new(pixel.Snapped.X, pixel.Snapped.Y, Consts.Game.PixelSize, Consts.Game.PixelSize), ghost);
+                    }
                 }
             }
 
